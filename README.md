@@ -1,1 +1,1 @@
-API service for Domer-client. Built with .NET, Entity framework and MySQL with JWT authentication
+Simple boilerplate API for register, login users with JWT authentication built with ASP.NET, EntityFramework, ASP.NET Core Identity.
