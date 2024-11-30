@@ -18,12 +18,12 @@ services:
       - POSTGRES_USER=app_user # The PostgreSQL user (useful to connect to the database)
       - POSTGRES_PASSWORD=myHardCoreDevDb123 # The PostgreSQL password (useful to connect to the database)
       - POSTGRES_DB=HeroDb # The PostgreSQL default database (automatically created at first launch)
-  boilerplate-api:
+  domer-api:
     build:
       context: .
       dockerfile: src/Domer.Api/Dockerfile
-    image: boilerplate-api:local
-    container_name: boilerplate-api
+    image: domer-api:local
+    container_name: domer-api
     depends_on:
       - db-server
     networks:

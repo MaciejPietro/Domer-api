@@ -1,6 +1,7 @@
 using Domer.Api.Common;
 using Domer.Api.Configurations;
 using Domer.Api.Endpoints;
+using Domer.Api.Controllers;
 using Domer.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -9,11 +10,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using System;
+using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
+builder.Services.AddControllers();
 builder.AddValidationSetup();
 
 builder.Services.AddAuthorization();
@@ -22,10 +26,8 @@ builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationSche
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
     options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.None;
-    options.SlidingExpiration = true; 
-    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-        ? CookieSecurePolicy.None // Allow non-HTTPS in development
-        : CookieSecurePolicy.Always; // Enforce HTTPS in production
+    options.SlidingExpiration = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 builder.Services.AddIdentityCore<ApplicationUser>()
@@ -33,7 +35,12 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddApiEndpoints();
 
 // Swagger
-builder.Services.AddSwaggerSetup();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+});
+// builder.Services.AddSwaggerSetup();
 
 // Persistence
 builder.Services.AddPersistenceSetup(builder.Configuration);
@@ -100,14 +107,18 @@ app.UseCors("LocalhostPolicy");
 
 app.UseRouting();
 
-app.UseSwaggerSetup();
+// app.UseSwaggerSetup();
 // app.UseHsts();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseResponseCompression();
 // app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllers();
 
 app.MapHeroEndpoints();
 app.MapGroup("api/identity")

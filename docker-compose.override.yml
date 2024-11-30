@@ -2,7 +2,7 @@ version: '3.6'
 
 
 services:
-  boilerplate-api:
+  domer-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:7123;http://+:7122

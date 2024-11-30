@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domer.Domain.Entities;
+namespace Domer.Domain.Entities.Auth;
 
 public class Register
 {

@@ -6,6 +6,7 @@ namespace Domer.Infrastructure;
 
 public class ApplicationUser : IdentityUser<Guid>
 {
+    public override string? UserName { get; set; }
     public override Guid Id { get; set; } = Guid.CreateVersion7();
 }
 

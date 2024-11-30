@@ -23,17 +23,7 @@ public static class SwaggerSetup
                 {
                     Title = "Domer.Api",
                     Version = "v1",
-                    Description = "API Domer",
-                    Contact = new OpenApiContact
-                    {
-                        Name = "Yan Pitangui",
-                        Url = new Uri("https://github.com/yanpitangui")
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "MIT",
-                        Url = new Uri("https://github.com/yanpitangui/dotnet-api-boilerplate/blob/main/LICENSE")
-                    }
+                    Description = "API Domer"
                 });
             c.DescribeAllParametersInCamelCase();
             c.OrderActionsBy(x => x.RelativePath);
