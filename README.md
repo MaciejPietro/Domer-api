@@ -10,14 +10,12 @@ A ``.Net 9.0`` WebApi project. Crafter for Domer.
  - Visual Studio/Code/Rider
  - docker
 
-# Api docs
-Visit https://localhost:7123/swagger/index.html
 
 ## Standalone
 1. You may need a running instance of Postgres, with appropriate migrations initialized.
 	- You can run just the DB on docker. For that, run the following command: ``docker-compose up -d db-server``. Doing that, the application will be able to reach the container of the db server.
 2. Go to the src/Domer.Api folder and run ``dotnet run``, or, in visual studio set the api project as startup and run as console/docker/IIS.
-3. Visit http://localhost:7122/api-docs or https://localhost:7123/api-docs to access the application's swagger.
+3. Visithttps://localhost:7123/swagger/index.html to access the application's swagger.
 
 ## Docker
 1. Run ``docker-compose up -d`` in the root directory, or, in visual studio, set the docker-compose project as startup and run. This should start the application and DB.

@@ -3,20 +3,33 @@ using Domer.Api.Configurations;
 using Domer.Api.Endpoints;
 using Domer.Api.Controllers;
 using Domer.Infrastructure;
+using Domer.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
+var configurationBuilder = new ConfigurationBuilder();
+configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+
+IConfigurationRoot configuration = configurationBuilder.Build();
+var emailConfig = configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+
+builder.Services.AddSingleton(emailConfig);
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 builder.Services.AddControllers();
 builder.AddValidationSetup();
 

@@ -6,14 +6,15 @@ namespace Domer.Domain.Entities.Auth;
 
 public class Register
 {
-    public string? Username { get; set; }
     
-    [Required]
+    [Required(ErrorMessage = "Email is required.")]
     [EmailAddress]
     public string Email { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Password is required.")]
     [DataType(DataType.Password)]
     public string Password { get; set; }
+    
+    public string? ClientUri { get; set; }
 
 }

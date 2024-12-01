@@ -168,3 +168,7 @@ C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\obj\Debug\net9.0\Domer.Api.xml
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\obj\Debug\net9.0\Domer.Api.pdb
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\obj\Debug\net9.0\Domer.Api.genruntimeconfig.cache
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\obj\Debug\net9.0\ref\Domer.Api.dll
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\MailKit.dll
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\MimeKit.dll
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\NETCore.MailKit.dll
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\BouncyCastle.Crypto.dll
