@@ -1,7 +1,9 @@
 ﻿using Domer.Domain.Entities.Auth;
 using Domer.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
@@ -17,21 +19,15 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
     [HttpPost("register")]
     public async Task<IActionResult> Register(Register model)
     {
-        // Check if the username already exists
-        if (!string.IsNullOrWhiteSpace(model.Username) && await userManager.FindByNameAsync(model.Username) != null)
-        {
-            return BadRequest(new { Message = "Username already exists." });
-        }
-        
         // Check if the email already exists
         if (await userManager.FindByEmailAsync(model.Email) != null)
         {
             return BadRequest(new { Message = "Email already exists." });
         }
         
-        ApplicationUser user = new ApplicationUser { UserName = model.Username, Email = model.Email };
+        ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Email };
     
-        IdentityResult result = await userManager.CreateAsync(user, model.Password!);
+        IdentityResult result = await userManager.CreateAsync(user, model.Password);
         
         if (result.Succeeded)
         {
@@ -56,8 +52,15 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
             return Ok();
         }
     
-        return BadRequest();
+        return BadRequest(signInResult);
     }
 
+    [HttpPost("logout")]
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+        await signInManager.SignOutAsync().ConfigureAwait(false);
+        return Ok();
+    }
 }
 
