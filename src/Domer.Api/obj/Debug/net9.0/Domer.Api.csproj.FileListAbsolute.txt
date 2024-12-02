@@ -172,3 +172,5 @@ C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\MailKit.dll
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\MimeKit.dll
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\NETCore.MailKit.dll
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\BouncyCastle.Crypto.dll
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\DotNetEnv.dll
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\Sprache.dll

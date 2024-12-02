@@ -19,52 +19,43 @@ using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DotNetEnv.Env.Load();
+
 // Controllers
 var configurationBuilder = new ConfigurationBuilder();
-configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true);
+configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true).AddEnvironmentVariables().Build();
 
-IConfigurationRoot configuration = configurationBuilder.Build();
-var emailConfig = configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
-
-builder.Services.AddSingleton(emailConfig);
-
-builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddControllers();
 builder.AddValidationSetup();
 
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme, options =>
-{
-    options.ExpireTimeSpan = TimeSpan.FromDays(7);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.SlidingExpiration = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-});
+// builder.Services.AddAuthorization();
+// builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme, options =>
+// {
+//     options.ExpireTimeSpan = TimeSpan.FromDays(7);
+//     options.Cookie.HttpOnly = true;
+//     options.Cookie.SameSite = SameSiteMode.None;
+//     options.SlidingExpiration = true;
+//     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+// });
+//
+// builder.Services.AddIdentityCore<ApplicationUser>()
+//     .AddEntityFrameworkStores<ApplicationDbContext>()
+//     .AddApiEndpoints();
 
-builder.Services.AddIdentityCore<ApplicationUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddApiEndpoints();
+builder.Services.AddAuthSetup(builder.Configuration);
 
 // Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-});
-// builder.Services.AddSwaggerSetup();
+builder.Services.AddSwaggerSetup(builder.Configuration);
+
+// Email
+builder.Services.AddEmailSetup(builder.Configuration);
 
 // Persistence
 builder.Services.AddPersistenceSetup(builder.Configuration);
 
 // Application layer setup
 builder.Services.AddApplicationSetup();
-
-// Add identity stuff
-// builder.Services
-//     .AddIdentityApiEndpoints<ApplicationUser>()
-//     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Request response compression
 builder.Services.AddCompressionSetup();
@@ -79,18 +70,7 @@ builder.Services.AddMediatRSetup();
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 // Add CORS services
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("LocalhostPolicy", builder =>
-    {
-        builder.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-    
-
-});
+builder.Services.AddCorsSetup(builder.Configuration);
 
 builder.Logging.ClearProviders();
 
@@ -114,22 +94,19 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-// Add CORS middleware before routing
-app.UseCors("LocalhostPolicy");
-
+app.UseCorsSetup();
 
 app.UseRouting();
 
-// app.UseSwaggerSetup();
+app.UseSwaggerSetup();
 // app.UseHsts();
-app.UseSwagger();
-app.UseSwaggerUI();
 
 app.UseResponseCompression();
 // app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
+app.UseAuthSetup();
 
 app.MapControllers();
 
