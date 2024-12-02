@@ -1,4 +1,6 @@
-﻿using Domer.Domain.Entities.Auth;
+﻿using Domer.Domain.Entities;
+using Domer.Domain.Entities.Auth;
+using Domer.Domain.Interface;
 using Domer.Infrastructure;
 using Domer.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;

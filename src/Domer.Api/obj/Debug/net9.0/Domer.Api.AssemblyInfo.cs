@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Domer.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c73ed016f39c73b1fd5d96ee2c774879e8b4d8ca")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+798205dfbb32bd55e134faf8ae73b32d618b908c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Domer.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Domer.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

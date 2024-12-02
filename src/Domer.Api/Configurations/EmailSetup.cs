@@ -1,9 +1,5 @@
-﻿using Domer.Application.Auth;
-using Domer.Domain.Auth.Interfaces;
-using Domer.Infrastructure;
-using Domer.Infrastructure.Services;
-using EntityFramework.Exceptions.PostgreSQL;
-using Microsoft.EntityFrameworkCore;
+﻿
+using Domer.Infrastructure.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

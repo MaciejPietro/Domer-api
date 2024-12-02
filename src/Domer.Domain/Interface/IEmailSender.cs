@@ -1,14 +1,13 @@
 ﻿using Domer.Domain;
-using Domer.Infrastructure.Services;
 using MimeKit;
 using System;
 using System.Threading.Tasks;
+using Domer.Domain.Entities;
 
-namespace Domer.Infrastructure.Services;
+namespace Domer.Domain.Interface;
 
 public interface IEmailSender
 {
-     // void SendEmail(Message message);
      Task SendEmailAsync(Message message);
 }
 

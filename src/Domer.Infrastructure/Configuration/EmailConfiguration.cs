@@ -1,4 +1,4 @@
-﻿namespace Domer.Infrastructure.Services;
+﻿namespace Domer.Infrastructure.Configuration;
 
 public class EmailConfiguration
 {
