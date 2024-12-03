@@ -16,7 +16,7 @@ namespace Domer.Api.Controllers;
 
 [Route("api/auth")]
 [ApiController]
-public class UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender _emailSender)
+public class UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService)
     : ControllerBase
 {
 
@@ -41,17 +41,44 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
         }
         
         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        // var encodedToken = HttpUtility.UrlEncode(token);
         var param = new Dictionary<string, string?> { { "token", token }, { " email", user.Email } };
         
         var callbackLink = QueryHelpers.AddQueryString(model.ClientUri!,  param);
         
         
-        var message = new Message([user.Email], "Email Confirmation Token", callbackLink);
+        // var message = new Message(
+        //     [user.Email], 
+        //     "Budoma - Potwierdź adres email", 
+        //     $"Dziękujemy za rejestracje, kliknij w poniższy link aby potwierdzić adres email: {callbackLink}"
+        //     );
+        
+        await emailService.SendRegistrationConfirmationEmailAsync(user.Email, callbackLink);
       
         
-        await _emailSender.SendEmailAsync(message);
+        // await _emailSender.SendEmailAsync(message);
         
         return Created();
+    }
+
+    [HttpGet("emailconfirmation")]
+    public async Task<IActionResult> EmailConfirmation([FromQuery] string token, [FromQuery] string email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+
+        if (user == null)
+        {
+            return BadRequest("Invalid Email Confirmation Request");
+        }
+
+        var confirmResult = await userManager.ConfirmEmailAsync(user, token);
+
+        if (!confirmResult.Succeeded)
+        {
+            return BadRequest("Invalid Email Confirmation Request");
+        }
+
+        return Ok();
     }
 
     [HttpPost("login")]

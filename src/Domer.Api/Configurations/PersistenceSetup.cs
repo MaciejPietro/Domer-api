@@ -15,7 +15,8 @@ public static class PersistenceSetup
 {
     public static IServiceCollection AddPersistenceSetup(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IEmailSender, EmailSender>();
+
+
 
         string? DbHost = Environment.GetEnvironmentVariable("DB_HOST");
         string? DbDatabase = Environment.GetEnvironmentVariable("DB_DATABASE");
