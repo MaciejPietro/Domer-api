@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Domer.Api.Controllers;
@@ -40,45 +42,51 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
             return BadRequest();
         }
         
-        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-        // var encodedToken = HttpUtility.UrlEncode(token);
-        var param = new Dictionary<string, string?> { { "token", token }, { " email", user.Email } };
+        string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var param = new Dictionary<string, string?> { 
+            { "token", HttpUtility.UrlEncode(token) }, 
+            { "email", user.Email } 
+        };
+        
+       
         
         var callbackLink = QueryHelpers.AddQueryString(model.ClientUri!,  param);
         
         
-        // var message = new Message(
-        //     [user.Email], 
-        //     "Budoma - Potwierdź adres email", 
-        //     $"Dziękujemy za rejestracje, kliknij w poniższy link aby potwierdzić adres email: {callbackLink}"
-        //     );
-        
+    
+
         await emailService.SendRegistrationConfirmationEmailAsync(user.Email, callbackLink);
       
-        
-        // await _emailSender.SendEmailAsync(message);
-        
         return Created();
     }
 
     [HttpGet("emailconfirmation")]
-    public async Task<IActionResult> EmailConfirmation([FromQuery] string token, [FromQuery] string email)
+    public async Task<IActionResult> EmailConfirmation([FromQuery] string email, [FromQuery] string token)
     {
-        var user = await userManager.FindByEmailAsync(email);
+        ApplicationUser? user = await userManager.FindByEmailAsync(email);
 
         if (user == null)
         {
             return BadRequest("Invalid Email Confirmation Request");
         }
 
-        var confirmResult = await userManager.ConfirmEmailAsync(user, token);
 
-        if (!confirmResult.Succeeded)
+        string decodedToken = HttpUtility.UrlDecode(token);
+    
+        IdentityResult confirmResult = await userManager.ConfirmEmailAsync(user, decodedToken);
+
+        if (confirmResult.Succeeded)
         {
-            return BadRequest("Invalid Email Confirmation Request");
+            return Ok();
         }
 
-        return Ok();
+        foreach (IdentityError error in confirmResult.Errors)
+        {
+            Console.WriteLine($"Token Confirmation Error: {error.Description}");
+        }
+        return BadRequest("Invalid Email Confirmation Request");
+
     }
 
     [HttpPost("login")]

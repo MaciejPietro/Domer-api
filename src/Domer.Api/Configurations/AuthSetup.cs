@@ -20,6 +20,7 @@ public static class AuthSetup
             options.Cookie.SameSite = SameSiteMode.None;
             options.SlidingExpiration = true;
             options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            
         });
 
         services.AddIdentityCore<ApplicationUser>()
