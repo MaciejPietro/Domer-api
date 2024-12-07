@@ -39,6 +39,8 @@ builder.AddValidationSetup();
 
 builder.Services.AddAuthSetup(builder.Configuration);
 
+builder.Services.AddAutoMapperSetup(builder.Configuration);
+
 // Swagger
 builder.Services.AddSwaggerSetup(builder.Configuration);
 

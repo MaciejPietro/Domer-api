@@ -9,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="Ardalis.Result.FluentValidation" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="DotNetEnv" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="MediatR" />
@@ -22,6 +24,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domer.Domain\Domer.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Auth\Services\" />
   </ItemGroup> 
 
 </Project>

@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <PackageReference Include="Ardalis.Result.AspNetCore" />
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="Ben.Demystifier" />
     <PackageReference Include="DotNetEnv" />
     <PackageReference Include="FluentValidation" />

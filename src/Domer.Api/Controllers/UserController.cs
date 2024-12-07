@@ -1,4 +1,6 @@
-﻿using Domer.Domain.Auth.Entities;
+﻿using AutoMapper;
+using Domer.Application.Auth.DTOs;
+using Domer.Domain.Auth.Entities;
 using Domer.Domain.Common.Interfaces;
 using Domer.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -15,12 +17,11 @@ namespace Domer.Api.Controllers;
 
 [Route("api/auth")]
 [ApiController]
-public class UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService)
+public class UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService, IMapper mapper)
     : ControllerBase
 {
 
-        // private readonly SignInManager<ApplicationUser> signInManager = signInManager;
-
+       
     [HttpPost("register")]
     public async Task<IActionResult> Register(Register model)
     {
@@ -87,21 +88,37 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(Login model)
+    public async Task<ActionResult<UserDto>> Login(Login model)
     {
-        SignInResult signInResult = await signInManager.PasswordSignInAsync(
-            model.Email, 
-            model.Password, 
-            isPersistent: false, 
-            lockoutOnFailure: false
+        try
+        {
+            SignInResult signInResult = await signInManager.PasswordSignInAsync(
+                model.Email, 
+                model.Password, 
+                isPersistent: false, 
+                lockoutOnFailure: false
             );
 
-        if (signInResult.Succeeded)
-        {
-            return Ok();
+            
+            if (signInResult.Succeeded)
+            {
+                var user = await userManager.FindByEmailAsync(model.Email);
+                
+                if (user == null)
+                    return Unauthorized();
+            
+                var responseDto = mapper.Map<UserDto>(user);
+                
+                return Ok(responseDto);
+            }
+            
+            return BadRequest(signInResult);
         }
-    
-        return BadRequest(signInResult);
+        catch (Exception ex)
+        {
+            // Log the exception
+            return StatusCode(500, new { message = ex });
+        }
     }
 
     [HttpPost("logout")]
