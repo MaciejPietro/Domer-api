@@ -9,7 +9,8 @@ public class UserMappingProfile : Profile
     public UserMappingProfile()
     {
 
-        CreateMap<IApplicationUser, UserDto>();
+        CreateMap<IApplicationUser, UserDto>().ForMember(dest => dest.IsEmailConfirmed, 
+            opt => opt.MapFrom(src => src.EmailConfirmed));
     }
 }
 

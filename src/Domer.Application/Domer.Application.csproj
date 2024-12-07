@@ -24,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domer.Domain\Domer.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Auth\Services\" />
   </ItemGroup> 
 
 </Project>

@@ -18,7 +18,7 @@ public class EmailService : IEmailService
     public async Task<string> LoadEmailTemplateAsync(string templateName)
     {
         string basePath = AppContext.BaseDirectory;
-        string templatePath = Path.Combine(basePath, "EmailTemplates", templateName);
+        string templatePath = Path.Combine(basePath, "Email", "Templates", templateName);
     
         if (File.Exists(templatePath))
         {
