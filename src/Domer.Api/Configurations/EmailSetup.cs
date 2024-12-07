@@ -1,7 +1,7 @@
 ﻿
-using Domer.Domain.Interface;
-using Domer.Infrastructure.Configuration;
-using Domer.Infrastructure.Services;
+using Domer.Application.Common.Services;
+using Domer.Domain.Common.Interfaces;
+using Domer.Infrastructure.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

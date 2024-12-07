@@ -1,14 +1,8 @@
-﻿using Domer.Domain.Entities.Common;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.SwaggerUI;
-using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
+
 
 namespace Domer.Api.Configurations;
 

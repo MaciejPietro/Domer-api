@@ -1,4 +1,4 @@
-﻿using Domer.Domain.Entities.Common;
+﻿using Domer.Domain.Common;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Security.Claims;

@@ -1,10 +1,10 @@
 ﻿using Ardalis.Result.AspNetCore;
-using Domer.Application.Features.Heroes.CreateHero;
-using Domer.Application.Features.Heroes.DeleteHero;
-using Domer.Application.Features.Heroes.GetAllHeroes;
-using Domer.Application.Features.Heroes.GetHeroById;
-using Domer.Application.Features.Heroes.UpdateHero;
-using Domer.Domain.Entities.Common;
+using Domer.Application.Heroes.CreateHero;
+using Domer.Application.Heroes.DeleteHero;
+using Domer.Application.Heroes.GetAllHeroes;
+using Domer.Application.Heroes.GetHeroById;
+using Domer.Application.Heroes.UpdateHero;
+using Domer.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;

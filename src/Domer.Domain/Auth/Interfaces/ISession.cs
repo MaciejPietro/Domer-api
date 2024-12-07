@@ -1,4 +1,4 @@
-﻿using Domer.Domain.Entities.Common;
+﻿using Domer.Domain.Common;
 using System;
 
 namespace Domer.Domain.Auth.Interfaces;

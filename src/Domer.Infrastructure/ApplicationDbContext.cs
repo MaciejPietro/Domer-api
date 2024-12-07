@@ -1,17 +1,16 @@
 ﻿using Domer.Application.Common;
-using Domer.Domain.Entities;
-using Domer.Infrastructure.Configuration;
+using Domer.Domain.Heroes.Entities;
+using Domer.Infrastructure.Hero;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Domer.Infrastructure;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IContext
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options), IContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-
-    public DbSet<Hero> Heroes { get; set; } = null!;
+    public DbSet<Domain.Heroes.Entities.Hero> Heroes { get; init; } = null!;
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

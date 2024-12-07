@@ -1,4 +1,4 @@
-﻿using Domer.Domain.Entities;
+﻿using Domer.Domain.Heroes.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;

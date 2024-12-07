@@ -174,4 +174,4 @@ C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\NETCore.MailKi
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\BouncyCastle.Crypto.dll
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\DotNetEnv.dll
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\Sprache.dll
-C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\EmailTemplates\ConfirmationEmail.html
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\Email\Templates\ConfirmationEmail.html

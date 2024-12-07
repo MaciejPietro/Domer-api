@@ -1,15 +1,12 @@
-﻿using Domer.Domain.Entities;
-using Domer.Domain.Entities.Auth;
-using Domer.Domain.Interface;
+﻿using Domer.Domain.Auth.Entities;
+using Domer.Domain.Common.Interfaces;
 using Domer.Infrastructure;
-using Domer.Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;

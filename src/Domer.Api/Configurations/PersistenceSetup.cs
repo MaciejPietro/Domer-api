@@ -1,8 +1,6 @@
 ﻿using Domer.Application.Auth;
 using Domer.Domain.Auth.Interfaces;
-using Domer.Domain.Interface;
 using Domer.Infrastructure;
-using Domer.Infrastructure.Services;
 using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,9 +9,9 @@ using System;
 
 namespace Domer.Api.Configurations;
 
-public static class PersistenceSetup
+public static class DbSetup
 {
-    public static IServiceCollection AddPersistenceSetup(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDbSetup(this IServiceCollection services, IConfiguration configuration)
     {
 
 

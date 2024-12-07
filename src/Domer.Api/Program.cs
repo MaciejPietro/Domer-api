@@ -1,21 +1,15 @@
 using Domer.Api.Common;
 using Domer.Api.Configurations;
 using Domer.Api.Endpoints;
-using Domer.Api.Controllers;
 using Domer.Infrastructure;
-using Domer.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
 using System.IO;
-using System.Threading.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +46,7 @@ builder.Services.AddSwaggerSetup(builder.Configuration);
 builder.Services.AddEmailSetup(builder.Configuration);
 
 // Persistence
-builder.Services.AddPersistenceSetup(builder.Configuration);
+builder.Services.AddDbSetup(builder.Configuration);
 
 // Application layer setup
 builder.Services.AddApplicationSetup();
