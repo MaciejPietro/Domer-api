@@ -22,7 +22,7 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
     : ControllerBase
 {
 
-    [HttpGet("current")]
+    [HttpGet()]
     [Authorize]
     public async Task<IActionResult> GetCurrentUser()
     {
@@ -112,6 +112,41 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
                 
         return Ok(responseDto);
         
+    }
+
+    [HttpDelete()]
+    [Authorize]
+    public async Task<IActionResult> DeleteUser([FromBody] Delete model)
+    {
+        if (string.IsNullOrEmpty(model.Password))
+        {
+            return BadRequest("Password is required to delete account.");
+        }
+        
+        ApplicationUser? user = await userManager.FindByIdAsync(model.Id);
+        
+        if (user == null)
+        {
+            return BadRequest("User not found");
+        }
+        
+        bool isCurrentPasswordCorrect = await userManager.CheckPasswordAsync(user, model.Password);
+    
+        if (!isCurrentPasswordCorrect)
+        {
+            return BadRequest("Password is incorrect.");
+        }
+        
+        IdentityResult deleteResult = await userManager.DeleteAsync(user);
+
+        if (!deleteResult.Succeeded)
+        {
+            return BadRequest(deleteResult.Errors);
+        }
+
+        await signInManager.SignOutAsync();
+
+        return Ok(new { Message = "Account successfully deleted." });
     }
     
     [HttpPost("resend-emailconfirmation")]
