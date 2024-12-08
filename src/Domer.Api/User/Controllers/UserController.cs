@@ -33,10 +33,11 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
             return Unauthorized(); 
         }
 
-        var userDto = new UserDto
+        UserDto userDto = new()
         {
             Id = currentUser.Id,
             Email = currentUser.Email,
+            IsEmailConfirmed = currentUser.EmailConfirmed,
         };
 
         return Ok(userDto);
@@ -53,13 +54,55 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
             return BadRequest();
         }
         
-        IdentityResult setEmailResult = await userManager.SetEmailAsync(user, model.Email);
-        IdentityResult setUserNameResult = await userManager.SetUserNameAsync(user, model.Email);
-
-            
-        if (!setEmailResult.Succeeded || !setUserNameResult.Succeeded)
+        if(!string.IsNullOrEmpty(model.Email))
         {
-            return BadRequest();
+            if (await userManager.FindByEmailAsync(model.Email) != null)
+                return BadRequest(new { Message = "Email already exists." });
+
+            if (string.IsNullOrEmpty(model.ClientUri))
+                return BadRequest(new { Message = "ClientUri is required to change email." });
+           
+            if (model.Email != user.Email)
+            {
+                IdentityResult setEmailResult = await userManager.SetEmailAsync(user, model.Email);
+                IdentityResult setUserNameResult = await userManager.SetUserNameAsync(user, model.Email);
+
+                if (!setEmailResult.Succeeded || !setUserNameResult.Succeeded)
+                {
+                    return BadRequest(new { Message = "Something went wrong." });
+                }
+
+                await ResendEmailConfirmation(new ResendEmailConfirmation 
+                { 
+                    Email = model.Email!, 
+                    ClientUri = model.ClientUri!
+                });
+            }
+        }
+        
+        
+        if (!string.IsNullOrEmpty(model.Password))
+        {
+            if (string.IsNullOrEmpty(model.CurrentPassword))
+            {
+                return BadRequest("Current password is required to change the password.");
+            }
+            
+            bool isCurrentPasswordCorrect = await userManager.CheckPasswordAsync(user, model.CurrentPassword);
+    
+            if (!isCurrentPasswordCorrect)
+            {
+                return BadRequest("Current password is incorrect.");
+            }
+            
+            string resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+        
+            IdentityResult resetPassResult = await userManager.ResetPasswordAsync(user, resetToken, model.Password);
+        
+            if (!resetPassResult.Succeeded)
+            {
+                return BadRequest(resetPassResult.Errors);
+            }
         }
         
          
@@ -70,5 +113,44 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
         return Ok(responseDto);
         
     }
+    
+    [HttpPost("resend-emailconfirmation")]
+    public async Task<IActionResult> ResendEmailConfirmation([FromBody] ResendEmailConfirmation model)
+    {
+        ApplicationUser? user = await userManager.FindByEmailAsync(model.Email);
+        if (user == null)
+        {
+            return BadRequest(new { Message = "User not found." });
+        }
+
+        if (await userManager.IsEmailConfirmedAsync(user))
+        {
+            return BadRequest(new { Message = "Email is already confirmed." });
+        }
+
+        try
+        {
+            string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            
+            string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            Dictionary<string, string> param = new()
+            {
+                { "token", encodedToken },
+                { "email", user.Email! }
+            };
+
+            string callbackLink = QueryHelpers.AddQueryString(model.ClientUri!, param!);
+
+            await emailService.SendRegistrationConfirmationEmailAsync(user.Email!, callbackLink);
+
+            return Ok(new { Message = "Email confirmation link has been resent." });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
+    }
+    
 }
 

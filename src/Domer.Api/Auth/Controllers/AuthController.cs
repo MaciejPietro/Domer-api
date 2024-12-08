@@ -95,43 +95,7 @@ public class AuthController(UserManager<ApplicationUser> userManager, SignInMana
         return BadRequest("Invalid Email Confirmation Request");
     }
 
-    [HttpPost("resend-emailconfirmation")]
-    public async Task<IActionResult> ResendEmailConfirmation([FromBody] ResendEmailConfirmation model)
-    {
-        ApplicationUser? user = await userManager.FindByEmailAsync(model.Email);
-        if (user == null)
-        {
-            return BadRequest(new { Message = "User not found." });
-        }
-
-        if (await userManager.IsEmailConfirmedAsync(user))
-        {
-            return BadRequest(new { Message = "Email is already confirmed." });
-        }
-
-        try
-        {
-            string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            
-            string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
-            Dictionary<string, string> param = new()
-            {
-                { "token", encodedToken },
-                { "email", user.Email! }
-            };
-
-            string callbackLink = QueryHelpers.AddQueryString(model.ClientUri!, param!);
-
-            await emailService.SendRegistrationConfirmationEmailAsync(user.Email!, callbackLink);
-
-            return Ok(new { Message = "Email confirmation link has been resent." });
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
-    }
+    
 
 
     [HttpPost("login")]
