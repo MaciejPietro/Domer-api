@@ -365,3 +365,21 @@ tools/
 .DS_Store
 
 .env
+
+# Ignore all bin and obj folders in all locations
+**/bin/
+**/obj/
+
+# Ignore contents of bin and obj folders at all levels
+**/bin/*
+**/obj/*
+
+# Ignore build outputs in any Debug or Release folder
+**/[Dd]ebug/
+**/[Rr]elease/
+
+# Specifically ignore specific build configurations
+**/bin/[Dd]ebug/
+**/bin/[Rr]elease/
+**/obj/[Dd]ebug/
+**/obj/[Rr]elease/
