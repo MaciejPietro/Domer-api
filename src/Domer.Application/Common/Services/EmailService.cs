@@ -45,4 +45,22 @@ public class EmailService : IEmailService
 
         await _emailSender.SendEmailAsync(message);
     }
+    
+    public async Task SendResetPasswordEmailAsync(string userEmail, string confirmationLink)
+    {
+        string emailTemplate = await LoadEmailTemplateAsync("ResetPasswordEmail.html");
+        
+        string emailBody = emailTemplate
+            .Replace("{{CONFIRMATION_LINK}}", confirmationLink)
+            .Replace("{{USER_EMAIL}}", userEmail)
+            .Replace("{{CURRENT_YEAR}}", DateTime.Now.Year.ToString());
+
+        var message = new Message(
+            new[] { userEmail }, 
+            "Budoma - Zresetuj hasło", 
+            emailBody
+        );
+
+        await _emailSender.SendEmailAsync(message);
+    }
 }

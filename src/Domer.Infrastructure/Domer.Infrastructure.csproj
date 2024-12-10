@@ -32,12 +32,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="EmailTemplates\*">
+    <None Update="Email\Templates\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Email\Templates\ConfirmationEmail.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+<!--    <None Update="Email\Templates\ConfirmationEmail.html">-->
+<!--      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--    </None>-->
+<!--    <None Update="Email\Templates\Re.html">-->
+<!--      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--    </None>-->
   </ItemGroup>
 
 </Project>

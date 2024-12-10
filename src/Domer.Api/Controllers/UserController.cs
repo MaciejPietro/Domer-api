@@ -136,7 +136,7 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
     
         if (!isCurrentPasswordCorrect)
         {
-            return BadRequest("Password is incorrect.");
+            return BadRequest("Błędne hasło.");
         }
         
         IdentityResult deleteResult = await userManager.DeleteAsync(user);

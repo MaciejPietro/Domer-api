@@ -7,4 +7,6 @@ public interface IEmailService
 {
     Task<string> LoadEmailTemplateAsync(string templateName);
     Task SendRegistrationConfirmationEmailAsync(string userEmail, string confirmationLink);
+    
+    Task SendResetPasswordEmailAsync(string userEmail, string resetPasswordLink);
 }

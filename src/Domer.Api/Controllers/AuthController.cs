@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Domer.Api.Controllers;
@@ -21,8 +21,6 @@ namespace Domer.Api.Controllers;
 public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService, IMapper mapper)
     : ControllerBase
 {
-
-       
     [HttpPost("register")]
     public async Task<IActionResult> Register(Register model)
     {
@@ -96,6 +94,69 @@ public class AuthController(UserManager<ApplicationUser> userManager, SignInMana
     }
 
     
+    [HttpPost("remindpassword")]
+    public async Task<IActionResult> SendResetPasswordLink(ResetPasswordLink model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        ApplicationUser? user = await userManager.FindByEmailAsync(model.Email);
+    
+        if (user == null)
+        {
+            return BadRequest("Użytkownik o podanym adresie email nie istnieje.");
+        }
+
+        if (!await userManager.IsEmailConfirmedAsync(user))
+        {
+            return BadRequest("Użytkownik o podanym adresie nie ma potwierdzonego adresu email.");
+        }
+
+        string resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+
+        string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
+
+        Dictionary<string, string?> param = new()
+        { 
+            { "token", encodedToken }, 
+            { "email", user.Email } 
+        };
+    
+        string resetLink = QueryHelpers.AddQueryString(model.ClientUri!, param);
+
+        try 
+        {
+            await emailService.SendResetPasswordEmailAsync(user.Email!, resetLink);
+            return Ok($"Email z linkiem aktywacyjnym został wysłany na adres {user.Email}.");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error sending password reset email: {ex.Message}");
+            return StatusCode(500, "Coś poszło nie tak.");
+        }
+    }
+    
+    [HttpPost("resetpassword")]
+    public async Task<IActionResult> ResetPassword(ResetPassword model)
+    {
+        ApplicationUser? user = await userManager.FindByEmailAsync(model.Email!);
+
+        if (user == null) return BadRequest();
+        
+        string decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
+        
+        IdentityResult resetPassResult = await userManager.ResetPasswordAsync(user, decodedToken, model.Password);
+        
+        if (!resetPassResult.Succeeded)
+        {
+            return resetPassResult.Errors.Any(e => 
+                e.Code.Contains("InvalidToken", StringComparison.OrdinalIgnoreCase)) ? BadRequest("Niepoprawny token.") : BadRequest(resetPassResult.Errors);
+        }
+        
+        return Ok("Hasło zostało zmienione");
+    }
 
 
     [HttpPost("login")]
@@ -103,6 +164,12 @@ public class AuthController(UserManager<ApplicationUser> userManager, SignInMana
     {
         try
         {
+            ApplicationUser? user = await userManager.FindByEmailAsync(model.Email!);
+
+            if (user == null) return BadRequest("Nie znaleźliśmy użytkownika o takim adresie email.");  
+            
+            
+            
             SignInResult signInResult = await signInManager.PasswordSignInAsync(
                 model.Email, 
                 model.Password, 
@@ -113,10 +180,9 @@ public class AuthController(UserManager<ApplicationUser> userManager, SignInMana
 
             if (!signInResult.Succeeded)
             {
-                return BadRequest(signInResult);
+                return BadRequest("Błędny email lub hasło");
             }
 
-            ApplicationUser? user = await userManager.FindByEmailAsync(model.Email);
                 
             if (user == null)
                 return Unauthorized();
