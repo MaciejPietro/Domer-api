@@ -1,5 +1,5 @@
 ﻿
-using Domer.Domain.Auth.Interfaces;
+using Domer.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 

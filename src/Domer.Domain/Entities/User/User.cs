@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domer.Domain.Auth.Entities;
+namespace Domer.Domain.Entities.User;
 
 public class User
 {

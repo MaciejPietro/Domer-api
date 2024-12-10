@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace Domer.Domain.Auth.Entities;
+namespace Domer.Domain.Entities.Auth;
 
 public class Register
 {

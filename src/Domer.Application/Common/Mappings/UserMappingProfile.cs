@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Domer.Application.Auth.DTOs;
-using Domer.Domain.Auth.Interfaces;
+using Domer.Application.DTOs.Queries;
+using Domer.Domain.Interfaces;
 
-namespace Domer.Application.Auth.Mappers;
+namespace Domer.Application.Common.Mappings;
 
 public class UserMappingProfile : Profile
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domer.Domain.Auth.Interfaces;
+namespace Domer.Domain.Interfaces;
 
 public interface IApplicationUser
 {

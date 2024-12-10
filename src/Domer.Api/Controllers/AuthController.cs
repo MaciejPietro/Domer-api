@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Domer.Application.Auth.DTOs;
-using Domer.Domain.Auth.Entities;
+using Domer.Application.DTOs.Queries;
 using Domer.Domain.Common.Interfaces;
+using Domer.Domain.Entities.Auth;
 using Domer.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Web;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace Domer.Api.Auth.Controllers;
+namespace Domer.Api.Controllers;
 
 [Route("api/auth")]
 [ApiController]

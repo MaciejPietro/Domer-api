@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Domer.Application.Auth.DTOs;
+namespace Domer.Application.DTOs.Queries;
 
 public class UserDto
 {

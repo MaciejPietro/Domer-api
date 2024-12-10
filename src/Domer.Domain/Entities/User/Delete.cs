@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
 
-namespace Domer.Domain.Auth.Entities;
+namespace Domer.Domain.Entities.User;
 
 public class Delete
 {

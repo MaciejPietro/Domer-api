@@ -2,9 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Security.Claims;
-using ISession = Domer.Domain.Auth.Interfaces.ISession;
+using ISession = Domer.Domain.Interfaces.ISession;
 
-namespace Domer.Application.Auth;
+
+namespace Domer.Application;
 
 public class Session : ISession
 {

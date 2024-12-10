@@ -1,4 +1,4 @@
-﻿using Domer.Application.Auth.Mappers;
+﻿using Domer.Application.Common.Mappings;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

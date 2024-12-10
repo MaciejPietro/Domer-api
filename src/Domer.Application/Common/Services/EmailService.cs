@@ -30,10 +30,8 @@ public class EmailService : IEmailService
 
     public async Task SendRegistrationConfirmationEmailAsync(string userEmail, string confirmationLink)
     {
-        // Load the template
         string emailTemplate = await LoadEmailTemplateAsync("ConfirmationEmail.html");
         
-        // Replace placeholders
         string emailBody = emailTemplate
             .Replace("{{CONFIRMATION_LINK}}", confirmationLink)
             .Replace("{{USER_EMAIL}}", userEmail)
