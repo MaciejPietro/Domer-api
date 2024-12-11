@@ -1,7 +1,9 @@
 using Domer.Api.Common;
 using Domer.Api.Configurations;
 using Domer.Api.Endpoints;
+using Domer.Application.Common.Interfaces;
 using Domer.Infrastructure;
+using Domer.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -10,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +43,14 @@ builder.AddValidationSetup();
 builder.Services.AddAuthSetup(builder.Configuration);
 
 builder.Services.AddAutoMapperSetup(builder.Configuration);
+
+// Mediatr
+builder.Services.AddMediatR(ctg =>
+{
+    ctg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+});
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+
 
 // Swagger
 builder.Services.AddSwaggerSetup(builder.Configuration);

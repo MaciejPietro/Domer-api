@@ -10,9 +10,11 @@
     <PackageReference Include="AutoMapper" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="DotNetEnv" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" />
     <PackageReference Include="NETCore.MailKit" />
     <PackageReference Include="StronglyTypedId" PrivateAssets="all" ExcludeAssets="runtime" />
     <PackageReference Include="StronglyTypedId.Templates" PrivateAssets="all" ExcludeAssets="runtime" />

@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
+using Domer.Application.Commands.Auth;
+using Domer.Application.Commands.Auth.Login;
+using Domer.Application.Commands.Auth.Logout;
+using Domer.Application.DTOs;
 using Domer.Application.DTOs.Queries;
 using Domer.Domain.Common.Interfaces;
 using Domer.Domain.Entities.Auth;
 using Domer.Infrastructure;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +23,7 @@ namespace Domer.Api.Controllers;
 
 [Route("api/auth")]
 [ApiController]
-public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService, IMapper mapper)
+public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService, IMapper mapper,  IMediator mediator)
     : ControllerBase
 {
     [HttpPost("register")]
@@ -160,50 +165,18 @@ public class AuthController(UserManager<ApplicationUser> userManager, SignInMana
 
 
     [HttpPost("login")]
-    public async Task<ActionResult<UserDto>> Login(Login model)
+    [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
+    public async Task<ActionResult<UserDto>> Login(LoginCommand command)
     {
-        try
-        {
-            ApplicationUser? user = await userManager.FindByEmailAsync(model.Email!);
-
-            if (user == null) return BadRequest("Nie znaleźliśmy użytkownika o takim adresie email.");  
-            
-            
-            
-            SignInResult signInResult = await signInManager.PasswordSignInAsync(
-                model.Email, 
-                model.Password, 
-                isPersistent: false, 
-                lockoutOnFailure: false
-            );
-
-
-            if (!signInResult.Succeeded)
-            {
-                return BadRequest("Błędny email lub hasło");
-            }
-
-                
-            if (user == null)
-                return Unauthorized();
-            
-            UserDto? responseDto = mapper.Map<UserDto>(user);
-                
-            return Ok(responseDto);
-
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex });
-        }
+        return Ok(await mediator.Send(command));
     }
 
     [HttpPost("logout")]
+    [ProducesDefaultResponseType()]
     [Authorize]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> Logout(LogoutCommand command)
     {
-        await signInManager.SignOutAsync().ConfigureAwait(false);
-        return Ok();
+        return Ok(await mediator.Send(command));
     }
 }
 

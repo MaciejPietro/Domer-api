@@ -178,3 +178,4 @@ C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\Email\Template
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\AutoMapper.dll
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\Email\Templates\ResetPasswordEmail.html
+C:\Users\mpiet\RiderProjects\domer\src\Domer.Api\bin\Debug\net9.0\System.Security.Permissions.dll
