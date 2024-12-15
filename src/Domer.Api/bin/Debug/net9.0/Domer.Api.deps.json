@@ -2046,6 +2046,7 @@
           "MediatR": "12.4.1",
           "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.0",
+          "Microsoft.AspNetCore.WebUtilities": "2.2.0",
           "Microsoft.EntityFrameworkCore": "9.0.0",
           "Microsoft.Extensions.Configuration": "9.0.0",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "9.0.0",

@@ -1,4 +1,5 @@
 ﻿using Domer.Domain.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,24 @@ namespace Domer.Application.Common.Interfaces;
     public interface IIdentityService
     {
         // User section
-        // Task<(bool isSucceed, string userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles);
+        Task<IApplicationUser> CreateUserAsync(string email, string password);
         Task<bool> SigninUserAsync(string emailAddress, string password);
         Task<bool> IsUserExists(string emailAddress);
+
+        Task<bool> HasConfirmedEmail(string emailAddress);
+
+        Task<string> GenerateEmailConfirmationTokenAsync(IApplicationUser user);
+        
+        Task ConfirmUserEmail(string emailAddress, string token);
         Task<IApplicationUser> GetUserDetailsAsync(string emailAddress);
         
         Task LogoutUserAsync();
+        
+        Task<IdentityResult> ResetPasswordAsync(string emailAddress, string token, string newPassword);
+ 
+        Task SendConfirmationEmail(string clientUri, string emailAddress, string token);
 
+        
         // Task<string> GetUserIdAsync(string userName);
         // Task<(string userId, string fullName, string UserName, string email, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName);
         // Task<string> GetUserNameAsync(string userId);

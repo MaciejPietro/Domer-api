@@ -4,6 +4,7 @@ using MediatR;
 
 
 namespace Domer.Application.Commands.Auth.Login;
+// TODO command should not return anything
     public class LoginCommand : IRequest<AuthResponseDTO>
     {
         public string Email { get; set; }

@@ -1,166 +1,48 @@
-﻿using AutoMapper;
-using Domer.Application.Commands.Auth;
+﻿using Domer.Application.Commands.Auth.ConfirmEmail;
 using Domer.Application.Commands.Auth.Login;
 using Domer.Application.Commands.Auth.Logout;
+using Domer.Application.Commands.Auth.Register;
+using Domer.Application.Commands.Auth.ResendConfirmationEmail;
+using Domer.Application.Commands.Auth.ResetPassword;
 using Domer.Application.DTOs;
 using Domer.Application.DTOs.Queries;
-using Domer.Domain.Common.Interfaces;
-using Domer.Domain.Entities.Auth;
-using Domer.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace Domer.Api.Controllers;
 
 [Route("api/auth")]
 [ApiController]
-public class AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService, IMapper mapper,  IMediator mediator)
+public class AuthController(IMediator mediator)
     : ControllerBase
 {
     [HttpPost("register")]
-    public async Task<IActionResult> Register(Register model)
+    public async Task<IActionResult> Register(RegisterCommand command)
     {
-        if (await userManager.FindByEmailAsync(model.Email) != null)
-        {
-            return BadRequest(new { Message = "Email already exists." });
-        }
-        
-        ApplicationUser user = new() { UserName = model.Email, Email = model.Email };
-    
-        try
-        {
-            IdentityResult result = await userManager.CreateAsync(user, model.Password);
-        
-            if (!result.Succeeded)
-            {
-                return BadRequest();
-            }
-        
-            string token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            
-            string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
-
-            Dictionary<string, string?> param = new()
-            { 
-                { "token", encodedToken }, 
-                { "email", user.Email } 
-            };
-        
-            string callbackLink = QueryHelpers.AddQueryString(model.ClientUri!,  param);
-        
-            await emailService.SendRegistrationConfirmationEmailAsync(user.Email, callbackLink);
-      
-            return Created();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, new { message = ex.Message });
-        }
+        return Ok(await mediator.Send(command));
     }
 
-    [HttpGet("emailconfirmation")]
-    public async Task<IActionResult> EmailConfirmation([FromQuery] string email, [FromQuery] string token)
+    [HttpPost("confirmemail")]
+    public async Task<IActionResult> ConfirmEmail(ConfirmEmailCommand command)
     {
-        ApplicationUser? user = await userManager.FindByEmailAsync(email);
-        
-
-        if (user == null)
-        {
-            return BadRequest("Invalid Email Confirmation Request");
-        }
-
-        string decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
-    
-        IdentityResult confirmResult = await userManager.ConfirmEmailAsync(user, decodedToken);
-        
-        Console.WriteLine(confirmResult);
-
-
-        if (confirmResult.Succeeded)
-        {
-            return Ok();
-        }
-
-        foreach (IdentityError error in confirmResult.Errors)
-        {
-            Console.WriteLine($"Token Confirmation Error: {error.Description}");
-        }
-        return BadRequest("Invalid Email Confirmation Request");
+        return Ok(await mediator.Send(command));
     }
 
     
-    [HttpPost("remindpassword")]
-    public async Task<IActionResult> SendResetPasswordLink(ResetPasswordLink model)
+    [HttpPost("resendconfirmationemail")]
+    [ProducesDefaultResponseType()]
+    public async Task<IActionResult> ResendConfirmationEmail(ResendConfirmationEmailCommand command)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        ApplicationUser? user = await userManager.FindByEmailAsync(model.Email);
-    
-        if (user == null)
-        {
-            return BadRequest("Użytkownik o podanym adresie email nie istnieje.");
-        }
-
-        if (!await userManager.IsEmailConfirmedAsync(user))
-        {
-            return BadRequest("Użytkownik o podanym adresie nie ma potwierdzonego adresu email.");
-        }
-
-        string resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-
-        string encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
-
-        Dictionary<string, string?> param = new()
-        { 
-            { "token", encodedToken }, 
-            { "email", user.Email } 
-        };
-    
-        string resetLink = QueryHelpers.AddQueryString(model.ClientUri!, param);
-
-        try 
-        {
-            await emailService.SendResetPasswordEmailAsync(user.Email!, resetLink);
-            return Ok($"Email z linkiem aktywacyjnym został wysłany na adres {user.Email}.");
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Error sending password reset email: {ex.Message}");
-            return StatusCode(500, "Coś poszło nie tak.");
-        }
+        return Ok(await mediator.Send(command));
     }
     
     [HttpPost("resetpassword")]
-    public async Task<IActionResult> ResetPassword(ResetPassword model)
+    [ProducesDefaultResponseType()]
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
-        ApplicationUser? user = await userManager.FindByEmailAsync(model.Email!);
-
-        if (user == null) return BadRequest();
-        
-        string decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Token));
-        
-        IdentityResult resetPassResult = await userManager.ResetPasswordAsync(user, decodedToken, model.Password);
-        
-        if (!resetPassResult.Succeeded)
-        {
-            return resetPassResult.Errors.Any(e => 
-                e.Code.Contains("InvalidToken", StringComparison.OrdinalIgnoreCase)) ? BadRequest("Niepoprawny token.") : BadRequest(resetPassResult.Errors);
-        }
-        
-        return Ok("Hasło zostało zmienione");
+        return Ok(await mediator.Send(command));
     }
 
 

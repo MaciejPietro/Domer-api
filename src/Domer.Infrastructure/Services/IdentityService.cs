@@ -1,11 +1,14 @@
 ﻿using Domer.Application.Common.Exceptions;
 using Domer.Application.Common.Interfaces;
+using Domer.Domain.Common.Interfaces;
 using Domer.Domain.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -15,25 +18,41 @@ namespace Domer.Infrastructure.Services;
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-
-        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly IEmailService _emailService;
+        
+        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _emailService = emailService;
+
         }
         
-        public async Task<bool> SigninUserAsync(string email, string password)
+        public async Task<bool> SigninUserAsync(string emailAddress, string password)
         {
-            SignInResult? result = await _signInManager.PasswordSignInAsync(email, password, false, false);
+            SignInResult? result = await _signInManager.PasswordSignInAsync(emailAddress, password, false, false);
             return result.Succeeded;
         }
         
-        public async Task<bool> IsUserExists(string email)
+        public async Task<bool> IsUserExists(string emailAddress)
         {
-            ApplicationUser? user = await _userManager.FindByEmailAsync(email!);
+            ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress!);
             
             return user != null;
         }
+        
+        public async Task<bool> HasConfirmedEmail(string emailAddress)
+        {
+            ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress!);
+            
+            if (user is null)
+            {
+                throw new BadRequestException("Użytkownik o podanym adresie email nie istnieje.");
+            }
+            
+            return await _userManager.IsEmailConfirmedAsync(user);
+        }
+
         
         public async Task<IApplicationUser> GetUserDetailsAsync(string emailAddress)
         {
@@ -49,29 +68,58 @@ namespace Domer.Infrastructure.Services;
             await _signInManager.SignOutAsync().ConfigureAwait(false);
         }
 
-        // public async Task<(bool isSucceed, string userId)> CreateUserAsync(string userName, string password, string email, string fullName, List<string> roles)
-        // {
-        //     var user = new ApplicationUser()
-        //     {
-        //         FullName = fullName,
-        //         UserName = userName,
-        //         Email = email
-        //     };
-        //
-        //     var result = await _userManager.CreateAsync(user, password);
-        //
-        //     if (!result.Succeeded)
-        //     {
-        //         throw new ValidationException(result.Errors);
-        //     }
-        //
-        //     var addUserRole = await _userManager.AddToRolesAsync(user, roles);
-        //     if (!addUserRole.Succeeded)
-        //     {
-        //         throw new ValidationException(addUserRole.Errors);
-        //     }
-        //     return (result.Succeeded, user.Id);
-        // }
+        public async Task<IdentityResult> ResetPasswordAsync(string emailAddress, string token, string newPassword)
+        {
+            ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress);
+
+            return await _userManager.ResetPasswordAsync(user!, token, newPassword);
+        }
+
+        public async Task<IApplicationUser> CreateUserAsync(string addressEmail, string password)
+        {
+
+            ApplicationUser user = new() { UserName = addressEmail, Email = addressEmail };
+            
+            IdentityResult result = await _userManager.CreateAsync(user, password);
+        
+            if (!result.Succeeded)
+            {
+                throw new ValidationException(result.Errors);
+            }
+        
+        
+            return user;
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(IApplicationUser user)
+        {
+            
+            string token = await _userManager.GenerateEmailConfirmationTokenAsync((ApplicationUser)user);
+            
+            return WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+        }
+
+        public async Task SendConfirmationEmail(string clientUri, string emailAddress, string token)
+        {
+            Dictionary<string, string?> param = new()
+            { 
+                { "token", token }, 
+                { "email", emailAddress } 
+            };
+        
+            string callbackLink = QueryHelpers.AddQueryString(clientUri!, param);
+        
+            await _emailService.SendRegistrationConfirmationEmailAsync(emailAddress, callbackLink);
+        }
+
+        public async Task ConfirmUserEmail(string emailAddress, string token)
+        {
+            string decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token));
+
+            ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress);
+    
+            await _userManager.ConfirmEmailAsync(user!, decodedToken);
+        }
 
 
         // public async Task<bool> DeleteUserAsync(string userId)
