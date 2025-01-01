@@ -47,7 +47,7 @@ public class AuthController(IMediator mediator)
 
 
     [HttpPost("login")]
-    [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
+    // [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
     public async Task<ActionResult<UserDto>> Login(LoginCommand command)
     {
         return Ok(await mediator.Send(command));

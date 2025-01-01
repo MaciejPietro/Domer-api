@@ -24,11 +24,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDTO
     public async Task<AuthResponseDTO> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         bool isUserExists = await _identityService.IsUserExists(request.Email!);
-        if (!isUserExists) throw new BadRequestException("Nie znaleźliśmy użytkownika o takim adresie email.");  
+        if (!isUserExists) throw new NotFoundException("Nie znaleźliśmy użytkownika o takim adresie email.");  
         
         
         bool result = await _identityService.SigninUserAsync(request.Email, request.Password);
-        if (!result) throw new BadRequestException("Błędne hasło");
+        if (!result) throw new NotFoundException("Błędne hasło");
 
         IApplicationUser user = await _identityService.GetUserDetailsAsync(request.Email);
 

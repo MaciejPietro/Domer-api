@@ -75,6 +75,7 @@ builder.Services.AddMediatRSetup();
 
 // Exception handler
 builder.Services.AddExceptionHandler<ExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Add CORS services
 builder.Services.AddCorsSetup(builder.Configuration);
@@ -105,8 +106,10 @@ app.UseCorsSetup();
 
 app.UseRouting();
 
+app.UseExceptionHandler(o => { });
+
 app.UseSwaggerSetup();
-// app.UseHsts();
+app.UseHsts();
 
 app.UseResponseCompression();
 // app.UseHttpsRedirection();
