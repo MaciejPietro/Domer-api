@@ -54,12 +54,25 @@ namespace Domer.Infrastructure.Services;
         }
 
         
-        public async Task<IApplicationUser> GetUserDetailsAsync(string emailAddress)
+        public async Task<IApplicationUser> GetUserDetailsByEmailAsync(string emailAddress)
         {
             ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress);
             if (user == null) throw new NotFoundException("User not found");
 
             return user;
+        }
+        
+        public async Task<IApplicationUser> GetUserDetailsAsync(string userId)
+        {
+     
+            
+            ApplicationUser? user = await _userManager.FindByIdAsync(userId);
+            
+            if (user == null) throw new NotFoundException($"Użytkownik o id {userId} nie istnieje");
+
+            return user;
+            
+          
         }
         
         
@@ -119,6 +132,42 @@ namespace Domer.Infrastructure.Services;
             ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress);
     
             await _userManager.ConfirmEmailAsync(user!, decodedToken);
+        }
+
+        public async Task UpdateUserProfile(string emailAddress)
+        {
+            ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress);
+            
+            IdentityResult setEmailResult = await _userManager.SetEmailAsync(user!, emailAddress);
+            IdentityResult setUserNameResult = await _userManager.SetUserNameAsync(user!, emailAddress);
+
+            
+            if (!setEmailResult.Succeeded || !setUserNameResult.Succeeded)
+            {
+                throw new BadRequestException("Nie udało się zaktualizować użytkownika");
+            }
+        }
+        
+        public async Task UpdateUserPassword(string userId, string password, string currentPasword)
+        {
+            ApplicationUser? user = await _userManager.FindByIdAsync(userId);
+            
+
+            bool isCurrentPasswordCorrect = await _userManager.CheckPasswordAsync(user!, currentPasword);
+    
+            if (!isCurrentPasswordCorrect)
+            {
+                throw new BadRequestException("Obecne hasło jest nieprawidłowe");
+            }
+            
+            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user!);
+        
+            IdentityResult resetPassResult = await _userManager.ResetPasswordAsync(user!, resetToken, password);
+        
+            if (!resetPassResult.Succeeded)
+            {
+                throw new BadRequestException("Zmiana hasła nie udała się");
+            }
         }
 
 

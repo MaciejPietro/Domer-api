@@ -9,6 +9,7 @@ using Domer.Application.DTOs.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Domer.Api.Controllers;
@@ -47,7 +48,7 @@ public class AuthController(IMediator mediator)
 
 
     [HttpPost("login")]
-    // [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
+    [ProducesDefaultResponseType(typeof(AuthResponseDTO))]
     public async Task<ActionResult<UserDto>> Login(LoginCommand command)
     {
         return Ok(await mediator.Send(command));

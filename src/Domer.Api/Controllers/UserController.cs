@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Domer.Application.Commands.User.UpdateUser;
 using Domer.Application.DTOs;
 using Domer.Application.DTOs.Queries;
 using Domer.Domain.Common.Interfaces;
 using Domer.Domain.Entities.Auth;
 using Domer.Domain.Entities.User;
 using Domer.Infrastructure;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +22,7 @@ namespace Domer.Api.Controllers;
 
 [Route("api/user")]
 [ApiController]
-public class UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService, IMapper mapper)
+public class UserController(IMediator mediator, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService  emailService, IMapper mapper)
     : ControllerBase
 {
 
@@ -44,77 +46,83 @@ public class UserController(UserManager<ApplicationUser> userManager, SignInMana
 
         return Ok(userDto);
     }
-
-    [HttpPatch()]
-    [Authorize]
-    public async Task<IActionResult> UpdateUser([FromBody] UpdateUser model)
-    {
-        ApplicationUser? user = await userManager.FindByIdAsync(model.Id);
-        
-        if (user == null)
-        {
-            return BadRequest();
-        }
-        
-        if(!string.IsNullOrEmpty(model.Email))
-        {
-            if (await userManager.FindByEmailAsync(model.Email) != null)
-                return BadRequest(new { Message = "Email already exists." });
-
-            if (string.IsNullOrEmpty(model.ClientUri))
-                return BadRequest(new { Message = "ClientUri is required to change email." });
-           
-            if (model.Email != user.Email)
-            {
-                IdentityResult setEmailResult = await userManager.SetEmailAsync(user, model.Email);
-                IdentityResult setUserNameResult = await userManager.SetUserNameAsync(user, model.Email);
-
-                if (!setEmailResult.Succeeded || !setUserNameResult.Succeeded)
-                {
-                    return BadRequest(new { Message = "Something went wrong." });
-                }
-
-                await ResendEmailConfirmation(new ResendEmailConfirmation 
-                { 
-                    Email = model.Email!, 
-                    ClientUri = model.ClientUri!
-                });
-            }
-        }
-        
-        
-        if (!string.IsNullOrEmpty(model.Password))
-        {
-            if (string.IsNullOrEmpty(model.CurrentPassword))
-            {
-                return BadRequest("Current password is required to change the password.");
-            }
-            
-            bool isCurrentPasswordCorrect = await userManager.CheckPasswordAsync(user, model.CurrentPassword);
     
-            if (!isCurrentPasswordCorrect)
-            {
-                return BadRequest("Current password is incorrect.");
-            }
-            
-            string resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
-        
-            IdentityResult resetPassResult = await userManager.ResetPasswordAsync(user, resetToken, model.Password);
-        
-            if (!resetPassResult.Succeeded)
-            {
-                return BadRequest(resetPassResult.Errors);
-            }
-        }
-        
-         
-        await userManager.UpdateAsync(user);
-
-        UserDto? responseDto = mapper.Map<UserDto>(user);
-                
-        return Ok(responseDto);
-        
+    [HttpPatch]
+    [Authorize]
+    public async Task<ActionResult> UpdateUser(UpdateUserCommand command)
+    {
+        return Ok(await mediator.Send(command));
     }
+
+
+    // public async Task<IActionResult> UpdateUser([FromBody] UpdateUser model)
+    // {
+    //     // ApplicationUser? user = await userManager.FindByIdAsync(model.Id);
+    //     //
+    //     // if (user == null)
+    //     // {
+    //     //     return BadRequest();
+    //     // }
+    //     //
+    //     // if(!string.IsNullOrEmpty(model.Email))
+    //     // {
+    //     //     if (await userManager.FindByEmailAsync(model.Email) != null)
+    //     //         return BadRequest(new { Message = "Email already exists." });
+    //     //
+    //     //     if (string.IsNullOrEmpty(model.ClientUri))
+    //     //         return BadRequest(new { Message = "ClientUri is required to change email." });
+    //     //    
+    //     //     if (model.Email != user.Email)
+    //     //     {
+    //     //         IdentityResult setEmailResult = await userManager.SetEmailAsync(user, model.Email);
+    //     //         IdentityResult setUserNameResult = await userManager.SetUserNameAsync(user, model.Email);
+    //     //
+    //     //         if (!setEmailResult.Succeeded || !setUserNameResult.Succeeded)
+    //     //         {
+    //     //             return BadRequest(new { Message = "Something went wrong." });
+    //     //         }
+    //     //
+    //     //         await ResendEmailConfirmation(new ResendEmailConfirmation 
+    //     //         { 
+    //     //             Email = model.Email!, 
+    //     //             ClientUri = model.ClientUri!
+    //     //         });
+    //     //     }
+    //     // }
+    //     //
+    //     //
+    //     // if (!string.IsNullOrEmpty(model.Password))
+    //     // {
+    //     //     if (string.IsNullOrEmpty(model.CurrentPassword))
+    //     //     {
+    //     //         return BadRequest("Current password is required to change the password.");
+    //     //     }
+    //     //     
+    //     //     bool isCurrentPasswordCorrect = await userManager.CheckPasswordAsync(user, model.CurrentPassword);
+    //     //
+    //     //     if (!isCurrentPasswordCorrect)
+    //     //     {
+    //     //         return BadRequest("Current password is incorrect.");
+    //     //     }
+    //     //     
+    //     //     string resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+    //     //
+    //     //     IdentityResult resetPassResult = await userManager.ResetPasswordAsync(user, resetToken, model.Password);
+    //     //
+    //     //     if (!resetPassResult.Succeeded)
+    //     //     {
+    //     //         return BadRequest(resetPassResult.Errors);
+    //     //     }
+    //     // }
+    //     //
+    //     //  
+    //     // await userManager.UpdateAsync(user);
+    //     //
+    //     // UserDto? responseDto = mapper.Map<UserDto>(user);
+    //     //         
+    //     // return Ok(responseDto);
+    //     
+    // }
 
     [HttpDelete()]
     [Authorize]

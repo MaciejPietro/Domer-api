@@ -20,13 +20,18 @@ namespace Domer.Application.Common.Interfaces;
         Task<string> GenerateEmailConfirmationTokenAsync(IApplicationUser user);
         
         Task ConfirmUserEmail(string emailAddress, string token);
-        Task<IApplicationUser> GetUserDetailsAsync(string emailAddress);
-        
+        Task<IApplicationUser> GetUserDetailsByEmailAsync(string emailAddress);
+        Task<IApplicationUser> GetUserDetailsAsync(string userId);
+
         Task LogoutUserAsync();
         
         Task<IdentityResult> ResetPasswordAsync(string emailAddress, string token, string newPassword);
  
         Task SendConfirmationEmail(string clientUri, string emailAddress, string token);
+        
+        Task UpdateUserProfile(string email); 
+
+        Task UpdateUserPassword(string userId, string password, string currentPassword); 
 
         
         // Task<string> GetUserIdAsync(string userName);

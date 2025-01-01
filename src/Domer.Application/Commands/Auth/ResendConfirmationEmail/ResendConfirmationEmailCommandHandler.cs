@@ -33,7 +33,7 @@ public class ResendConfirmationEmailCommandHandler : IRequestHandler<ResendConfi
             throw new BadRequestException("Użytkownik o podanym adresie nie ma potwierdzonego adresu email.");
         }
         
-        IApplicationUser user = await _identityService.GetUserDetailsAsync(request.Email);
+        IApplicationUser user = await _identityService.GetUserDetailsByEmailAsync(request.Email);
         
         string token = await _identityService.GenerateEmailConfirmationTokenAsync(user);
         
