@@ -2,6 +2,7 @@ using Domer.Api.Common;
 using Domer.Api.Configurations;
 using Domer.Api.Endpoints;
 using Domer.Application.Common.Interfaces;
+using Domer.Application.Queries.User.GetCurrentUser;
 using Domer.Infrastructure;
 using Domer.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
