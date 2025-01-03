@@ -20,8 +20,6 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
     
     public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        Console.WriteLine(request.Id);
-        
         IApplicationUser? user = await _identityService.GetUserDetailsAsync(request.Id);
 
         if (user is null)
@@ -38,10 +36,10 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
             // CHANGE EMAIL
             if (request.Email != user.Email)
             {
-                await _identityService.UpdateUserProfile(request.Email!);
+                await _identityService.UpdateUserProfile(user, request.Email!);
 
                 string token = await _identityService.GenerateEmailConfirmationTokenAsync(user);
-        
+                
                 await _identityService.SendConfirmationEmail(request.ClientUri, user.Email, token);
             }
         }

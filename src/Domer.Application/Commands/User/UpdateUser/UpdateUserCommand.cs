@@ -7,13 +7,13 @@ public class UpdateUserCommand : IRequest<Unit>
 {
 
  
-    public string Id { get; internal set; }
+    public string Id { get; set; }
 
-    public string? Email { get; }
+    public string? Email { get; set;}
 
-    public string? Password { get; }
+    public string? Password { get; set; }
     
-    public string? CurrentPassword { get; }
-    public string? ClientUri { get; }
+    public string? CurrentPassword { get; set;}
+    public string? ClientUri { get;set; }
 
 }

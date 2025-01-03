@@ -28,7 +28,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDTO
         
         
         bool result = await _identityService.SigninUserAsync(request.Email, request.Password);
-        if (!result) throw new NotFoundException("Błędne hasło");
+        if (!result) throw new BadRequestException("Błędne hasło");
 
         IApplicationUser user = await _identityService.GetUserDetailsByEmailAsync(request.Email);
 

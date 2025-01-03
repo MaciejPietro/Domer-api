@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,16 +23,23 @@ namespace Domer.Application.Common.Interfaces;
         Task ConfirmUserEmail(string emailAddress, string token);
         Task<IApplicationUser> GetUserDetailsByEmailAsync(string emailAddress);
         Task<IApplicationUser> GetUserDetailsAsync(string userId);
-
+        Task<IApplicationUser> GetUserAsync(ClaimsPrincipal principal);
+        
         Task LogoutUserAsync();
         
         Task<IdentityResult> ResetPasswordAsync(string emailAddress, string token, string newPassword);
  
+        Task<bool> CheckPasswordAsync(IApplicationUser user, string password);
+
         Task SendConfirmationEmail(string clientUri, string emailAddress, string token);
         
-        Task UpdateUserProfile(string email); 
+        Task UpdateUserProfile(IApplicationUser user, string newEmail); 
 
         Task UpdateUserPassword(string userId, string password, string currentPassword); 
+        
+        Task<bool> DeleteUserAsync(IApplicationUser user);
+        
+        Task<bool> SingOutUser();
 
         
         // Task<string> GetUserIdAsync(string userName);

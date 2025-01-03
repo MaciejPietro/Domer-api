@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -53,11 +54,24 @@ namespace Domer.Infrastructure.Services;
             return await _userManager.IsEmailConfirmedAsync(user);
         }
 
+        public async Task<IApplicationUser> GetUserAsync(ClaimsPrincipal principal)
+        {
+            ApplicationUser? currentUser = await _userManager.GetUserAsync(principal);
+
+            return currentUser;
+        }
+
+        public async Task<bool> CheckPasswordAsync(IApplicationUser user, string password)
+        {
+            bool isCurrentPasswordCorrect = await _userManager.CheckPasswordAsync((ApplicationUser) user, password);
+            
+            return isCurrentPasswordCorrect;
+        }
         
         public async Task<IApplicationUser> GetUserDetailsByEmailAsync(string emailAddress)
         {
             ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress);
-            if (user == null) throw new NotFoundException("User not found");
+            if (user == null) throw new NotFoundException("Użytkownik o podanym adresie email nie istnieje");
 
             return user;
         }
@@ -134,12 +148,12 @@ namespace Domer.Infrastructure.Services;
             await _userManager.ConfirmEmailAsync(user!, decodedToken);
         }
 
-        public async Task UpdateUserProfile(string emailAddress)
+        public async Task UpdateUserProfile(IApplicationUser user, string newEmail)
         {
-            ApplicationUser? user = await _userManager.FindByEmailAsync(emailAddress);
+    
             
-            IdentityResult setEmailResult = await _userManager.SetEmailAsync(user!, emailAddress);
-            IdentityResult setUserNameResult = await _userManager.SetUserNameAsync(user!, emailAddress);
+            IdentityResult setEmailResult = await _userManager.SetEmailAsync((ApplicationUser)user, newEmail);
+            IdentityResult setUserNameResult = await _userManager.SetUserNameAsync((ApplicationUser)user, newEmail);
 
             
             if (!setEmailResult.Succeeded || !setUserNameResult.Succeeded)
@@ -171,23 +185,35 @@ namespace Domer.Infrastructure.Services;
         }
 
 
-        // public async Task<bool> DeleteUserAsync(string userId)
-        // {
-        //     var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId);
-        //     if (user == null)
-        //     {
-        //         throw new NotFoundException("User not found");
-        //         //throw new Exception("User not found");
-        //     }
-        //
-        //     if (user.UserName == "system" || user.UserName == "admin")
-        //     {
-        //         throw new Exception("You can not delete system or admin user");
-        //         //throw new BadRequestException("You can not delete system or admin user");
-        //     }
-        //     var result = await _userManager.DeleteAsync(user);
-        //     return result.Succeeded;
-        // }
+        public async Task<bool> DeleteUserAsync(IApplicationUser user)
+        {
+            try
+            {
+                IdentityResult deleteResult = await _userManager.DeleteAsync((ApplicationUser)user);
+
+                return true;
+            }
+            catch (Exception err)
+            {
+                throw new InternalException("Coś poszło nie tak", err);
+            }
+            
+            
+        }
+
+        public async Task<bool> SingOutUser()
+        {
+            try
+            {
+                await _signInManager.SignOutAsync();
+
+                return true;
+            }
+            catch (Exception err)
+            {
+                throw new InternalException("Coś poszło nie tak", err);
+            }
+        }
 
 
 

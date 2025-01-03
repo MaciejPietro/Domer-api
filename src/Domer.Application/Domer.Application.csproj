@@ -27,10 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domer.Domain\Domer.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTOs\Commands\" />
   </ItemGroup> 
 
 </Project>

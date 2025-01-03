@@ -1,6 +1,9 @@
-﻿namespace Domer.Application.Commands.User.DeleteUser;
+﻿using MediatR;
 
-public class DeleteUserCommand
+namespace Domer.Application.Commands.User.DeleteUser;
+
+public class DeleteUserCommand  : IRequest<Unit>
 {
-    
+    public string Id { get;set; }
+    public string Password { get; set;}
 }
