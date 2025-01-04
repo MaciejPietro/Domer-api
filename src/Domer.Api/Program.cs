@@ -23,23 +23,10 @@ DotNetEnv.Env.Load();
 var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true).AddEnvironmentVariables().Build();
 
+// builder.Services.AddSingleton<IApplicationConfiguration, ApplicationConfiguration>();
 
 builder.Services.AddControllers();
 builder.AddValidationSetup();
-
-// builder.Services.AddAuthorization();
-// builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme, options =>
-// {
-//     options.ExpireTimeSpan = TimeSpan.FromDays(7);
-//     options.Cookie.HttpOnly = true;
-//     options.Cookie.SameSite = SameSiteMode.None;
-//     options.SlidingExpiration = true;
-//     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-// });
-//
-// builder.Services.AddIdentityCore<ApplicationUser>()
-//     .AddEntityFrameworkStores<ApplicationDbContext>()
-//     .AddApiEndpoints();
 
 builder.Services.AddAuthSetup(builder.Configuration);
 
@@ -68,7 +55,7 @@ builder.Services.AddApplicationSetup();
 // Request response compression
 builder.Services.AddCompressionSetup();
 
-// HttpContextAcessor
+// HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
 // Mediator

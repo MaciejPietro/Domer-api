@@ -9,6 +9,15 @@ namespace Domer.Domain.Common;
 public interface IGuid {}
 
 [StronglyTypedId]
+public partial struct ProjectId : IGuid
+{
+    public static implicit operator ProjectId(Guid guid)
+    {
+        return new ProjectId(guid);
+    }
+}
+
+[StronglyTypedId]
 public partial struct HeroId : IGuid
 {
     public static implicit operator HeroId(Guid guid)

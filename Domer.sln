@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domer.Api", "src\Domer.Api\Domer.Api.csproj", "{7BB1E674-BC4C-4A4E-873E-FEE2F57AED4E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9485D4F4-9E94-4058-A11B-40BD0511E99D}"
+	ProjectSection(SolutionItems) = preProject
+		.env.example = .env.example
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2222C55D-4478-437D-A6F0-EAA8A21903DC}"
 EndProject
