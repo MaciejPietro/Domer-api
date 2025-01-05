@@ -1,28 +1,45 @@
 ﻿using Ardalis.Result;
+using Domer.Application.Common.Exceptions;
+using Domer.Domain.Enums.Projects;
+using Domer.Domain.Interfaces.Projects;
 using FluentValidation;
 using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using InternalException = Domer.Application.Common.Exceptions.InternalException;
+
 
 namespace Domer.Application.Commands.Project.CreateProject;
 
 public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, Result<Unit>>
 {
-    private readonly IValidator<CreateProjectCommand> _validator;
+    private readonly IProjectRepository _projectRepository;
     
-    public CreateProjectCommandHandler()
+    public CreateProjectCommandHandler(IProjectRepository projectRepository)
     {
+        _projectRepository = projectRepository;
     }
     
     public async Task<Result<Unit>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
-        // _validator.ValidateAndThrow(request);
-        
-        // If validation is successful, this code is reached
-        Console.WriteLine(request.Name);
+        try
+        {
+            var project = new Domain.Entities.Projects.Project
+            {
+                Name = request.Name, 
+                Description = request.Description, 
+                Status = ProjectStatus.Design, 
+                BuildingArea = request.BuildingArea,
+                UsableArea = request.UsableArea 
+            };
 
-        // Your logic to handle the command goes here
+            await _projectRepository.AddAsync(project, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            throw new InternalException(e.Message);
+        }
 
         return Unit.Value;
     }

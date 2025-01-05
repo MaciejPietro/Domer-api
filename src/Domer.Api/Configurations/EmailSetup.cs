@@ -2,6 +2,7 @@
 using Domer.Application.Common.Services;
 using Domer.Domain.Common.Interfaces;
 using Domer.Infrastructure.Email;
+using Domer.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,6 +13,8 @@ public static class EmailSetup
 {
     public static IServiceCollection AddEmailSetup(this IServiceCollection services, IConfiguration configuration)
     {
+        EnvService.Load();
+        
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IEmailService, EmailService>();
         

@@ -3,7 +3,9 @@ using Domer.Api.Configurations;
 using Domer.Api.Endpoints;
 using Domer.Application.Common.Interfaces;
 using Domer.Application.Queries.User.GetCurrentUser;
+using Domer.Domain.Interfaces.Projects;
 using Domer.Infrastructure;
+using Domer.Infrastructure.Repository;
 using Domer.Infrastructure.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +40,7 @@ builder.Services.AddMediatR(ctg =>
     ctg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
 });
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 
 // Swagger

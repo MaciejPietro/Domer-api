@@ -10,7 +10,7 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required.")
-            .MaximumLength(4).WithMessage("Name must not exceed 4 characters.");
+            .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
 
     }
 }
