@@ -27,16 +27,21 @@ public class ProjectRepository : IProjectRepository
         return project;
     }
     
-    public async Task<List<Project>> GetAllAsync(int pageNumber, CancellationToken cancellationToken)
+    public async Task<(List<Project> Projects, int TotalCount)> GetAllAsync(
+        int pageNumber, 
+        int pageSize, 
+        CancellationToken cancellationToken)
     {
-        const int pageSize = 10;
-        
-        var result = await _dbContext.Projects.AsNoTracking()
+        var query = _dbContext.Projects.AsNoTracking();
+    
+        var totalCount = await query.CountAsync(cancellationToken);
+    
+        var projects = await query
             .OrderBy(x => x.Id)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
 
-        return result;
+        return (projects, totalCount);
     }
 }

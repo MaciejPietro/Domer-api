@@ -1,4 +1,5 @@
-﻿using Domer.Application.DTOs.Queries;
+﻿using Domer.Application.Common.Responses;
+using Domer.Application.DTOs.Queries;
 using Domer.Domain.Interfaces.Projects;
 using MediatR;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domer.Application.Queries.Projects.GetAllProjects;
 
-public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, List<ProjectListDto>>
+public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, PaginatedResponse<ProjectListDto>>
 {
     private readonly IProjectRepository _projectRepository;
     
@@ -18,14 +19,17 @@ public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, L
         _projectRepository = projectRepository;
     }
     
-    public async Task<List<ProjectListDto>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResponse<ProjectListDto>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
     {
 
         try
         {
-            var results = await _projectRepository.GetAllAsync(1, cancellationToken);
+            var (projects, totalCount) = await _projectRepository.GetAllAsync(
+                request.Page,
+                request.PerPage,
+                cancellationToken);
 
-            return results.Select(project => new ProjectListDto
+            var items = projects.Select(project => new ProjectListDto
             {
                 Id = project.Id,
                 Name = project.Name,
@@ -34,13 +38,22 @@ public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, L
                 CreatedAt = project.CreatedAt,
                 UpdatedAt = project.UpdatedAt
             }).ToList();
+
+            var totalPages = (int)Math.Ceiling(totalCount / (double)request.PerPage);
+
+            return new PaginatedResponse<ProjectListDto>
+            {
+                Results = items,
+                CurrentPage = request.Page,
+                TotalPages = totalPages,
+                TotalItems = totalCount,
+            };
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             throw;
         }
-        
        
     }
 

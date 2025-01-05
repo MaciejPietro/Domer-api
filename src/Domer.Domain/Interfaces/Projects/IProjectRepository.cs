@@ -9,6 +9,9 @@ public interface IProjectRepository
 {
         Task<IProject> AddAsync(Project project, CancellationToken cancellationToken);
         
-        Task<List<Project>> GetAllAsync(int pageNumber, CancellationToken cancellationToken);
+        Task<(List<Project> Projects, int TotalCount)> GetAllAsync(
+            int pageNumber, 
+            int pageSize, 
+            CancellationToken cancellationToken);
 
 }

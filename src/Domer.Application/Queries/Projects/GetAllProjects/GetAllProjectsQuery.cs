@@ -6,10 +6,10 @@ using System.Collections.Generic;
 
 namespace Domer.Application.Queries.Projects.GetAllProjects;
 
-public class GetAllProjectsQuery : IRequest<List<ProjectListDto>>
+public class GetAllProjectsQuery : IRequest<PaginatedResponse<ProjectListDto>>
 {
 
-    public GetAllProjectsQuery()
-    {
-    }
+    public int Page { get; set; } = 1;
+    public int PerPage { get; set; } = 10;
+
 }

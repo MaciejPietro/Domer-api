@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Domer.Application.Heroes.GetAllHeroes;
 
-public class GetAllHeroesHandler : IRequestHandler<GetAllHeroesRequest, PaginatedList<GetHeroResponse>>
+public class GetAllHeroesHandler : IRequestHandler<GetAllHeroesRequest, PaginatedResponse<GetHeroResponse>>
 {
     private readonly IContext _context;
     
@@ -18,7 +18,7 @@ public class GetAllHeroesHandler : IRequestHandler<GetAllHeroesRequest, Paginate
     {
         _context = context;
     }
-    public async Task<PaginatedList<GetHeroResponse>> Handle(GetAllHeroesRequest request, CancellationToken cancellationToken)
+    public async Task<PaginatedResponse<GetHeroResponse>> Handle(GetAllHeroesRequest request, CancellationToken cancellationToken)
     {
         var heroes = _context.Heroes
             .WhereIf(!string.IsNullOrEmpty(request.Name), x => EF.Functions.Like(x.Name, $"%{request.Name}%"))

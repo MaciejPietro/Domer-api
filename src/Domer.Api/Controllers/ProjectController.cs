@@ -1,5 +1,6 @@
 ﻿using Domer.Application.Commands.Project.CreateProject;
 using Domer.Application.Commands.User.ResendEmailConfirmation;
+using Domer.Application.Common.Responses;
 using Domer.Application.DTOs.Queries;
 using Domer.Application.Queries.Projects;
 using Domer.Application.Queries.Projects.GetAllProjects;
@@ -18,9 +19,9 @@ public class ProjectController(IMediator mediator)
 {
     [HttpGet()]
     [Authorize]
-    public async Task<ActionResult> GetAllProjects(GetAllProjectsQuery query)
+    public async Task<ActionResult> GetAllProjects([FromQuery] GetAllProjectsQuery query)
     {
-        List<ProjectListDto> result = await mediator.Send(query);
+        PaginatedResponse<ProjectListDto> result = await mediator.Send(query);
         
         return Ok(result);
     }
