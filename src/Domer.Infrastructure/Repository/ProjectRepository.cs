@@ -1,4 +1,6 @@
-﻿using Domer.Application.Common.Responses;
+﻿using Domer.Application.Common.Exceptions;
+using Domer.Application.Common.Responses;
+using Domer.Domain.Common;
 using Domer.Domain.Entities.Projects;
 using Domer.Domain.Interfaces.Projects;
 using Microsoft.EntityFrameworkCore;
@@ -43,5 +45,18 @@ public class ProjectRepository : IProjectRepository
             .ToListAsync(cancellationToken);
 
         return (projects, totalCount);
+    }
+
+    public async Task<Project> GetByIdAsync(ProjectId projectId, CancellationToken cancellationToken)
+    {
+        var project = await _dbContext.Projects
+            .FirstOrDefaultAsync(p => p.Id == projectId, cancellationToken);
+        
+        if (project == null)
+        {
+            throw new NotFoundException($"Project with ID {projectId} not found");
+        }
+    
+        return project;
     }
 }

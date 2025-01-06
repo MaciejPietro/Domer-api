@@ -4,6 +4,8 @@ using Domer.Application.Common.Responses;
 using Domer.Application.DTOs.Queries;
 using Domer.Application.Queries.Projects;
 using Domer.Application.Queries.Projects.GetAllProjects;
+using Domer.Application.Queries.Projects.GetProjectById;
+using Domer.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,16 @@ public class ProjectController(IMediator mediator)
     {
         PaginatedResponse<ProjectListDto> result = await mediator.Send(query);
         
+        return Ok(result);
+    }
+    
+    [HttpGet("{projectId}")]
+    [Authorize]
+    public async Task<ActionResult> GetProjectById([FromRoute] ProjectId projectId)
+    {
+        GetProjectByIdQuery query = new (projectId);
+        ResultResponse<ProjectDto> result = await mediator.Send(query);
+    
         return Ok(result);
     }
     

@@ -56,6 +56,4 @@ public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, P
         }
        
     }
-
-
 }

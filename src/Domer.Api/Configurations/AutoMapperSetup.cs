@@ -11,6 +11,7 @@ public static class AutoMapperSetup
     public static IServiceCollection AddAutoMapperSetup(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(typeof(UserMappingProfile));
+        services.AddAutoMapper(typeof(ProjectsMappingProfile));
 
         return services;
     }
