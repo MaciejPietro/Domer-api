@@ -54,9 +54,25 @@ public class ProjectRepository : IProjectRepository
         
         if (project == null)
         {
-            throw new NotFoundException($"Project with ID {projectId} not found");
+            throw new NotFoundException($"Nie znaleziono project o id {projectId}");
         }
     
         return project;
+    }
+
+    public async Task<bool> DeleteAsync(ProjectId projectId, CancellationToken cancellationToken)
+    {
+        var project = await _dbContext.Projects
+            .FirstOrDefaultAsync(p => p.Id == projectId, cancellationToken);
+        
+        if (project == null)
+        {
+            return false;
+        }
+
+        _dbContext.Projects.Remove(project);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    
+        return true;
     }
 }

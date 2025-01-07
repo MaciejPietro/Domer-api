@@ -1,5 +1,6 @@
 ﻿using Domer.Domain.Common;
 using Domer.Domain.Entities.Projects;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,4 +17,7 @@ public interface IProjectRepository
             CancellationToken cancellationToken);
         
         Task<Project> GetByIdAsync( ProjectId projectId,  CancellationToken cancellationToken);
+        
+        Task<bool> DeleteAsync( ProjectId projectId,  CancellationToken cancellationToken);
+
 }

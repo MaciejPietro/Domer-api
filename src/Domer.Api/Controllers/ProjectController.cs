@@ -1,4 +1,6 @@
-﻿using Domer.Application.Commands.Project.CreateProject;
+﻿using Domer.Application.Commands.Project;
+using Domer.Application.Commands.Project.CreateProject;
+using Domer.Application.Commands.Project.DeleteProject;
 using Domer.Application.Commands.User.ResendEmailConfirmation;
 using Domer.Application.Common.Responses;
 using Domer.Application.DTOs.Queries;
@@ -43,5 +45,16 @@ public class ProjectController(IMediator mediator)
     public async Task<ActionResult> CreateProject(CreateProjectCommand command)
     {
         return Ok(await mediator.Send(command));
+    }
+    
+    [HttpDelete("{projectId}")]
+    [Authorize]
+    public async Task<ActionResult> DeleteProject([FromRoute] ProjectId projectId)
+    {
+        
+        DeleteProjectCommand query = new (projectId);
+        var result = await mediator.Send(query);
+    
+        return Ok(result);
     }
 }
