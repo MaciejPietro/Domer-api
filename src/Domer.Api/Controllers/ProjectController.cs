@@ -44,7 +44,7 @@ public class ProjectController(IMediator mediator)
     [Authorize]
     public async Task<ActionResult> CreateProject(CreateProjectCommand command)
     {
-        return Ok(await mediator.Send(command));
+        return StatusCode(201, await mediator.Send(command));
     }
     
     [HttpDelete("{projectId}")]

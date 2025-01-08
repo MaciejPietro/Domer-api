@@ -39,7 +39,8 @@ public class ProjectRepository : IProjectRepository
         var totalCount = await query.CountAsync(cancellationToken);
     
         var projects = await query
-            .OrderBy(x => x.Id)
+            .OrderByDescending(x => x.CreatedAt)  // Changed from OrderBy to OrderByDescending
+            // .ThenByDescending(x => x.Id)          
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync(cancellationToken);
