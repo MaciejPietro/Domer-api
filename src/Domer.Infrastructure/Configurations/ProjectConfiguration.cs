@@ -1,4 +1,5 @@
 ﻿using Domer.Domain.Common;
+using Domer.Domain.Entities.Projects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,5 +13,9 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Domain.Entities.Pro
 
         builder.Property(x => x.Id)
             .HasConversion<ProjectId.EfCoreValueConverter>();
+        
+        builder.HasOne(p => p.ProjectDetails)
+            .WithOne(pd => pd.Project)
+            .HasForeignKey<ProjectDetails>(pd => pd.ProjectId);
     }
 }

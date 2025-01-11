@@ -33,8 +33,6 @@ public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, P
             {
                 Id = project.Id,
                 Name = project.Name,
-                UsableArea = project.UsableArea,
-                BuildingArea = project.BuildingArea,
                 CreatedAt = project.CreatedAt,
                 UpdatedAt = project.UpdatedAt
             }).ToList();

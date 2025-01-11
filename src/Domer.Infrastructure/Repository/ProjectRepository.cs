@@ -21,9 +21,12 @@ public class ProjectRepository : IProjectRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<IProject> AddAsync(Project project, CancellationToken cancellationToken)
+    public async Task<IProject> AddAsync(Project project, ProjectDetails projectDetails, CancellationToken cancellationToken)
     {
         await _dbContext.Projects.AddAsync(project, cancellationToken);
+        
+        await _dbContext.AddAsync(projectDetails, cancellationToken);
+        
         await _dbContext.SaveChangesAsync(cancellationToken);
         
         return project;
@@ -51,12 +54,15 @@ public class ProjectRepository : IProjectRepository
     public async Task<Project> GetByIdAsync(ProjectId projectId, CancellationToken cancellationToken)
     {
         var project = await _dbContext.Projects
+            .Include(p => p.ProjectDetails)
             .FirstOrDefaultAsync(p => p.Id == projectId, cancellationToken);
         
         if (project == null)
         {
             throw new NotFoundException($"Nie znaleziono project o id {projectId}");
         }
+        
+        Console.WriteLine(project);
     
         return project;
     }

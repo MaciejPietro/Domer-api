@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using Domer.Application.Common.Exceptions;
+using Domer.Domain.Common;
 using Domer.Domain.Entities.Projects;
 using Domer.Domain.Enums.Projects;
 using Domer.Domain.Interfaces;
@@ -7,6 +8,7 @@ using Domer.Domain.Interfaces.Projects;
 using FluentValidation;
 using MediatR;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,34 +32,46 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
     {
         try
         {
+        
             var project = new Domain.Entities.Projects.Project
             {
                 Name = request.Name, 
                 Description = request.Description, 
-                Status = ProjectStatus.Design, 
-                BuildingArea = request.BuildingArea,
-                UsableArea = request.UsableArea 
+                Status = request.Status, 
+                Type = request.Type,
             };
-            
-            // Upload images and create ProjectImage entities
-            if (request.Images != null && request.Images.Any())
-            {
-                foreach (var image in request.Images)
-                {
-                    var uploadResult = await _s3StorageService.UploadObjectAsync(image);
-                    
-                    if (uploadResult.Success)
-                    {
-                        project.Images.Add(new ProjectImage
-                        {
-                            FileName = uploadResult.FileName,
-                            ImageUrl = $"https://your-bucket-url/{uploadResult.FileName}"
-                        });
-                    }
-                }
-            }
 
-            await _projectRepository.AddAsync(project, cancellationToken);
+            var projectDetails = new Domain.Entities.Projects.ProjectDetails
+            {
+                ProjectId = project.Id,
+                UsableArea = request.UsableArea ?? null,
+                BuildingArea = request.BuildingArea ?? null,
+                Urls = request.Urls?.Select(l => new ExternalUrl() 
+                { 
+                    Name = l.Name, 
+                    Url = l.Url 
+                }).ToList() ?? new List<ExternalUrl>()
+            };
+
+            // Upload images and create ProjectImage entities
+            // if (request.Images != null && request.Images.Any())
+            // {
+            //     foreach (var image in request.Images)
+            //     {
+            //         var uploadResult = await _s3StorageService.UploadObjectAsync(image);
+            //         
+            //         if (uploadResult.Success)
+            //         {
+            //             project.Images.Add(new ProjectImage
+            //             {
+            //                 FileName = uploadResult.FileName,
+            //                 ImageUrl = $"https://your-bucket-url/{uploadResult.FileName}"
+            //             });
+            //         }
+            //     }
+            // }
+
+            await _projectRepository.AddAsync(project, projectDetails, cancellationToken);
         }
         catch (Exception e)
         {

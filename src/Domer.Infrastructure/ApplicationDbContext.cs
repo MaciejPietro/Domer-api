@@ -18,6 +18,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(typeof(HeroConfiguration).Assembly);
         builder.ApplyConfigurationsFromAssembly(typeof(ProjectConfiguration).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(ProjectDetailsConfiguration).Assembly);
 
     }
 }

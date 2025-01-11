@@ -10,6 +10,10 @@ public class ProjectsMappingProfile : Profile
     public ProjectsMappingProfile()
     {
         CreateMap<IProject, ProjectDto>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+            .ForMember(dest => dest.Details, opt =>
+                opt.MapFrom(src => src.ProjectDetails));
+            // .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+        
+        CreateMap<IProjectDetails, ProjectDetailsDto>();
     }
 }

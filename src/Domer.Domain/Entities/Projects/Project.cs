@@ -14,18 +14,17 @@ public class Project : Entity<ProjectId>, IProject
     
     public string Name { get; set; } = null!;
     
+    public string? Description { get; set; }
+
     public ProjectStatus Status { get; set; }
     
-    public string? Description { get; set; }
+    public ProjectType Type { get; set; }
     
-    public int? BuildingArea { get; set; }
-
-    public int? UsableArea { get; set; }
+    public ProjectDetails ProjectDetails { get; set; }
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     
     public ICollection<ProjectImage> Images { get; set; } = new List<ProjectImage>();
-
 }

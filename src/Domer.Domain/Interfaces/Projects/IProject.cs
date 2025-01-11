@@ -1,4 +1,5 @@
 ﻿using Domer.Domain.Common;
+using Domer.Domain.Entities.Projects;
 using Domer.Domain.Enums.Projects;
 using System;
 
@@ -9,9 +10,12 @@ public interface  IProject
     ProjectId Id { get; set; }
     string Name { get; set; }
     ProjectStatus Status { get; set; }
+    ProjectType Type { get; set; }
+    
+    ProjectDetails ProjectDetails { get; set; }
+
     string? Description { get; set; }
-    int? BuildingArea { get; set; }
-    int? UsableArea { get; set; }
+
     DateTime CreatedAt { get; set; }
 
     DateTime UpdatedAt { get; set; }

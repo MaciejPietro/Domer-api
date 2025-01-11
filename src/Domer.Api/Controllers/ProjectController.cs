@@ -11,6 +11,7 @@ using Domer.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -42,7 +43,7 @@ public class ProjectController(IMediator mediator)
     
     [HttpPost()]
     [Authorize]
-    public async Task<ActionResult> CreateProject(CreateProjectCommand command)
+    public async Task<ActionResult> CreateProject([FromBody] CreateProjectCommand command)
     {
         return StatusCode(201, await mediator.Send(command));
     }
