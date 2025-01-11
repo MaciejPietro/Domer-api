@@ -97,6 +97,25 @@
           }
         }
       },
+      "AWSSDK.Core/3.7.400.77": {
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.400.77"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.411.5": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.400.77"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.411.5"
+          }
+        }
+      },
       "Ben.Demystifier/0.4.1": {
         "dependencies": {
           "System.Reflection.Metadata": "7.0.0"
@@ -2066,6 +2085,7 @@
           "AutoMapper": "12.0.1",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "DotNetEnv": "3.1.1",
+          "Microsoft.AspNetCore.Http.Features": "2.2.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.0",
           "Microsoft.EntityFrameworkCore": "9.0.0",
           "Microsoft.Extensions.Configuration": "9.0.0",
@@ -2082,6 +2102,7 @@
       },
       "Domer.Infrastructure/1.0.0": {
         "dependencies": {
+          "AWSSDK.S3": "3.7.411.5",
           "AutoMapper": "12.0.1",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "Domer.Application": "1.0.0",
@@ -2147,6 +2168,20 @@
       "sha512": "sha512-+g/K+Vpe3gGMKGzjslMOdqNlkikScDjWfVvmWTayrDHaG/n2pPmFBMa+jKX1r/h6BDGFdkyRjAuhFE3ykW+r1g==",
       "path": "automapper.extensions.microsoft.dependencyinjection/12.0.1",
       "hashPath": "automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.7.400.77": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xpTOkzkqawZpCfGumTPTL5vMc/6VnxoQKAlhZLHliLiwRFiTMc+8BAaJ8aiAL7KzqFN1jqZ6EaQD9AYGoKe7wg==",
+      "path": "awssdk.core/3.7.400.77",
+      "hashPath": "awssdk.core.3.7.400.77.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.411.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GAJrQaL3+8nLyfHy5byQXrCtud+9cfvfL5PX6Ts0boVAKtPO3aSRVVn5mR4KhqNbWiVK5Ckm3a81vTYO/O1WuQ==",
+      "path": "awssdk.s3/3.7.411.5",
+      "hashPath": "awssdk.s3.3.7.411.5.nupkg.sha512"
     },
     "Ben.Demystifier/0.4.1": {
       "type": "package",

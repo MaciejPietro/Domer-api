@@ -52,6 +52,9 @@ builder.Services.AddEmailSetup(builder.Configuration);
 // Persistence
 builder.Services.AddDbSetup(builder.Configuration);
 
+// S3 File Storage
+builder.Services.AddS3StorageSetup(builder.Configuration);
+
 // Application layer setup
 builder.Services.AddApplicationSetup();
 

@@ -1,5 +1,7 @@
 ﻿using Ardalis.Result;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 
 namespace Domer.Application.Commands.Project.CreateProject;
 
@@ -10,4 +12,6 @@ public class CreateProjectCommand : IRequest<Result<Unit>>
     
     public int? BuildingArea { get; set; }
     public int? UsableArea { get; set; }
+    
+    public List<IFormFile> Images { get; set; } = new();
 }
