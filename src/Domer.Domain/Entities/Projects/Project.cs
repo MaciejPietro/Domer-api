@@ -22,6 +22,8 @@ public class Project : Entity<ProjectId>, IProject
     
     public ProjectDetails ProjectDetails { get; set; }
     
+    public ProjectCreator ProjectCreator { get; set; }
+    
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

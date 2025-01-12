@@ -1,4 +1,5 @@
-﻿using Domer.Application.Commands.Project;
+﻿using Ardalis.Result;
+using Domer.Application.Commands.Project;
 using Domer.Application.Commands.Project.CreateProject;
 using Domer.Application.Commands.Project.DeleteProject;
 using Domer.Application.Commands.Project.UpdateProject;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Domer.Api.Controllers;
@@ -46,7 +48,28 @@ public class ProjectController(IMediator mediator)
     [Authorize]
     public async Task<ActionResult> CreateProject([FromBody] CreateProjectCommand command)
     {
-        return StatusCode(201, await mediator.Send(command));
+        var result = await mediator.Send(command);
+    
+        if (result.Status == ResultStatus.Invalid)
+        {
+            // Return 400 Bad Request with validation errors
+            return BadRequest(new 
+            { 
+                Errors = result.ValidationErrors
+            });
+        }
+    
+        if (result.Status == ResultStatus.Error)
+        {
+            // Return 500 Internal Server Error
+            return StatusCode(500, new 
+            { 
+                Error = result.Errors.FirstOrDefault()
+            });
+        }
+
+        // Success case
+        return StatusCode(201, result);
     }
     
     [HttpPatch("{projectId}")]

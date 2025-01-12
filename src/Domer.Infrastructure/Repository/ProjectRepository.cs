@@ -21,11 +21,13 @@ public class ProjectRepository : IProjectRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<IProject> AddAsync(Project project, ProjectDetails projectDetails, CancellationToken cancellationToken)
+    public async Task<IProject> AddAsync(Project project, ProjectDetails projectDetails, IProjectCreator projectCreator, CancellationToken cancellationToken)
     {
         await _dbContext.Projects.AddAsync(project, cancellationToken);
         
         await _dbContext.AddAsync(projectDetails, cancellationToken);
+
+        await _dbContext.AddAsync(projectCreator, cancellationToken);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
         

@@ -7,17 +7,15 @@ using System.Collections.Generic;
 
 namespace Domer.Domain.Entities.Projects;
 
-public class ProjectDetails  : Entity<ProjectDetailsId>, IProjectDetails
+public class ProjectCreator : Entity<ProjectCreatorId>, IProjectCreator
 {
-    public override ProjectDetailsId Id { get; set; } = Guid.CreateVersion7();
-    public ProjectId ProjectId { get; set; }
-    public Project Project { get; set; }
-
+    public override ProjectCreatorId Id { get; set; } = Guid.CreateVersion7();
     
-    public int? UsableArea { get; set; }
-    public int? BuildingArea { get; set; }
-
-    public List<ExternalUrl>? Urls { get; set; } = new();
+    public ProjectId ProjectId { get; set; }
+    
+    public Project Project { get; set; }
+    
+    public string config { get; set; } = "\"{\\\"floors\\\":[]}\"";
 
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

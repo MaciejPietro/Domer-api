@@ -9,11 +9,10 @@ namespace Domer.Domain.Interfaces.Projects;
 
 public interface IProjectRepository
 {
-        Task<IProject> AddAsync(Project project, ProjectDetails projectDetails, CancellationToken cancellationToken);
+        Task<IProject> AddAsync(Project project, ProjectDetails projectDetails, IProjectCreator projectCreator, CancellationToken cancellationToken);
 
         Task UpdateAsync(Project project, ProjectDetails projectDetails, CancellationToken cancellationToken);
 
-        
         Task<(List<Project> Projects, int TotalCount)> GetAllAsync(
             int pageNumber, 
             int pageSize, 

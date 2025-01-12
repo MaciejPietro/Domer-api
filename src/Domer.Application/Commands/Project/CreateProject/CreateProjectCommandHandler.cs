@@ -21,18 +21,35 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IS3StorageService _s3StorageService;
+    private readonly IValidator<CreateProjectCommand> _validator;
     
-    public CreateProjectCommandHandler(IProjectRepository projectRepository, IS3StorageService s3StorageService)
+    public CreateProjectCommandHandler(
+        IProjectRepository projectRepository, 
+        IS3StorageService s3StorageService,
+        IValidator<CreateProjectCommand> validator)
     {
         _projectRepository = projectRepository;
         _s3StorageService = s3StorageService;
+        _validator = validator;
     }
     
     public async Task<Result<Unit>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
+        // Perform validation
+        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            var validationErrors = validationResult.Errors
+                .Select(x => new ValidationError
+                {
+                    ErrorMessage = x.ErrorMessage,
+                    Identifier = x.PropertyName
+                });
+            return Result<Unit>.Invalid(validationErrors);
+        }
+
         try
         {
-        
             var project = new Domain.Entities.Projects.Project
             {
                 Name = request.Name, 
@@ -44,14 +61,29 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             var projectDetails = new Domain.Entities.Projects.ProjectDetails
             {
                 ProjectId = project.Id,
-                UsableArea = request.UsableArea ?? null,
-                BuildingArea = request.BuildingArea ?? null,
+                UsableArea = request.UsableArea,
+                BuildingArea = request.BuildingArea,
                 Urls = request.Urls?.Select(l => new ExternalUrl() 
                 { 
                     Name = l.Name, 
                     Url = l.Url 
                 }).ToList() ?? new List<ExternalUrl>()
             };
+
+            var projectCreator = new Domain.Entities.Projects.ProjectCreator
+            {
+                ProjectId = project.Id,  
+            };
+
+            await _projectRepository.AddAsync(project, projectDetails, projectCreator, cancellationToken);
+            return Result<Unit>.Success(Unit.Value);
+        }
+        catch (Exception e)
+        {
+            return Result<Unit>.Error(e.Message);
+        }
+    }
+}
 
             // Upload images and create ProjectImage entities
             // if (request.Images != null && request.Images.Any())
@@ -70,14 +102,3 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             //         }
             //     }
             // }
-
-            await _projectRepository.AddAsync(project, projectDetails, cancellationToken);
-        }
-        catch (Exception e)
-        {
-            throw new InternalException(e.Message);
-        }
-
-        return Unit.Value;
-    }
-}
