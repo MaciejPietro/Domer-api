@@ -7,4 +7,5 @@ public enum ProjectStatus
     Design = 2,
     InProgress = 3,
     Done = 4,
+    Paused = 5,
 }

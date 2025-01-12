@@ -31,7 +31,34 @@ public class ProjectRepository : IProjectRepository
         
         return project;
     }
+
+    public async Task UpdateAsync(Project project, ProjectDetails projectDetails, CancellationToken cancellationToken)
+    {
     
+        Project? existingProject = await GetByIdAsync(project.Id, cancellationToken);
+
+
+        // Detach existing entities to avoid tracking conflicts
+        _dbContext.Entry(existingProject).State = EntityState.Detached;
+        _dbContext.Entry(existingProject.ProjectDetails).State = EntityState.Detached;
+
+        // Update Project entity
+        _dbContext.Entry(project).State = EntityState.Modified;
+
+        // Update ProjectDetails entity
+        projectDetails.ProjectId = project.Id; // Ensure the relationship is maintained
+        _dbContext.Entry(projectDetails).State = EntityState.Modified;
+
+        try
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException ex)
+        {
+            throw new InternalException("An error occurred while updating the project", ex);
+        }
+    }
+
     public async Task<(List<Project> Projects, int TotalCount)> GetAllAsync(
         int pageNumber, 
         int pageSize, 
@@ -61,8 +88,6 @@ public class ProjectRepository : IProjectRepository
         {
             throw new NotFoundException($"Nie znaleziono project o id {projectId}");
         }
-        
-        Console.WriteLine(project);
     
         return project;
     }

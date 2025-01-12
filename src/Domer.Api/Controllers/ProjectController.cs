@@ -1,6 +1,7 @@
 ﻿using Domer.Application.Commands.Project;
 using Domer.Application.Commands.Project.CreateProject;
 using Domer.Application.Commands.Project.DeleteProject;
+using Domer.Application.Commands.Project.UpdateProject;
 using Domer.Application.Commands.User.ResendEmailConfirmation;
 using Domer.Application.Common.Responses;
 using Domer.Application.DTOs.Queries;
@@ -47,6 +48,16 @@ public class ProjectController(IMediator mediator)
     {
         return StatusCode(201, await mediator.Send(command));
     }
+    
+    [HttpPatch("{projectId}")]
+    [Authorize]
+    public async Task<ActionResult> UpdateProject([FromRoute] ProjectId projectId, [FromBody] UpdateProjectCommand command)
+    {
+        command.Id = projectId;
+        
+        return StatusCode(200, await mediator.Send(command));
+    }
+
     
     [HttpDelete("{projectId}")]
     [Authorize]
