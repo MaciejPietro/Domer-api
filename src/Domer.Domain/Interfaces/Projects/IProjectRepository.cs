@@ -1,5 +1,6 @@
 ﻿using Domer.Domain.Common;
 using Domer.Domain.Entities.Projects;
+using Domer.Domain.Enums.Projects;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -16,6 +17,7 @@ public interface IProjectRepository
         Task<(List<Project> Projects, int TotalCount)> GetAllAsync(
             int pageNumber, 
             int pageSize, 
+            List<ProjectStatus>? statuses,
             CancellationToken cancellationToken);
         
         Task<Project> GetByIdAsync( ProjectId projectId,  CancellationToken cancellationToken);

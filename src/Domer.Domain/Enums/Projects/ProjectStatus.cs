@@ -4,8 +4,7 @@ public enum ProjectStatus
 {
     Draft = 0,
     Archived = 1,
-    Design = 2,
-    InProgress = 3,
-    Done = 4,
-    Paused = 5,
+    Active = 2,
+    Done = 3,
+    Paused = 4,
 }

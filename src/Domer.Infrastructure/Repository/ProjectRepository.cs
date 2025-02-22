@@ -2,6 +2,7 @@
 using Domer.Application.Common.Responses;
 using Domer.Domain.Common;
 using Domer.Domain.Entities.Projects;
+using Domer.Domain.Enums.Projects;
 using Domer.Domain.Interfaces.Projects;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -64,13 +65,20 @@ public class ProjectRepository : IProjectRepository
     public async Task<(List<Project> Projects, int TotalCount)> GetAllAsync(
         int pageNumber, 
         int pageSize, 
+        List<ProjectStatus>? statuses,
         CancellationToken cancellationToken)
     {
-        var query = _dbContext.Projects.AsNoTracking();
+        IQueryable<Project> query = _dbContext.Projects.AsNoTracking();
+        
+        if (statuses != null)
+        {
+            query = query.Where(p => statuses.Contains(p.Status));
+        }
     
-        var totalCount = await query.CountAsync(cancellationToken);
+        int totalCount = await query.CountAsync(cancellationToken);
+        
     
-        var projects = await query
+        List<Project> projects = await query
             .OrderByDescending(x => x.CreatedAt)  // Changed from OrderBy to OrderByDescending
             // .ThenByDescending(x => x.Id)          
             .Skip((pageNumber - 1) * pageSize)

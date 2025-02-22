@@ -27,6 +27,7 @@ public class GetAllProjectsQueryHandler : IRequestHandler<GetAllProjectsQuery, P
             var (projects, totalCount) = await _projectRepository.GetAllAsync(
                 request.Page,
                 request.PerPage,
+                request.Status,
                 cancellationToken);
 
             var items = projects.Select(project => new ProjectListDto
