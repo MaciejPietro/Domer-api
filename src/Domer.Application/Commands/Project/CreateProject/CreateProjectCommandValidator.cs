@@ -15,19 +15,19 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
             .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
         
-        // USABLE AREA
-        When(x => x.UsableArea.HasValue, () =>
-        {
-            RuleFor(x => x.UsableArea)
-                .GreaterThan(0);
-        });
-
-        // BUILDIN AREA
-        When(x => x.BuildingArea.HasValue, () =>
-        {
-            RuleFor(x => x.BuildingArea)
-                .GreaterThan(0);
-        });
+        // // USABLE AREA
+        // When(x => x.UsableArea.HasValue, () =>
+        // {
+        //     RuleFor(x => x.UsableArea)
+        //         .GreaterThan(0);
+        // });
+        //
+        // // BUILDIN AREA
+        // When(x => x.BuildingArea.HasValue, () =>
+        // {
+        //     RuleFor(x => x.BuildingArea)
+        //         .GreaterThan(0);
+        // });
 
         // URLS
         When(x => x.Urls != null, () =>

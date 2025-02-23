@@ -55,14 +55,19 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
                 Name = request.Name, 
                 Description = request.Description, 
                 Status = request.Status, 
-                Type = request.Type,
             };
 
             var projectDetails = new Domain.Entities.Projects.ProjectDetails
             {
                 ProjectId = project.Id,
-                UsableArea = request.UsableArea,
-                BuildingArea = request.BuildingArea,
+                // UsableArea = request.UsableArea,
+                // BuildingArea = request.BuildingArea,
+                AdvertiserType = request.AdvertiserType,
+                AdvertType = request.AdvertType,
+                ConditionType = request.ConditionType,
+                MarketType = request.MarketType,
+                OwnershipType = request.OwnershipType,
+                Type = request.Type,
                 Urls = request.Urls?.Select(l => new ExternalUrl() 
                 { 
                     Name = l.Name, 

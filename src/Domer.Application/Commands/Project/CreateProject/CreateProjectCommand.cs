@@ -17,9 +17,17 @@ public class CreateProjectCommand : IRequest<Result<Unit>>
     
     public string? Description { get; set; }
     
-    public int? UsableArea { get; set; }
-    public int? BuildingArea { get; set; }
-
+    public ProjectAdvertiserType AdvertiserType { get; set; }
+    
+    public ProjectAdvertType AdvertType { get; set; }
+    
+    public ProjectConditionType ConditionType { get; set; }
+    
+    public ProjectMarketType MarketType { get; set; }
+    
+    public ProjectOwnershipType OwnershipType { get; set; }
+    
+    
     public List<ExternalUrl>? Urls { get; set; } = new();
     public List<IFormFile>? Images { get; set; } = new();
 } 

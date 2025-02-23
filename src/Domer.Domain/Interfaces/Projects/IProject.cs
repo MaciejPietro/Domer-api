@@ -10,7 +10,6 @@ public interface  IProject
     ProjectId Id { get; set; }
     string Name { get; set; }
     ProjectStatus Status { get; set; }
-    ProjectType Type { get; set; }
     
     ProjectDetails ProjectDetails { get; set; }
 

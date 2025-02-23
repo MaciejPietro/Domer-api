@@ -9,11 +9,19 @@ public interface IProjectDetails
 {
     ProjectDetailsId Id { get; set; }
     
-    int? UsableArea  { get; set; }
-    int? BuildingArea  { get; set; }
+    ProjectAdvertiserType AdvertiserType { get; set; }
+    
+    ProjectAdvertType AdvertType { get; set; }
+    
+    ProjectConditionType ConditionType { get; set; }
+    
+    ProjectMarketType MarketType { get; set; }
+    
+    ProjectOwnershipType OwnershipType { get; set; }
+    
+    ProjectType Type { get; set; }
     
     List<ExternalUrl>? Urls { get; set; }
-
     DateTime CreatedAt { get; set; }
 
     DateTime UpdatedAt { get; set; }

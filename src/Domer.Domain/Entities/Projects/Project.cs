@@ -18,8 +18,6 @@ public class Project : Entity<ProjectId>, IProject
 
     public ProjectStatus Status { get; set; }
     
-    public ProjectType Type { get; set; }
-    
     public ProjectDetails ProjectDetails { get; set; }
     
     public ProjectCreator ProjectCreator { get; set; }

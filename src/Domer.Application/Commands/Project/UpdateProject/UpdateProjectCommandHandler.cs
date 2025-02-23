@@ -35,13 +35,13 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
         if(request.Name is not null ) project.Name = request.Name;
         if(project.Description is not null ) project.Description = request.Description;
         if(request.Status is not null ) project.Status = request.Status.Value;
-        if(request.Type is not null ) project.Type = request.Type.Value;
+        // if(request.Type is not null ) project.Type = request.Type.Value;
 
 
         ProjectDetails projectDetails = project.ProjectDetails;
         
-        if(request.UsableArea is not null) projectDetails.UsableArea = request.UsableArea;
-        if(request.BuildingArea is not null) projectDetails.BuildingArea = request.BuildingArea;
+        // if(request.UsableArea is not null) projectDetails.UsableArea = request.UsableArea;
+        // if(request.BuildingArea is not null) projectDetails.BuildingArea = request.BuildingArea;
         if(request.Urls is not null) projectDetails.Urls = request.Urls?.Select(u => new ExternalUrl
         {
             Name = u.Name,
