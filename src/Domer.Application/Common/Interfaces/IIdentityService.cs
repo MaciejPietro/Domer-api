@@ -19,7 +19,9 @@ namespace Domer.Application.Common.Interfaces;
         Task<bool> HasConfirmedEmail(string emailAddress);
 
         Task<string> GenerateEmailConfirmationTokenAsync(IApplicationUser user);
-        
+
+        Task<string> GenerateRemindPasswordTokenAsync(IApplicationUser user);
+
         Task ConfirmUserEmail(string emailAddress, string token);
         Task<IApplicationUser> GetUserDetailsByEmailAsync(string emailAddress);
         Task<IApplicationUser> GetUserDetailsAsync(string userId);
@@ -32,6 +34,8 @@ namespace Domer.Application.Common.Interfaces;
         Task<bool> CheckPasswordAsync(IApplicationUser user, string password);
 
         Task SendConfirmationEmail(string clientUri, string emailAddress, string token);
+        
+        Task SendResetPasswordEmail(string clientUri, string emailAddress, string token);
         
         Task UpdateUserProfile(IApplicationUser user, string newEmail); 
 

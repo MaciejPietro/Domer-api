@@ -40,7 +40,6 @@ public static class DbSetup
         services.AddDbContextPool<ApplicationDbContext>(options =>
             {
                 var appConfig = services.BuildServiceProvider().GetRequiredService<IApplicationConfiguration>();
-                Console.WriteLine(appConfig);
                 ApplicationDbContextConfiguration.Configure(options, appConfig);
             }
        

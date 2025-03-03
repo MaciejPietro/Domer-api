@@ -26,10 +26,9 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
     
     public async Task<Unit> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        Console.WriteLine(request.Email);
         if (await _identityService.IsUserExists(request.Email))
         {
-            throw new BadRequestException("Użytkownik o takim adresie email już istnieje");
+            throw new BadRequestException("Użytkownik o takim adresie e-mail już istnieje");
         }
         
         IApplicationUser user = await _identityService.CreateUserAsync(request.Email, request.Password);

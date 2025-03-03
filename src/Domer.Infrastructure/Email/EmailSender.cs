@@ -42,7 +42,6 @@ public class EmailSender(EmailConfiguration emailConfig) : IEmailSender
 
                 string? res = await client.SendAsync(mailMessage);
                 
-                Console.WriteLine(res);
             }
             catch (Exception ex)
             {

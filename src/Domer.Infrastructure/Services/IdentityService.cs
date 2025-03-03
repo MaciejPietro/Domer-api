@@ -125,6 +125,13 @@ namespace Domer.Infrastructure.Services;
             
             return WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
         }
+        
+        public async Task<string> GenerateRemindPasswordTokenAsync(IApplicationUser user)
+        {
+            string token = await _userManager.GeneratePasswordResetTokenAsync((ApplicationUser) user);
+            
+            return WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+        }
 
         public async Task SendConfirmationEmail(string clientUri, string emailAddress, string token)
         {
@@ -138,6 +145,21 @@ namespace Domer.Infrastructure.Services;
         
             await _emailService.SendRegistrationConfirmationEmailAsync(emailAddress, callbackLink);
         }
+        
+        public async Task SendResetPasswordEmail(string clientUri, string emailAddress, string token)
+        {
+            Dictionary<string, string?> param = new()
+            { 
+                { "token", token }, 
+                { "email", emailAddress } 
+            };
+            
+        
+            string callbackLink = QueryHelpers.AddQueryString(clientUri!, param);
+        
+            await _emailService.SendResetPasswordEmailAsync(emailAddress, callbackLink);
+        }
+
 
         public async Task ConfirmUserEmail(string emailAddress, string token)
         {

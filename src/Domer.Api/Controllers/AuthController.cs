@@ -2,6 +2,7 @@
 using Domer.Application.Commands.Auth.Login;
 using Domer.Application.Commands.Auth.Logout;
 using Domer.Application.Commands.Auth.Register;
+using Domer.Application.Commands.Auth.RemindPassword;
 using Domer.Application.Commands.Auth.ResendConfirmationEmail;
 using Domer.Application.Commands.Auth.ResetPassword;
 using Domer.Application.DTOs;
@@ -38,6 +39,14 @@ public class AuthController(IMediator mediator)
     {
         return Ok(await mediator.Send(command));
     }
+    
+    [HttpPost("remindpassword")]
+    [ProducesDefaultResponseType()]
+    public async Task<IActionResult> RemindPassword(RemindPasswordCommand command)
+    {
+        return Ok(await mediator.Send(command));
+    }
+
     
     [HttpPost("resetpassword")]
     [ProducesDefaultResponseType()]
