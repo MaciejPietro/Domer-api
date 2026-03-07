@@ -1,7 +1,7 @@
-# Domer API
+# Kompass API
 
 
-A ``.Net 9.0`` WebApi project. Crafter for Domer. 
+A ``.Net 9.0`` WebApi project. Crafted for Kompass. 
 
 
 
@@ -14,7 +14,7 @@ A ``.Net 9.0`` WebApi project. Crafter for Domer.
 ## Standalone
 1. You may need a running instance of Postgres, with appropriate migrations initialized.
 	- You can run just the DB on docker. For that, run the following command: ``docker-compose up -d db-server``. Doing that, the application will be able to reach the container of the db server.
-2. Go to the src/Domer.Api folder and run ``dotnet run``, or, in visual studio set the api project as startup and run as console/docker/IIS.
+2. Go to the src/Kompass.Api folder and run ``dotnet run``, or, in visual studio set the api project as startup and run as console/docker/IIS.
 3. Visithttps://localhost:7123/swagger/index.html to access the application's swagger.
 
 ## Docker
@@ -55,14 +55,14 @@ For more information, please take a look on swagger documentation.
 - Authorization
 - Unit tests
 - Integration tests with testcontainers
-- Container support with [docker](src/Domer.Api/dockerfile) and [docker-compose](docker-compose.yml)
+- Container support with [docker](src/Kompass.Api/dockerfile) and [docker-compose](docker-compose.yml)
 - OpenTelemetry support (with OLTP as default exporter)
 - NuGet Central package management (CPM)
 
 # Project Structure
 1. Services
 	- This folder stores your apis and any project that sends data to your users.
-	1. Domer.Api
+	1. Kompass.Api
 		- This is the main api project. Here are all the controllers and initialization for the api that will be used.
 	2. docker-compose
 		- This project exists to allow you to run docker-compose with Visual Studio. It contains a reference to the docker-compose file and will build all the projects dependencies and run it.
@@ -72,13 +72,13 @@ For more information, please take a look on swagger documentation.
 		- This folder contains the login Session implementation.
 3. Domain
 	- This folder contains your business models, enums and common interfaces.
-	1. Domer.Domain
+	1. Kompass.Domain
 		- Contains business models and enums.
 		1. Auth
 			- This folder contains the login Session Interface.
 4. Infra
 	- This folder contains all data access configuration, database contexts, anything that reaches for outside data.
-	1. Domer.Infrastructure
+	1. Kompass.Infrastructure
 		- This project contains the dbcontext, entities configuration and migrations.
 
 
@@ -92,8 +92,8 @@ For more information, please take a look on swagger documentation.
 To run migrations on this project, you need the dotnet-ef tool.
 - Run ``dotnet tool install --global dotnet-ef``
 - Now, depending on your OS, you have different commands:
-    1. For windows: ``dotnet ef migrations add InitialCreate --startup-project .\src\Domer.Api\ --project .\src\Domer.Infrastructure\``
-    2. For linux/mac: ``dotnet ef migrations add InitialCreate --startup-project ./src/Domer.Api/ --project ./src/Domer.Infrastructure/``
+    1. For windows: ``dotnet ef migrations add InitialCreate --startup-project .\src\Kompass.Api\ --project .\src\Kompass.Infrastructure\``
+    2. For linux/mac: ``dotnet ef migrations add InitialCreate --startup-project ./src/Kompass.Api/ --project ./src/Kompass.Infrastructure/``
 
 # Thanks
 This project has great influence of https://github.com/yanpitangui/dotnet-api-boilerplate/tree/main. If you have time, please visit these repos, and give them a star, too!

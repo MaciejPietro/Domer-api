@@ -2,7 +2,7 @@ version: '3.6'
 
 
 services:
-  domer-api:
+  kompass-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:7123;http://+:7122
