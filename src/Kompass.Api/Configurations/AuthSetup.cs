@@ -27,6 +27,7 @@ public static class AuthSetup
         services.AddIdentityCore<ApplicationUser>()
             .AddRoles<ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>()
             .AddApiEndpoints();
 
         return services;

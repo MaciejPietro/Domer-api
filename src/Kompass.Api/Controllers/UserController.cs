@@ -1,23 +1,26 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Kompass.Application.Commands.User.DeleteUser;
 using Kompass.Application.Commands.User.ResendEmailConfirmation;
 using Kompass.Application.Commands.User.UpdateUser;
 using Kompass.Application.DTOs.Queries;
 using Kompass.Application.Queries.User.GetCurrentUser;
+using Kompass.Domain.Enums.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
 namespace Kompass.Api.Controllers;
 
-[Route("api/user")]
+[Route("api/users")]
 [ApiController]
 public class UserController(IMediator mediator)
     : ControllerBase
 {
-    [HttpGet()]
+    [HttpGet("me")]
     [Authorize]
     public async Task<IActionResult> GetCurrentUser()
     {
@@ -26,6 +29,17 @@ public class UserController(IMediator mediator)
         UserDto result = await mediator.Send(query);
         
         return Ok(result);
+    }
+    
+    [HttpGet()]
+    [Authorize(Roles=nameof(UserRole.Admin))]
+    public async Task<IActionResult> GetUsers()
+    {
+        // GetCurrentUserQuery query = new (User);
+        //
+        // UserDto result = await mediator.Send(query);
+        
+        return Ok(new List<Any>());
     }
     
     [HttpPatch]
