@@ -27,7 +27,7 @@ public class ProjectController(IMediator mediator)
 {
     [HttpGet()]
     [Authorize]
-    public async Task<ActionResult> GetAllProjects([FromQuery] GetAllProjectsQuery query)
+    public async Task<IActionResult> GetAllProjects([FromQuery] GetAllProjectsQuery query)
     {
         PaginatedResponse<ProjectListDto> result = await mediator.Send(query);
         
@@ -36,7 +36,7 @@ public class ProjectController(IMediator mediator)
     
     [HttpGet("{projectId}")]
     [Authorize]
-    public async Task<ActionResult> GetProjectById([FromRoute] ProjectId projectId)
+    public async Task<IActionResult> GetProjectById([FromRoute] ProjectId projectId)
     {
         GetProjectByIdQuery query = new (projectId);
         ResultResponse<ProjectDto> result = await mediator.Send(query);
@@ -46,7 +46,7 @@ public class ProjectController(IMediator mediator)
     
     [HttpPost()]
     [Authorize]
-    public async Task<ActionResult> CreateProject([FromBody] CreateProjectCommand command)
+    public async Task<IActionResult> CreateProject([FromBody] CreateProjectCommand command)
     {
         var result = await mediator.Send(command);
     
@@ -74,7 +74,7 @@ public class ProjectController(IMediator mediator)
     
     [HttpPatch("{projectId}")]
     [Authorize]
-    public async Task<ActionResult> UpdateProject([FromRoute] ProjectId projectId, [FromBody] UpdateProjectCommand command)
+    public async Task<IActionResult> UpdateProject([FromRoute] ProjectId projectId, [FromBody] UpdateProjectCommand command)
     {
         command.Id = projectId;
         
@@ -84,7 +84,7 @@ public class ProjectController(IMediator mediator)
     
     [HttpDelete("{projectId}")]
     [Authorize]
-    public async Task<ActionResult> DeleteProject([FromRoute] ProjectId projectId)
+    public async Task<IActionResult> DeleteProject([FromRoute] ProjectId projectId)
     {
         
         DeleteProjectCommand query = new (projectId);

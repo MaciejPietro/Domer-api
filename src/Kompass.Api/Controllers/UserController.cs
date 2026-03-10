@@ -3,8 +3,11 @@ using Google.Protobuf.WellKnownTypes;
 using Kompass.Application.Commands.User.DeleteUser;
 using Kompass.Application.Commands.User.ResendEmailConfirmation;
 using Kompass.Application.Commands.User.UpdateUser;
+using Kompass.Application.Common.Responses;
 using Kompass.Application.DTOs.Queries;
+using Kompass.Application.DTOs.Queries.Users;
 using Kompass.Application.Queries.User.GetCurrentUser;
+using Kompass.Application.Queries.Users.GetUsers;
 using Kompass.Domain.Enums.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -33,13 +36,12 @@ public class UserController(IMediator mediator)
     
     [HttpGet()]
     [Authorize(Roles=nameof(UserRole.Admin))]
-    public async Task<IActionResult> GetUsers()
+    public async Task<IActionResult> GetUsers([FromQuery] GetUsersQuery query)
     {
-        // GetCurrentUserQuery query = new (User);
-        //
-        // UserDto result = await mediator.Send(query);
+        PaginatedResponse<UserListDto> result = await mediator.Send(query);
+
         
-        return Ok(new List<Any>());
+        return Ok(result);
     }
     
     [HttpPatch]

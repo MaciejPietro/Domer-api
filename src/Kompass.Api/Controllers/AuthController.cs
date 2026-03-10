@@ -6,7 +6,7 @@ using Kompass.Application.Commands.Auth.RemindPassword;
 using Kompass.Application.Commands.Auth.ResendConfirmationEmail;
 using Kompass.Application.Commands.Auth.ResetPassword;
 using Kompass.Application.DTOs;
-using Kompass.Application.DTOs.Queries;
+using Kompass.Application.DTOs.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

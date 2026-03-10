@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kompass.Domain.Interfaces;
+namespace Kompass.Domain.Interfaces.Users;
 
 public interface IApplicationUser
 {
