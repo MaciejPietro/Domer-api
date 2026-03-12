@@ -1,4 +1,7 @@
 ﻿using Kompass.Application.Common;
+using Kompass.Domain.Entities.Documents;
+using Kompass.Domain.Entities.Folders;
+using Kompass.Domain.Entities.Projects;
 using Kompass.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +12,12 @@ namespace Kompass.Infrastructure;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options), IContext
 {
-    public DbSet<Domain.Entities.Projects.Project> Projects { get; init; } = null!;
-    
+    public DbSet<Project> Projects { get; init; } = null!;
+    public DbSet<Folder> Folders { get; init; } = null!;
+    public DbSet<Document> Documents { get; init; } = null!;
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(typeof(ProjectConfiguration).Assembly);
-        builder.ApplyConfigurationsFromAssembly(typeof(ProjectDetailsConfiguration).Assembly);
-
     }
 }

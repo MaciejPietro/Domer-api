@@ -1,12 +1,12 @@
 ﻿using Kompass.Application.Common.Interfaces;
-using Kompass.Application.DTOs.Queries;
-using Kompass.Domain.Interfaces;
+using Kompass.Application.DTOs.Queries.Users;
+using Kompass.Application.Queries.User.GetCurrentUser;
+using Kompass.Domain.Interfaces.Users;
 using MediatR;
-
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kompass.Application.Queries.User.GetCurrentUser;
+namespace Kompass.Application.Queries.Users.GetCurrentUser;
 
 public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, UserDto>
 {

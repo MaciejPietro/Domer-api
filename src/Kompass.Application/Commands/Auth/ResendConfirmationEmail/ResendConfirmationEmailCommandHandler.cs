@@ -4,6 +4,7 @@ using Kompass.Application.Common.Exceptions;
 using Kompass.Application.Common.Interfaces;
 using Kompass.Application.DTOs;
 using Kompass.Domain.Interfaces;
+using Kompass.Domain.Interfaces.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;

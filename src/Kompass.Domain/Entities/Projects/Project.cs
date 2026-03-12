@@ -1,5 +1,6 @@
 ﻿using Kompass.Domain.Common;
 using Kompass.Domain.Common.Entities;
+using Kompass.Domain.Entities.Folders;
 using Kompass.Domain.Enums.Projects;
 using Kompass.Domain.Interfaces.Projects;
 using System;
@@ -21,6 +22,8 @@ public class Project : Entity<ProjectId>, IProject
     public ProjectDetails ProjectDetails { get; set; }
     
     public ProjectCreator ProjectCreator { get; set; }
+    
+    public ICollection<Folder> Folders { get; set; } = [];
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

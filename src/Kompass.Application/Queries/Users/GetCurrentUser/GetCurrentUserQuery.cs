@@ -1,4 +1,5 @@
 ﻿using Kompass.Application.DTOs.Queries;
+using Kompass.Application.DTOs.Queries.Users;
 using MediatR;
 
 namespace Kompass.Application.Queries.User.GetCurrentUser;

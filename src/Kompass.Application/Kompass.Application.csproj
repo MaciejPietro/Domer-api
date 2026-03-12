@@ -27,6 +27,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kompass.Domain\Kompass.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\Users\" />
   </ItemGroup> 
 
 </Project>

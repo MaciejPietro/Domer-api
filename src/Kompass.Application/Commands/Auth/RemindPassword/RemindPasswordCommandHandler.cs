@@ -1,6 +1,7 @@
 ﻿using Kompass.Application.Common.Exceptions;
 using Kompass.Application.Common.Interfaces;
 using Kompass.Domain.Interfaces;
+using Kompass.Domain.Interfaces.Users;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;

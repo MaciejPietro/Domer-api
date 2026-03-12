@@ -1,4 +1,5 @@
 ﻿using Kompass.Domain.Interfaces;
+using Kompass.Domain.Interfaces.Users;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -48,13 +49,13 @@ namespace Kompass.Application.Common.Interfaces;
         Task<IList<string>> GetUserRolesAsync(string userId);
         Task AssignUserToRoleAsync(string userId, string role);
 
+        Task<IList<IApplicationUser>> GetAllUsersAsync();
 
         // Task<string> GetUserIdAsync(string userName);
         // Task<(string userId, string fullName, string UserName, string email, IList<string> roles)> GetUserDetailsByUserNameAsync(string userName);
         // Task<string> GetUserNameAsync(string userId);
         // Task<bool> DeleteUserAsync(string userId);
         // Task<bool> IsUniqueUserName(string userName);
-        // Task<List<(string id, string fullName, string userName, string email)>> GetAllUsersAsync();
         // Task<List<(string id, string userName, string email, IList<string> roles)>> GetAllUsersDetailsAsync();
         // Task<bool> UpdateUserProfile(string id, string fullName, string email, IList<string> roles);
 

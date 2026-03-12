@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Kompass.Application.DTOs.Queries;
+namespace Kompass.Application.DTOs.Queries.Users;
 
 public class UserDto
 {

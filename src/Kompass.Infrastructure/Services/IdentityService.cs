@@ -2,10 +2,13 @@
 using Kompass.Application.Common.Interfaces;
 using Kompass.Domain.Common.Interfaces;
 using Kompass.Domain.Interfaces;
+using Kompass.Domain.Interfaces.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -240,6 +243,19 @@ namespace Kompass.Infrastructure.Services;
             {
                 throw new InternalException("Coś poszło nie tak", err);
             }
+        }
+        
+        public async Task<IList<IApplicationUser>> GetAllUsersAsync()
+        {
+            var users = await userManager.Users.ToListAsync();
+
+            foreach (var user in users)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+                ((ApplicationUser)user).Roles = roles;
+            }
+
+            return users.Cast<IApplicationUser>().ToList();
         }
 
 
