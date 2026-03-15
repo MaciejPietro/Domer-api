@@ -20,7 +20,7 @@ public interface IProjectRepository
             List<ProjectStatus>? statuses,
             CancellationToken cancellationToken);
         
-        Task<Project> GetByIdAsync( ProjectId projectId,  CancellationToken cancellationToken);
+        Task<Project?> GetByIdAsync( ProjectId projectId,  CancellationToken cancellationToken);
         
         Task<bool> DeleteAsync( ProjectId projectId,  CancellationToken cancellationToken);
 

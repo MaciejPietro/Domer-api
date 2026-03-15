@@ -81,16 +81,13 @@ public class ProjectRepository(ApplicationDbContext dbContext) : IProjectReposit
         return (projects, totalCount);
     }
 
-    public async Task<Project> GetByIdAsync(ProjectId projectId, CancellationToken cancellationToken)
+    public async Task<Project?> GetByIdAsync(ProjectId projectId, CancellationToken cancellationToken)
     {
         var project = await dbContext.Projects
             .Include(p => p.ProjectDetails)
             .FirstOrDefaultAsync(p => p.Id == projectId, cancellationToken);
         
-        if (project == null)
-        {
-            throw new NotFoundException($"Nie znaleziono project o id {projectId}");
-        }
+       
     
         return project;
     }

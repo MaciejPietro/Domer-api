@@ -4,6 +4,7 @@ using Kompass.Infrastructure.Configurations;
 using Kompass.Application.Common.Interfaces;
 using Kompass.Application.Queries.User.GetCurrentUser;
 using Kompass.Domain.Interfaces.Documents;
+using Kompass.Domain.Interfaces.Folders;
 using Kompass.Domain.Interfaces.Projects;
 using Kompass.Infrastructure;
 using Kompass.Infrastructure.Repository;
@@ -37,7 +38,7 @@ builder.Services.AddMediatR(ctg =>
 });
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 
