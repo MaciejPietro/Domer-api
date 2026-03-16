@@ -30,13 +30,7 @@ public class CreateFolderCommandValidator : AbstractValidator<CreateFolderComman
         RuleFor(x => x.ProjectId)
             .Cascade(CascadeMode.Stop)
             .MustBeGuidObject()
-        .MustAsync(async (projectId, cancellation) =>
-            {
-                Guid.TryParse(projectId.ToString(), out Guid guid);
-            Domain.Entities.Projects.Project? project = await _projectRepository.GetByIdAsync(guid, cancellation);
-            return project != null;
-        })
-        .WithMessage("Project does not exist.");
+            .MustProjectExists(_projectRepository);
 
 
         // PARENT FOLDER ID (if provided)
