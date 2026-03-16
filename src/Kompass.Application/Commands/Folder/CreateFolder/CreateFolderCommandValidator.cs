@@ -34,13 +34,15 @@ public class CreateFolderCommandValidator : AbstractValidator<CreateFolderComman
 
 
         // PARENT FOLDER ID (if provided)
-        // RuleFor(x => x.ParentFolderId)
-        //     .MustBeGuid()
-        //     .When(x => !string.IsNullOrEmpty(x.ParentFolderId))
-        //     .MustAsync(async (parentFolderId, cancellation) =>
-        //         await ParentFolderExists(parentFolderId, cancellation))
-        //     .When(x => !string.IsNullOrEmpty(x.ParentFolderId))
-        //     .WithMessage("Parent folder does not exist.");
+        RuleFor(x => x.ParentFolderId)
+            .Cascade(CascadeMode.Stop)
+            .MustBeGuidObject().When(x => !string.IsNullOrEmpty(x.ParentFolderId))
+            .MustFolderExists(_folderRepository);
+
+        // .MustAsync(async (parentFolderId, cancellation) =>
+        //     await ParentFolderExists(parentFolderId, cancellation))
+        // .When(x => !string.IsNullOrEmpty(x.ParentFolderId))
+        // .WithMessage("Parent folder does not exist.");
         //
         // // PARENT FOLDER MUST BELONG TO SAME PROJECT
         // RuleFor(x => x)

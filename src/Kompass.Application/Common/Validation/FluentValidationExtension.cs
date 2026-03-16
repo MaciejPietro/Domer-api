@@ -1,4 +1,5 @@
 using FluentValidation;
+using Kompass.Domain.Interfaces.Folders;
 using Kompass.Domain.Interfaces.Projects;
 using System;
 
@@ -32,5 +33,24 @@ public static class FluentValidationExtensions
                 return false;
             })
             .WithMessage("Project does not exist.");
+    }
+    
+    public static IRuleBuilderOptions<T, object?> MustFolderExists<T>(
+        this IRuleBuilder<T, object?> ruleBuilder, IFolderRepository folderRepository)
+    {
+        return ruleBuilder
+            .MustAsync(async (folderId, cancellation) =>
+            {
+                if (Guid.TryParse(folderId?.ToString(), out Guid guid))
+                {
+                    
+                    var folder = await folderRepository.GetByIdAsync(guid, cancellation);
+                    
+                    return folder != null;
+                }
+                
+                return false;
+            })
+            .WithMessage("Folder does not exist.");
     }
 }
