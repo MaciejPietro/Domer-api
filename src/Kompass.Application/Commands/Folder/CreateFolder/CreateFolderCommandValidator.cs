@@ -56,18 +56,6 @@ public class CreateFolderCommandValidator : AbstractValidator<CreateFolderComman
         //     .WithMessage("Parent folder must belong to the same project.");
     }
 
-    // private static Task<bool> ProjectExists(object? projectId, CancellationToken cancellationToken)
-    // {
-    //     // var guid = Guid.Parse(projectId as string);
-    //     
-    //     // Console.WriteLine(projectId);
-    //     
-    //     // Domain.Entities.Projects.Project? project = await _projectRepository.GetByIdAsync(projectId?.ToString(), cancellationToken);
-    //     
-    //
-    //     return Task.FromResult(false);
-    // }
-
     // private async Task<bool> ParentFolderExists(string? parentFolderId, CancellationToken cancellationToken)
     // {
     //     if (string.IsNullOrEmpty(parentFolderId) || !Guid.TryParse(parentFolderId, out var guid))
