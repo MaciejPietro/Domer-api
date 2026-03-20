@@ -8,5 +8,5 @@ public class CreateFolderCommand : IRequest<Result<Unit>>
 {
     public string? Name { get; set; }
     public string? ParentFolderId { get; set; }
-    public object? ProjectId { get; set; }
+    public string? ProjectId { get; set; }
 } 

@@ -24,7 +24,11 @@ public class CreateFolderCommandValidator : AbstractValidator<CreateFolderComman
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
-
+        
+        // PARENT FOLDER ID (if provided)
+        RuleFor(x => x)
+            .Cascade(CascadeMode.Stop)
+            .MustFolderHaveNoDuplicatedNames(x => x.ParentFolderId,x => x.Name, _folderRepository).When(x => !string.IsNullOrEmpty(x.ParentFolderId));
 
         // PROJECT ID
         RuleFor(x => x.ProjectId)
@@ -32,47 +36,20 @@ public class CreateFolderCommandValidator : AbstractValidator<CreateFolderComman
             .MustBeGuidObject()
             .MustProjectExists(_projectRepository);
 
-
         // PARENT FOLDER ID (if provided)
         RuleFor(x => x.ParentFolderId)
             .Cascade(CascadeMode.Stop)
             .MustBeGuidObject().When(x => !string.IsNullOrEmpty(x.ParentFolderId))
-            .MustFolderExists(_folderRepository);
+            .MustFolderExists(_folderRepository).When(x => !string.IsNullOrEmpty(x.ParentFolderId));
+        
+        // PARENT FOLDER ID belongs to PROJECT ID
+        RuleFor(x => x)
+            .Cascade(CascadeMode.Stop)
+            .MustBelongsToProject(
+                x => x.ParentFolderId,
+                x => x.ProjectId,
+                _folderRepository)
+            .When(x => !string.IsNullOrEmpty(x.ParentFolderId));
 
-        // .MustAsync(async (parentFolderId, cancellation) =>
-        //     await ParentFolderExists(parentFolderId, cancellation))
-        // .When(x => !string.IsNullOrEmpty(x.ParentFolderId))
-        // .WithMessage("Parent folder does not exist.");
-        //
-        // // PARENT FOLDER MUST BELONG TO SAME PROJECT
-        // RuleFor(x => x)
-        //     .MustAsync(async (command, cancellation) =>
-        //         await ParentFolderBelongsToProject(command.ParentFolderId, command.ProjectId, cancellation))
-        //     .When(x => !string.IsNullOrEmpty(x.ParentFolderId))
-        //     .WithMessage("Parent folder must belong to the same project.");
     }
-
-    // private async Task<bool> ParentFolderExists(string? parentFolderId, CancellationToken cancellationToken)
-    // {
-    //     if (string.IsNullOrEmpty(parentFolderId) || !Guid.TryParse(parentFolderId, out var guid))
-    //         return false;
-    //
-    //     var folder = await _folderRepository.GetByIdAsync(new Domain.Common.FolderId(guid), cancellationToken);
-    //     return folder != null;
-    // }
-    //
-    // private async Task<bool> ParentFolderBelongsToProject(
-    //     string? parentFolderId,
-    //     string? projectId,
-    //     CancellationToken cancellationToken)
-    // {
-    //     if (string.IsNullOrEmpty(parentFolderId) || !Guid.TryParse(parentFolderId, out var parentGuid))
-    //         return true;
-    //
-    //     if (string.IsNullOrEmpty(projectId) || !Guid.TryParse(projectId, out var projectGuid))
-    //         return true;
-    //
-    //     var parentFolder = await _folderRepository.GetByIdAsync(new Domain.Common.FolderId(parentGuid), cancellationToken);
-    //     return parentFolder?.ProjectId == new Domain.Common.ProjectId(projectGuid);
-    // }
 }

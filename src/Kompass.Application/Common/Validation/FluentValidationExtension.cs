@@ -1,4 +1,5 @@
 using FluentValidation;
+using Kompass.Domain.Common;
 using Kompass.Domain.Interfaces.Folders;
 using Kompass.Domain.Interfaces.Projects;
 using System;
@@ -52,5 +53,52 @@ public static class FluentValidationExtensions
                 return false;
             })
             .WithMessage("Folder does not exist.");
+    }
+    
+    public static IRuleBuilderOptions<T, T> MustFolderHaveNoDuplicatedNames<T>(
+        this IRuleBuilder<T, T> ruleBuilder,
+        Func<T, string?> parentFolderIdSelector,
+        Func<T, string?> nameSelector,
+        IFolderRepository folderRepository)
+    {
+        return ruleBuilder
+            .MustAsync(async (command, cancellation) =>
+            {
+                Guid.TryParse(parentFolderIdSelector(command), out Guid parentFolderId);
+                Guid.TryParse(nameSelector(command)?.ToString(), out Guid name);
+               
+                
+                // var folder = await folderRepository.GetByIdAsync(guid, cancellation);
+                
+                return false;
+            })
+            .WithMessage(x =>
+                $"'{{x.Name}}' has already exists in this folder.");
+    }
+    
+    public static IRuleBuilderOptions<T, T> MustBelongsToProject<T>(
+        this IRuleBuilder<T, T> ruleBuilder,
+        Func<T, string?> parentFolderIdSelector,
+        Func<T, object?> projectIdSelector,
+        IFolderRepository folderRepository)
+    {
+        return ruleBuilder
+            .MustAsync(async (command, cancellationToken) =>
+            {
+                if (!Guid.TryParse(parentFolderIdSelector(command), out Guid parentFolderId))
+                {
+                    return false;
+                }
+
+                if (!Guid.TryParse(projectIdSelector(command)?.ToString(), out Guid projectId))
+                {
+                    return false;
+                }
+
+                var parentFolder = await folderRepository.GetByIdAsync(new FolderId(parentFolderId), cancellationToken);
+
+                return parentFolder.ProjectId == projectId;
+            })
+            .WithMessage("Folder and parent folder must belong to the same project.");
     }
 }

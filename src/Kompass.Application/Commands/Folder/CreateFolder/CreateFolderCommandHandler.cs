@@ -47,8 +47,28 @@ public class CreateFolderCommandHandler : IRequestHandler<CreateFolderCommand, R
                 });
             return Result<Unit>.Invalid(validationErrors);
         }
+
+        try
+        {
+
+            // Guid.TryParse(request.ParentFolderId, out var parentFolderId);
+            // Guid.TryParse(request.ProjectId, out var projectId);
+            //
+            // var newFolder = new Domain.Entities.Folders.Folder
+            // {
+            //     Name = request.Name!, ProjectId = projectId, ParentFolderId = parentFolderId
+            // };
+            //
+            // await _folderRepository.AddAsync(newFolder, cancellationToken);
+
+            
+            return Result<Unit>.Success(Unit.Value);
+        }
+        catch (Exception e)
+        {
+            return Result<Unit>.Error(e.Message);
+        }
         
-        return Result<Unit>.Success(Unit.Value);
         
 
         // try
