@@ -7,6 +7,8 @@ using Kompass.Application.Commands.Project.UpdateProject;
 using Kompass.Application.Commands.User.ResendEmailConfirmation;
 using Kompass.Application.Common.Responses;
 using Kompass.Application.DTOs.Queries;
+using Kompass.Application.DTOs.Queries.Folders;
+using Kompass.Application.Queries.Folders.GetAllFolders;
 using Kompass.Application.Queries.Projects;
 using Kompass.Application.Queries.Projects.GetAllProjects;
 using Kompass.Application.Queries.Projects.GetProjectById;
@@ -26,24 +28,20 @@ namespace Kompass.Api.Controllers;
 public class FolderController(IMediator mediator)
     : ControllerBase
 {
-    // [HttpGet()]
-    // [Authorize]
-    // public async Task<IActionResult> GetAllProjects([FromQuery] GetAllProjectsQuery query)
-    // {
-    //     PaginatedResponse<ProjectListDto> result = await mediator.Send(query);
-    //     
-    //     return Ok(result);
-    // }
-    //
-    // [HttpGet("{projectId}")]
-    // [Authorize]
-    // public async Task<IActionResult> GetProjectById([FromRoute] ProjectId projectId)
-    // {
-    //     GetProjectByIdQuery query = new (projectId);
-    //     ResultResponse<ProjectDto> result = await mediator.Send(query);
-    //
-    //     return Ok(result);
-    // }
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetAllFolders([FromQuery] Guid projectId)
+    {
+        var query = new GetAllFoldersQuery
+        {
+            ProjectId = new ProjectId(projectId),
+        };
+
+        var result = await mediator.Send(query);
+
+        return Ok(result);
+    }
+    
     
     [HttpPost()]
     [Authorize]
