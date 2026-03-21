@@ -27,20 +27,16 @@ public class FolderRepository(ApplicationDbContext dbContext) : IFolderRepositor
             .FirstOrDefaultAsync(f => f.Id == folderId, cancellationToken);
     }
 
-
-
-    public async Task<Folder> GetAllAsync(FolderId folderId, CancellationToken cancellationToken)
+    public async Task<Folder?> GetByNameAsync(string folderName, FolderId? folderId, CancellationToken cancellationToken)
     {
-        var folder = await dbContext.Folders
-            .FirstOrDefaultAsync(f => f.Id == folderId, cancellationToken)
-            ?? throw new InvalidOperationException($"Folder with id {folderId} not found.");
+        var query = dbContext.Folders.Where(f => f.Name == folderName);
 
-        // Load all folders in the same project into the change tracker.
-        // EF Core fix-up will automatically wire SubFolders navigation properties,
-        // giving us the full recursive tree without manual recursion.
-        await dbContext.Folders
-            .Where(f => f.ProjectId == folder.ProjectId)
-            .LoadAsync(cancellationToken);
+        if (folderId is not null)
+        {
+            query = query.Where(f => f.ParentFolderId == folderId);
+        }
+
+        var folder = await query.FirstOrDefaultAsync(cancellationToken);
 
         return folder;
     }

@@ -12,7 +12,7 @@ public interface IFolderRepository
 
     Task<Folder> GetByIdAsync(FolderId folderId, CancellationToken cancellationToken);
 
-    Task<Folder> GetAllAsync(FolderId folderId, CancellationToken cancellationToken);
+    Task<Folder?> GetByNameAsync(string folderName, FolderId? folderId, CancellationToken cancellationToken);
 
     Task<(List<Folder> Folders, int TotalCount)> GetAllAsync(ProjectId projectId, CancellationToken cancellationToken);
 

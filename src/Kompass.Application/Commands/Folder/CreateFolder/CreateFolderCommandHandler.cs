@@ -33,9 +33,6 @@ public class CreateFolderCommandHandler : IRequestHandler<CreateFolderCommand, R
     
     public async Task<Result<Unit>> Handle(CreateFolderCommand request, CancellationToken cancellationToken)
     {
-        Console.WriteLine("test");
-        Console.WriteLine(request);
-        // Perform validation
         var validationResult = await _validator.ValidateAsync(request, cancellationToken);
         if (!validationResult.IsValid)
         {
@@ -50,16 +47,15 @@ public class CreateFolderCommandHandler : IRequestHandler<CreateFolderCommand, R
 
         try
         {
-
-            // Guid.TryParse(request.ParentFolderId, out var parentFolderId);
-            // Guid.TryParse(request.ProjectId, out var projectId);
-            //
-            // var newFolder = new Domain.Entities.Folders.Folder
-            // {
-            //     Name = request.Name!, ProjectId = projectId, ParentFolderId = parentFolderId
-            // };
-            //
-            // await _folderRepository.AddAsync(newFolder, cancellationToken);
+            Guid.TryParse(request.ParentFolderId, out var parentFolderId);
+            Guid.TryParse(request.ProjectId, out var projectId);
+            
+            var newFolder = new Domain.Entities.Folders.Folder
+            {
+                Name = request.Name!, ProjectId = projectId, ParentFolderId = parentFolderId
+            };
+            
+            await _folderRepository.AddAsync(newFolder, cancellationToken);
 
             
             return Result<Unit>.Success(Unit.Value);
@@ -68,33 +64,5 @@ public class CreateFolderCommandHandler : IRequestHandler<CreateFolderCommand, R
         {
             return Result<Unit>.Error(e.Message);
         }
-        
-        
-
-        // try
-        // {
-        //     // Convert string IDs to strongly-typed IDs
-        //     var projectId = new ProjectId(Guid.Parse(request.ProjectId as string ?? string.Empty));
-        //     FolderId? parentFolderId = null;
-        //
-        //     if (request.ParentFolderId is string parentFolderIdStr && !string.IsNullOrEmpty(parentFolderIdStr))
-        //     {
-        //         parentFolderId = new FolderId(Guid.Parse(parentFolderIdStr));
-        //     }
-        //
-        //     var folder = new Domain.Entities.Folders.Folder
-        //     {
-        //         Name = request.Name!,
-        //         ParentFolderId = parentFolderId,
-        //         ProjectId = projectId,
-        //     };
-        //
-        //     await _folderRepository.AddAsync(folder, cancellationToken);
-        //     return Result<Unit>.Success(Unit.Value);
-        // }
-        // catch (Exception e)
-        // {
-        //     return Result<Unit>.Error(e.Message);
-        // }
     }
 }

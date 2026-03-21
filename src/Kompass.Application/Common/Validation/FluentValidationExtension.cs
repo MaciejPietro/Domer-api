@@ -58,22 +58,22 @@ public static class FluentValidationExtensions
     public static IRuleBuilderOptions<T, T> MustFolderHaveNoDuplicatedNames<T>(
         this IRuleBuilder<T, T> ruleBuilder,
         Func<T, string?> parentFolderIdSelector,
-        Func<T, string?> nameSelector,
+        Func<T, string> nameSelector,
         IFolderRepository folderRepository)
     {
         return ruleBuilder
             .MustAsync(async (command, cancellation) =>
             {
                 Guid.TryParse(parentFolderIdSelector(command), out Guid parentFolderId);
-                Guid.TryParse(nameSelector(command)?.ToString(), out Guid name);
+                var name = nameSelector(command);
                
                 
-                // var folder = await folderRepository.GetByIdAsync(guid, cancellation);
-                
-                return false;
+                var folder = await folderRepository.GetByNameAsync(name, parentFolderId, cancellation);
+
+                return folder is null;
             })
             .WithMessage(x =>
-                $"'{{x.Name}}' has already exists in this folder.");
+                $"'{nameSelector(x)}' already exists in this folder.");
     }
     
     public static IRuleBuilderOptions<T, T> MustBelongsToProject<T>(

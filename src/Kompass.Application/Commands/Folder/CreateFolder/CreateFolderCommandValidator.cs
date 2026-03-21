@@ -28,7 +28,7 @@ public class CreateFolderCommandValidator : AbstractValidator<CreateFolderComman
         // PARENT FOLDER ID (if provided)
         RuleFor(x => x)
             .Cascade(CascadeMode.Stop)
-            .MustFolderHaveNoDuplicatedNames(x => x.ParentFolderId,x => x.Name, _folderRepository).When(x => !string.IsNullOrEmpty(x.ParentFolderId));
+            .MustFolderHaveNoDuplicatedNames(x => x.ParentFolderId,x => x.Name!, _folderRepository).When(x => !string.IsNullOrEmpty(x.ParentFolderId));
 
         // PROJECT ID
         RuleFor(x => x.ProjectId)
@@ -51,5 +51,7 @@ public class CreateFolderCommandValidator : AbstractValidator<CreateFolderComman
                 _folderRepository)
             .When(x => !string.IsNullOrEmpty(x.ParentFolderId));
 
+        
+        // TODO Max Depth reached, validation
     }
 }
