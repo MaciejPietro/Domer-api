@@ -67,8 +67,40 @@ public class FolderRepository(ApplicationDbContext dbContext) : IFolderRepositor
         return (rootFolders, rootFolders.Count);
     }
 
-    public Task<bool> DeleteAsync(FolderId projectId, CancellationToken cancellationToken)
+    // TODO think about better solution since it is ai generated and I think it coulde be better
+    public async Task<bool> DeleteAsync(FolderId folderId, CancellationToken cancellationToken)
     {
-        throw new System.NotImplementedException();
+        var folder = await dbContext.Folders
+            .FirstOrDefaultAsync(p => p.Id == folderId, cancellationToken);
+
+        if (folder == null)
+        {
+            return false;
+        }
+
+        // Load entire subtree so EF can remove children before parents
+        var allDescendants = new List<Folder>();
+        await LoadDescendantsAsync(folderId, allDescendants, cancellationToken);
+
+        // Remove deepest children first, then the folder itself
+        allDescendants.Reverse();
+        dbContext.Folders.RemoveRange(allDescendants);
+        dbContext.Folders.Remove(folder);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
+
+    private async Task LoadDescendantsAsync(FolderId parentId, List<Folder> result, CancellationToken cancellationToken)
+    {
+        var children = await dbContext.Folders
+            .Where(f => f.ParentFolderId == parentId)
+            .ToListAsync(cancellationToken);
+
+        foreach (var child in children)
+        {
+            await LoadDescendantsAsync(child.Id, result, cancellationToken);
+            result.Add(child);
+        }
     }
 }
