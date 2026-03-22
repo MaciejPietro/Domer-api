@@ -1,8 +1,10 @@
 using FluentValidation;
 using Kompass.Domain.Common;
+using Kompass.Domain.Entities.Folders;
 using Kompass.Domain.Interfaces.Folders;
 using Kompass.Domain.Interfaces.Projects;
 using System;
+using System.Threading.Tasks;
 
 namespace Kompass.Application.Common.Validation;
 
@@ -45,7 +47,7 @@ public static class FluentValidationExtensions
                 if (Guid.TryParse(folderId?.ToString(), out Guid guid))
                 {
                     
-                    var folder = await folderRepository.GetByIdAsync(guid, cancellation);
+                    Folder? folder = await folderRepository.GetByIdAsync(guid, cancellation);
                     
                     return folder != null;
                 }
@@ -57,18 +59,19 @@ public static class FluentValidationExtensions
     
     public static IRuleBuilderOptions<T, T> MustFolderHaveNoDuplicatedNames<T>(
         this IRuleBuilder<T, T> ruleBuilder,
-        Func<T, string?> parentFolderIdSelector,
+        Func<T, Task<string?>> parentFolderIdSelector,
         Func<T, string> nameSelector,
         IFolderRepository folderRepository)
     {
         return ruleBuilder
             .MustAsync(async (command, cancellation) =>
             {
-                Guid.TryParse(parentFolderIdSelector(command), out Guid parentFolderId);
-                var name = nameSelector(command);
+                string? parentFolderIdStr = await parentFolderIdSelector(command);
+                Guid.TryParse(parentFolderIdStr, out Guid parentFolderId);
+                string name = nameSelector(command);
                
                 
-                var folder = await folderRepository.GetByNameAsync(name, parentFolderId, cancellation);
+                Folder? folder = await folderRepository.GetByNameAsync(name, parentFolderId, cancellation);
 
                 return folder is null;
             })

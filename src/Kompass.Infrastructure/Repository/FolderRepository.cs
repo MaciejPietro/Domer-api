@@ -21,6 +21,13 @@ public class FolderRepository(ApplicationDbContext dbContext) : IFolderRepositor
         return folder;
     }
 
+    public async Task<IFolder> UpdateAsync(IFolder folder, CancellationToken cancellationToken)
+    {
+        dbContext.Folders.Update((Folder)folder);
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return folder;
+    }
+
     public async Task<Folder?> GetByIdAsync(FolderId folderId, CancellationToken cancellationToken)
     {
         return await dbContext.Folders

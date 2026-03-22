@@ -9,8 +9,10 @@ namespace Kompass.Domain.Interfaces.Folders;
 public interface IFolderRepository
 {
     Task<IFolder> AddAsync(Folder project, CancellationToken cancellationToken);
+    
+    Task<IFolder> UpdateAsync(IFolder folder, CancellationToken cancellationToken);
 
-    Task<Folder> GetByIdAsync(FolderId folderId, CancellationToken cancellationToken);
+    Task<Folder?> GetByIdAsync(FolderId folderId, CancellationToken cancellationToken);
 
     Task<Folder?> GetByNameAsync(string folderName, FolderId? folderId, CancellationToken cancellationToken);
 

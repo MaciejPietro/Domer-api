@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using Kompass.Application.Commands.Folder.CreateFolder;
+using Kompass.Application.Commands.Folder.UpdateFolder;
 using Kompass.Application.Commands.Project;
 using Kompass.Application.Commands.Project.CreateProject;
 using Kompass.Application.Commands.Project.DeleteProject;
@@ -71,14 +72,14 @@ public class FolderController(IMediator mediator)
         return StatusCode(201, result);
     }
     
-    // [HttpPatch("{projectId}")]
-    // [Authorize]
-    // public async Task<IActionResult> UpdateProject([FromRoute] ProjectId projectId, [FromBody] UpdateProjectCommand command)
-    // {
-    //     command.Id = projectId;
-    //     
-    //     return StatusCode(200, await mediator.Send(command));
-    // }
+    [HttpPatch("{folderId}")]
+    [Authorize]
+    public async Task<IActionResult> UpdateProject([FromRoute] string folderId, [FromBody] UpdateFolderCommand command)
+    {
+        command.Id = folderId;
+        
+        return StatusCode(200, await mediator.Send(command));
+    }
 
     
     // [HttpDelete("{projectId}")]
