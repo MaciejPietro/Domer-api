@@ -90,6 +90,15 @@ public class FolderController(IMediator mediator)
         
         command.Id = folderId;
         var result = await mediator.Send(command);
+        
+        if (result.Status == ResultStatus.Invalid)
+        {
+            // Return 400 Bad Request with validation errors
+            return BadRequest(new 
+            { 
+                Errors = result.ValidationErrors
+            });
+        }
     
         return Ok(result);
     }
