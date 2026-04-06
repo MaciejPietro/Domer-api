@@ -4,13 +4,14 @@ using System;
 
 namespace Kompass.Domain.Entities.Projects;
 
+// NOT USED FOR NOW
+
 public class ProjectImage : Entity<ProjectImageId>
 {
-    public override ProjectImageId Id { get; set; } = Guid.CreateVersion7();
+    public override ProjectImageId Id { get; protected set; } = Guid.CreateVersion7();
     
-    // public ProjectId ProjectId { get; set; }
-    public Project Project { get; set; }
-    public string ImageUrl { get; set; }
-    public string FileName { get; set; }
+    public ProjectId ProjectId { get; private init; }
+    public string ImageUrl { get; private init; }
+    public string FileName { get; private init; }
 }
 

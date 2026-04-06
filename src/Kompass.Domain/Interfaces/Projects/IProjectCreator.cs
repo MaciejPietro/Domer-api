@@ -8,15 +8,13 @@ namespace Kompass.Domain.Interfaces.Projects;
 
 public interface IProjectCreator
 {
-    ProjectCreatorId Id { get; set; }
+    ProjectCreatorId Id { get; }
     
-    ProjectId ProjectId { get; set; }
+    ProjectId ProjectId { get; }
     
-    Project Project { get; set; }
-    
-    string config { get; set; }
+    string Config { get; }
 
-    DateTime CreatedAt { get; set; }
+    DateTime CreatedAt { get; }
 
-    DateTime UpdatedAt { get; set; }
+    DateTime UpdatedAt { get; }
 }

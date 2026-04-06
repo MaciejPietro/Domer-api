@@ -4,22 +4,32 @@ using Kompass.Domain.Enums.Projects;
 using Kompass.Domain.Interfaces.Projects;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Kompass.Domain.Entities.Projects;
 
 public class ProjectCreator : Entity<ProjectCreatorId>, IProjectCreator
 {
-    public override ProjectCreatorId Id { get; set; } = Guid.CreateVersion7();
+    private ProjectCreator() {}
+    public override ProjectCreatorId Id { get; protected set; } = Guid.CreateVersion7();
     
-    public ProjectId ProjectId { get; set; }
+    public ProjectId ProjectId { get; private init; }
     
-    public Project Project { get; set; }
+    [MaxLength(1000)]
+    public string Config { get; private init; } = "\"{\\\"floors\\\":[]}\"";
+
+    public DateTime CreatedAt { get; private init; } = DateTime.UtcNow;
+
+    public DateTime UpdatedAt { get; private init; } = DateTime.UtcNow;
     
-    public string config { get; set; } = "\"{\\\"floors\\\":[]}\"";
+    public static ProjectCreator Create(ProjectId projectId, string config)
+    {
+        ProjectCreator project = new ()
+        {
+            ProjectId = projectId,
+            Config = config,
+        };
 
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
+        return project;
+    }
 }

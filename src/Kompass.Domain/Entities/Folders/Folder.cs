@@ -12,7 +12,7 @@ namespace Kompass.Domain.Entities.Folders;
 
 public class Folder: Entity<FolderId>, IFolder
 {
-    public override FolderId Id { get; set; } = Guid.CreateVersion7();
+    public override FolderId Id { get; protected set; } = Guid.CreateVersion7();
     public string Name { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

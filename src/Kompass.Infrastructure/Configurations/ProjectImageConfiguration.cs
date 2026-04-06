@@ -13,5 +13,7 @@ public class ProjectImageConfiguration : IEntityTypeConfiguration<Domain.Entitie
         builder.Property(x => x.Id)
             .HasConversion<ProjectImageId.EfCoreValueConverter>();
 
+        builder.Property(x => x.ProjectId)
+            .HasConversion<ProjectId.EfCoreValueConverter>();
     }
 }

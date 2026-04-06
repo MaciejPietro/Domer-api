@@ -15,13 +15,13 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Domain.Entities.Pro
             .HasConversion<ProjectId.EfCoreValueConverter>();
         
         builder.HasOne(p => p.ProjectDetails)
-            .WithOne(pd => pd.Project)
+            .WithOne()
             .HasForeignKey<ProjectDetails>(pd => pd.ProjectId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
         builder.HasOne(p => p.ProjectCreator)
-            .WithOne(pc => pc.Project)
+            .WithOne()
             .HasForeignKey<ProjectCreator>(pc => pc.ProjectId)
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();

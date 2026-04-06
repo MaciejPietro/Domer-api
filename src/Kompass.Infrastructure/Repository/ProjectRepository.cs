@@ -1,6 +1,4 @@
-﻿using Kompass.Application.Common.Exceptions;
-using Kompass.Application.Common.Responses;
-using Kompass.Domain.Common;
+﻿using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Projects;
 using Kompass.Domain.Enums.Projects;
 using Kompass.Domain.Interfaces.Projects;
@@ -36,13 +34,12 @@ public class ProjectRepository(ApplicationDbContext dbContext) : IProjectReposit
 
         // Detach existing entities to avoid tracking conflicts
         dbContext.Entry(existingProject).State = EntityState.Detached;
-        dbContext.Entry(existingProject.ProjectDetails).State = EntityState.Detached;
+        dbContext.Entry(existingProject!.ProjectDetails).State = EntityState.Detached;
 
         // Update Project entity
         dbContext.Entry(project).State = EntityState.Modified;
 
         // Update ProjectDetails entity
-        projectDetails.ProjectId = project.Id; // Ensure the relationship is maintained
         dbContext.Entry(projectDetails).State = EntityState.Modified;
 
         try
@@ -51,7 +48,7 @@ public class ProjectRepository(ApplicationDbContext dbContext) : IProjectReposit
         }
         catch (DbUpdateException ex)
         {
-            throw new InternalException("An error occurred while updating the project", ex);
+            throw new Exception("An error occurred while updating the project", ex);
         }
     }
 

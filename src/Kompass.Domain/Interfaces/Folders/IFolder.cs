@@ -9,7 +9,7 @@ namespace Kompass.Domain.Interfaces.Folders;
 
 public interface IFolder
 {
-    FolderId Id { get; set; }
+    FolderId Id { get; }
     string Name { get; set; }
     DateTime CreatedAt { get; set; }
     DateTime UpdatedAt { get; set; }

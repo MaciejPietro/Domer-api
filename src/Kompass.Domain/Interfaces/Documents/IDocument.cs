@@ -9,7 +9,7 @@ namespace Kompass.Domain.Interfaces.Documents;
 
 public interface IDocument
 {
-    DocumentId Id { get; set; }
+    DocumentId Id { get;  }
     string Title { get; set; }
     string Content { get; set; }
     DateTime CreatedAt { get; set; }

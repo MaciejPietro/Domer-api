@@ -100,3 +100,37 @@ This project has great influence of https://github.com/yanpitangui/dotnet-api-bo
 
 # About
 This api was built with boilerplate/template, developed by Yan Pitangui under [MIT license](LICENSE).
+
+
+# TODO 
+DOMAIN LAYER ISSUES 🎯
+
+4. Weak Entity Encapsulation - Public Setters
+
+All your domain entities allow unrestricted modification:
+
+// src/Kompass.Domain/Entities/Projects/Project.cs
+public class Project : Entity<ProjectId>
+{
+public override ProjectId Id { get; set; }  // Public setter - bad!
+public string Name { get; set; }            // Can be changed anywhere
+public ProjectStatus Status { get; set; }   // No validation
+public ProjectDetails ProjectDetails { get; set; }  // Can be swapped
+public ICollection<Folder> Folders { get; set; } = [];  // Mutable collection
+}
+
+Problem: Any code can modify entities without triggering business logic or validation. Use private setters and factory methods instead.
+
+  ---
+5. Mutable Collections Exposed
+
+// src/Kompass.Domain/Entities/Projects/ProjectDetails.cs
+public List<ExternalUrl>? Urls { get; set; } = new();  // External code can modify!
+
+Better: Use IReadOnlyCollection<ExternalUrl> and factory methods to add/remove items.
+
+  ---
+6. Unused Infrastructure Import
+
+// src/Kompass.Domain/Entities/Folders/Folder.cs
+using MailKit;  // Why? Not used anywhere

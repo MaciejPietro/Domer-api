@@ -7,15 +7,16 @@ namespace Kompass.Domain.Interfaces.Projects;
 
 public interface  IProject
 {
-    ProjectId Id { get; set; }
-    string Name { get; set; }
-    ProjectStatus Status { get; set; }
+    ProjectId Id { get; }
+    string Name { get;  }
+    ProjectStatus Status { get;  }
     
-    ProjectDetails ProjectDetails { get; set; }
+    ProjectDetails ProjectDetails { get; }
 
-    string? Description { get; set; }
+    string? Description { get;  }
 
-    DateTime CreatedAt { get; set; }
+    DateTime CreatedAt { get;  }
 
-    DateTime UpdatedAt { get; set; }
+    DateTime UpdatedAt { get; }
+    
 }

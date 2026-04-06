@@ -30,23 +30,31 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
     
     public async Task<Result<Unit>> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        Domain.Entities.Projects.Project project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken);
-        
-        if(request.Name is not null ) project.Name = request.Name;
-        if(project.Description is not null ) project.Description = request.Description;
-        if(request.Status is not null ) project.Status = request.Status.Value;
+        Domain.Entities.Projects.Project? project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken);
 
+        if (project == null)
+            throw new Exception(nameof(Domain.Entities.Projects.Project));
 
-        ProjectDetails projectDetails = project.ProjectDetails;
-        
-        if(request.Urls is not null) projectDetails.Urls = request.Urls?.Select(u => new ExternalUrl
+        if (request.Name is not null)
+            project.UpdateName(request.Name);
+
+        if (request.Description is not null)
+            project.UpdateDescription(request.Description);
+
+        if (request.Status is not null)
+            project.UpdateStatus(request.Status.Value);
+
+        if (request.Urls is not null)
         {
-            Name = u.Name,
-            Url = u.Url
-        }).ToList() ?? new List<ExternalUrl>();
-        
-        await _projectRepository.UpdateAsync(project, projectDetails, cancellationToken);
-        
+            var urls = request.Urls.Select(u => new ExternalUrl
+            {
+                Name = u.Name,
+                Url = u.Url
+            }).ToList();
+            project.ProjectDetails.UpdateUrls(urls);
+        }
+
+        await _projectRepository.UpdateAsync(project, project.ProjectDetails, cancellationToken);
 
         return Unit.Value;
     }

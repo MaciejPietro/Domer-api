@@ -1,8 +1,6 @@
 ﻿using Ardalis.Result;
-using Kompass.Application.Common.Exceptions;
 using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Projects;
-using Kompass.Domain.Enums.Projects;
 using Kompass.Domain.Interfaces;
 using Kompass.Domain.Interfaces.Projects;
 using FluentValidation;
@@ -35,51 +33,43 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
     
     public async Task<Result<Unit>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
-        // Perform validation
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            var validationErrors = validationResult.Errors
-                .Select(x => new ValidationError
-                {
-                    ErrorMessage = x.ErrorMessage,
-                    Identifier = x.PropertyName
-                });
-            return Result<Unit>.Invalid(validationErrors);
-        }
-
         try
         {
-            var project = new Domain.Entities.Projects.Project
+            var urls = request.Urls?.Select(l => new ExternalUrl
             {
-                Name = request.Name, 
-                Description = request.Description, 
-                Status = request.Status, 
-            };
+                Name = l.Name,
+                Url = l.Url
+            }).ToList() ?? new List<ExternalUrl>();
 
-            var projectDetails = new Domain.Entities.Projects.ProjectDetails
-            {
-                ProjectId = project.Id,
-                Urls = request.Urls?.Select(l => new ExternalUrl() 
-                { 
-                    Name = l.Name, 
-                    Url = l.Url 
-                }).ToList() ?? new List<ExternalUrl>()
-            };
+            var projectId = Guid.CreateVersion7();
 
-            var projectCreator = new Domain.Entities.Projects.ProjectCreator
-            {
-                ProjectId = project.Id,  
-            };
+            var projectDetails = ProjectDetails.Create(projectId, urls);
+            var projectCreator = ProjectCreator.Create(projectId, "\"{}\"");
+            var projectImages = new List<ProjectImage>();
+
+            var project = Domain.Entities.Projects.Project.Create(
+                id: projectId,
+                name: request.Name!,
+                description: request.Description,
+                status: request.Status,
+                projectDetails: projectDetails,
+                projectCreator: projectCreator,
+                projectImages: projectImages
+            );
 
             await _projectRepository.AddAsync(project, projectDetails, projectCreator, cancellationToken);
             return Result<Unit>.Success(Unit.Value);
+        }
+        catch (ArgumentException ex)
+        {
+            return Result<Unit>.Error(ex.Message);
         }
         catch (Exception e)
         {
             return Result<Unit>.Error(e.Message);
         }
     }
+
 }
 
             // Upload images and create ProjectImage entities

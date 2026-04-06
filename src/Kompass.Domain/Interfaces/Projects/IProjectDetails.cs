@@ -7,9 +7,9 @@ namespace Kompass.Domain.Interfaces.Projects;
 
 public interface IProjectDetails
 {
-    ProjectDetailsId Id { get; set; }
+    ProjectDetailsId Id { get; }
     
-    DateTime CreatedAt { get; set; }
+    DateTime CreatedAt { get; }
 
-    DateTime UpdatedAt { get; set; }
+    DateTime UpdatedAt { get; }
 }
