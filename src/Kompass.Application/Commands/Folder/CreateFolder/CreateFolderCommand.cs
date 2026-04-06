@@ -6,7 +6,7 @@ namespace Kompass.Application.Commands.Folder.CreateFolder;
 
 public class CreateFolderCommand : IRequest<Result<Unit>>
 {
-    public string? Name { get; set; }
-    public string? ParentFolderId { get; set; }
-    public string? ProjectId { get; set; }
+    public string? Name { get; init; }
+    public string? ParentFolderId { get; init; }
+    public string? ProjectId { get; init; }
 } 

@@ -17,34 +17,15 @@ namespace Kompass.Application.Commands.Folder.CreateFolder;
 
 public class CreateFolderCommandHandler : IRequestHandler<CreateFolderCommand, Result<Unit>>
 {
-    private readonly IProjectRepository _projectRepository;
     private readonly IFolderRepository _folderRepository;
-    private readonly IValidator<CreateFolderCommand> _validator;
     
-    public CreateFolderCommandHandler(
-        IProjectRepository projectRepository, 
-        IFolderRepository folderRepository,
-        IValidator<CreateFolderCommand> validator)
+    public CreateFolderCommandHandler(IFolderRepository folderRepository)
     {
-        _projectRepository = projectRepository;
         _folderRepository = folderRepository;
-        _validator = validator;
     }
     
     public async Task<Result<Unit>> Handle(CreateFolderCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            var validationErrors = validationResult.Errors
-                .Select(x => new ValidationError
-                {
-                    ErrorMessage = x.ErrorMessage,
-                    Identifier = x.PropertyName
-                });
-            return Result<Unit>.Invalid(validationErrors);
-        }
-
         try
         {
             Guid.TryParse(request.ParentFolderId, out var parentFolderId);

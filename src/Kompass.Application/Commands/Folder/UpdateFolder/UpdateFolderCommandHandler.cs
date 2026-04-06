@@ -29,20 +29,6 @@ public class UpdateFolderCommandHandler : IRequestHandler<UpdateFolderCommand, R
     
     public async Task<Result<Unit>> Handle(UpdateFolderCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            var validationErrors = validationResult.Errors
-                .Select(x => new ValidationError
-                {
-                    ErrorMessage = x.ErrorMessage,
-                    Identifier = x.PropertyName
-                });
-            return Result<Unit>.Invalid(validationErrors);
-        }
-        
-        Console.WriteLine(request.Id);
-
         try
         {
             Guid.TryParse(request.Id, out var folderId);

@@ -9,9 +9,9 @@ namespace Kompass.Application.Commands.Project.CreateProject;
 
 public class CreateProjectCommand : IRequest<Result<Unit>>
 {
-    public required string Name { get; set; }
-    public ProjectStatus Status { get; set; }
-    public string? Description { get; set; }
-    public List<ExternalUrl>? Urls { get; set; } = new();
-    public List<IFormFile>? Images { get; set; } = new();
+    public string? Name { get; init; }
+    public ProjectStatus Status { get; init; }
+    public string? Description { get; init; }
+    public List<ExternalUrl>? Urls { get; init; } = new();
+    public List<IFormFile>? Images { get; init; } = new();
 } 

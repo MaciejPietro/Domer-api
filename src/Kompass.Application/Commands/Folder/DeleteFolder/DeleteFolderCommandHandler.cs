@@ -28,21 +28,9 @@ public class DeleteFolderCommandHandler : IRequestHandler<DeleteFolderCommand, R
     
     public async Task<Result<Unit>> Handle(DeleteFolderCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-        if (!validationResult.IsValid)
-        {
-            var validationErrors = validationResult.Errors
-                .Select(x => new ValidationError
-                {
-                    ErrorMessage = x.ErrorMessage,
-                    Identifier = x.PropertyName
-                });
-            return Result<Unit>.Invalid(validationErrors);
-        }
-
         try
         {
-            Guid.TryParse(request.Id, out var folderId);
+            Guid.TryParse(request.Id, out Guid folderId);
             
             await _folderRepository.DeleteAsync(folderId, cancellationToken);
         

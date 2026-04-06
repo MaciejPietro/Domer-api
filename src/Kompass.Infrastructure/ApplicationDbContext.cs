@@ -1,5 +1,4 @@
-﻿using Kompass.Application.Common;
-using Kompass.Domain.Entities.Documents;
+﻿using Kompass.Domain.Entities.Documents;
 using Kompass.Domain.Entities.Folders;
 using Kompass.Domain.Entities.Projects;
 using Kompass.Infrastructure.Configurations;
@@ -10,7 +9,7 @@ using System;
 namespace Kompass.Infrastructure;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options), IContext
+    : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
 {
     public DbSet<Project> Projects { get; init; } = null!;
     public DbSet<Folder> Folders { get; init; } = null!;

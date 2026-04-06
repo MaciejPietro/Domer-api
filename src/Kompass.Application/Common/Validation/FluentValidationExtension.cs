@@ -10,6 +10,13 @@ namespace Kompass.Application.Common.Validation;
 
 public static class FluentValidationExtensions
 {
+    public static IRuleBuilderOptions<T, string> MustBeValidEmail<T>(
+        this IRuleBuilder<T, string?> ruleBuilder)
+    {
+        return ruleBuilder.Matches(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$").WithMessage(value =>
+            $"Email must be a valid email address.");
+          
+    }
     public static IRuleBuilderOptions<T, object?> MustBeGuidObject<T>(
         this IRuleBuilder<T, object?> ruleBuilder)
     {
