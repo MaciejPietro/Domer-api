@@ -13,18 +13,12 @@ namespace Kompass.Application.Commands.Folder.UpdateFolder;
 
 public class UpdateFolderCommandHandler : IRequestHandler<UpdateFolderCommand, Result<Unit>>
 {
-    private readonly IProjectRepository _projectRepository;
     private readonly IFolderRepository _folderRepository;
-    private readonly IValidator<UpdateFolderCommand> _validator;
     
     public UpdateFolderCommandHandler(
-        IProjectRepository projectRepository, 
-        IFolderRepository folderRepository,
-        IValidator<UpdateFolderCommand> validator)
+        IFolderRepository folderRepository)
     {
-        _projectRepository = projectRepository;
         _folderRepository = folderRepository;
-        _validator = validator;
     }
     
     public async Task<Result<Unit>> Handle(UpdateFolderCommand request, CancellationToken cancellationToken)
@@ -32,20 +26,18 @@ public class UpdateFolderCommandHandler : IRequestHandler<UpdateFolderCommand, R
         try
         {
             Guid.TryParse(request.Id, out var folderId);
-            string folderName = request.Name!;
 
             Domain.Entities.Folders.Folder? existingFolder = await _folderRepository.GetByIdAsync(folderId, cancellationToken);
 
             if (existingFolder is null)
             {
-                throw new InternalException("Folder not found");
+                return Result<Unit>.Error("Folder not found");
             }
-            
+
             existingFolder.Name = request.Name!;
-            
+
             await _folderRepository.UpdateAsync(existingFolder, cancellationToken);
-        
-            
+
             return Result<Unit>.Success(Unit.Value);
         }
         catch (Exception e)

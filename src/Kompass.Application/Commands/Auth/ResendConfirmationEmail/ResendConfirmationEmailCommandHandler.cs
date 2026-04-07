@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.Result;
+using AutoMapper;
 using Kompass.Application.Commands.Auth.ResendConfirmationEmail;
 using Kompass.Application.Common.Exceptions;
 using Kompass.Application.Common.Interfaces;
@@ -16,31 +17,29 @@ using System.Threading.Tasks;
 
 namespace Kompass.Application.Commands.Auth.ResendConfirmationEmail;
 
-public class ResendConfirmationEmailCommandHandler : IRequestHandler<ResendConfirmationEmailCommand, Unit>
+public class ResendConfirmationEmailCommandHandler : IRequestHandler<ResendConfirmationEmailCommand, Result<Unit>>
 {
     private readonly IIdentityService _identityService;
 
-    
+
     public ResendConfirmationEmailCommandHandler(IIdentityService identityService)
     {
         _identityService = identityService;
     }
-    
-    public async Task<Unit> Handle(ResendConfirmationEmailCommand request, CancellationToken cancellationToken)
+
+    public async Task<Result<Unit>> Handle(ResendConfirmationEmailCommand request, CancellationToken cancellationToken)
     {
-   
         if (await _identityService.HasConfirmedEmail(request.Email) == false)
         {
-            throw new BadRequestException("Użytkownik o podanym adresie nie ma potwierdzonego adresu email.");
+            return Result<Unit>.Error("Użytkownik o podanym adresie nie ma potwierdzonego adresu email.");
         }
-        
-        IApplicationUser user = await _identityService.GetUserDetailsByEmailAsync(request.Email);
-        
-        string token = await _identityService.GenerateEmailConfirmationTokenAsync(user);
-        
-        await _identityService.SendConfirmationEmail(request.ClientUri, user.Email, token);
-    
-        return Unit.Value;
 
+        IApplicationUser user = await _identityService.GetUserDetailsByEmailAsync(request.Email);
+
+        string token = await _identityService.GenerateEmailConfirmationTokenAsync(user);
+
+        await _identityService.SendConfirmationEmail(request.ClientUri, user.Email, token);
+
+        return Result<Unit>.Success(Unit.Value);
     }
 }

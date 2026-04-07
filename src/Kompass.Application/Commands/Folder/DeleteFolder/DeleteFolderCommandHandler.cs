@@ -12,18 +12,12 @@ namespace Kompass.Application.Commands.Folder.DeleteFolder;
 
 public class DeleteFolderCommandHandler : IRequestHandler<DeleteFolderCommand, Result<Unit>>
 {
-    private readonly IProjectRepository _projectRepository;
     private readonly IFolderRepository _folderRepository;
-    private readonly IValidator<DeleteFolderCommand> _validator;
     
     public DeleteFolderCommandHandler(
-        IProjectRepository projectRepository, 
-        IFolderRepository folderRepository,
-        IValidator<DeleteFolderCommand> validator)
+        IFolderRepository folderRepository)
     {
-        _projectRepository = projectRepository;
         _folderRepository = folderRepository;
-        _validator = validator;
     }
     
     public async Task<Result<Unit>> Handle(DeleteFolderCommand request, CancellationToken cancellationToken)

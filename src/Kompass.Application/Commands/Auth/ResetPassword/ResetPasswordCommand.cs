@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Ardalis.Result;
+using MediatR;
 
 namespace Kompass.Application.Commands.Auth.ResetPassword;
 
-public class ResetPasswordCommand : IRequest<Unit>
+public class ResetPasswordCommand : IRequest<Result<Unit>>
 {
     public string Email { get; set; }
     

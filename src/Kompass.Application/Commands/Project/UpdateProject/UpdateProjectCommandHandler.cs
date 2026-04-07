@@ -33,7 +33,7 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
         Domain.Entities.Projects.Project? project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (project == null)
-            throw new Exception(nameof(Domain.Entities.Projects.Project));
+            return Result<Unit>.Error($"{nameof(Domain.Entities.Projects.Project)} not found");
 
         if (request.Name is not null)
             project.UpdateName(request.Name);
@@ -56,6 +56,6 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
 
         await _projectRepository.UpdateAsync(project, project.ProjectDetails, cancellationToken);
 
-        return Unit.Value;
+        return Result<Unit>.Success(Unit.Value);
     }
 }

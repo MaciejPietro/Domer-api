@@ -1,8 +1,9 @@
-﻿using MediatR;
+﻿using Ardalis.Result;
+using MediatR;
 
 namespace Kompass.Application.Commands.Auth.ResendConfirmationEmail;
 
-public class ResendConfirmationEmailCommand : IRequest<Unit>
+public class ResendConfirmationEmailCommand : IRequest<Result<Unit>>
 {
     public string Email { get; set; }
     

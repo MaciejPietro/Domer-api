@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.Result;
+using AutoMapper;
 using Kompass.Application.Common.Exceptions;
 using Kompass.Application.Common.Interfaces;
 using Kompass.Application.DTOs;
@@ -13,25 +14,25 @@ using System.Threading.Tasks;
 
 namespace Kompass.Application.Commands.Auth.ConfirmEmail;
 
-public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, Unit>
+public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, Result<Unit>>
 {
     private readonly IIdentityService _identityService;
 
-    
+
     public ConfirmEmailCommandHandler(IIdentityService identityService)
     {
         _identityService = identityService;
     }
-    
-    public async Task<Unit> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
+
+    public async Task<Result<Unit>> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
     {
         if (await _identityService.IsUserExists(request.Email) == false)
         {
-            throw new BadRequestException("Użytkownik o takim adresie email nie istnieje");
+            return Result<Unit>.Error("Użytkownik o takim adresie email nie istnieje");
         }
-        
+
         await _identityService.ConfirmUserEmail(request.Email, request.Token);
-        
-        return Unit.Value;
+
+        return Result<Unit>.Success(Unit.Value);
     }
 }

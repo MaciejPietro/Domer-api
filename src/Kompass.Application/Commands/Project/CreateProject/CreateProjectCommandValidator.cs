@@ -15,20 +15,12 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
             .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
         
-        // // USABLE AREA
-        // When(x => x.UsableArea.HasValue, () =>
-        // {
-        //     RuleFor(x => x.UsableArea)
-        //         .GreaterThan(0);
-        // });
-        //
-        // // BUILDIN AREA
-        // When(x => x.BuildingArea.HasValue, () =>
-        // {
-        //     RuleFor(x => x.BuildingArea)
-        //         .GreaterThan(0);
-        // });
-
+        // NAME
+        RuleFor(x => x.Description)
+            .MaximumLength(1000)
+            .When(x => !string.IsNullOrEmpty(x.Description))
+            .WithMessage("Description must not exceed 100 characters.");
+        
         // URLS
         When(x => x.Urls != null, () =>
         {
@@ -41,15 +33,15 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
         });
         
         // IMAGES
-        RuleForEach(x => x.Images)
-            .Must(file => file.Length <= 2 * 1024 * 1024) // 2MB limit
-            .WithMessage("Image size must be less than 2MB")
-            .Must(file => new[] { ".jpg", ".jpeg", ".png" }
-                .Contains(Path.GetExtension(file.FileName).ToLower()))
-            .WithMessage("Only .jpg and .png files are allowed");
-        RuleFor(x => x.Images)
-            .Must(x => x == null || x.Count <= 10)
-            .WithMessage("Maximum 10 images allowed");
+        // RuleForEach(x => x.Images)
+        //     .Must(file => file.Length <= 2 * 1024 * 1024) // 2MB limit
+        //     .WithMessage("Image size must be less than 2MB")
+        //     .Must(file => new[] { ".jpg", ".jpeg", ".png" }
+        //         .Contains(Path.GetExtension(file.FileName).ToLower()))
+        //     .WithMessage("Only .jpg and .png files are allowed");
+        // RuleFor(x => x.Images)
+        //     .Must(x => x == null || x.Count <= 10)
+        //     .WithMessage("Maximum 10 images allowed");
 
     }
 }

@@ -26,12 +26,11 @@ public class DeleteProjectCommandHandler : IRequestHandler<DeleteProjectCommand,
         try
         {
             await _projectRepository.DeleteAsync(request.ProjectId, cancellationToken);
+            return Result<Unit>.Success(Unit.Value);
         }
         catch (Exception e)
         {
-            throw new InternalException(e.Message);
+            return Result<Unit>.Error(e.Message);
         }
-
-        return Unit.Value;
     }
 }

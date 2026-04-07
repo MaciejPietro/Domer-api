@@ -1,14 +1,7 @@
 ﻿using Ardalis.Result;
-using FluentValidation;
-using Kompass.Application.Commands.Project.CreateProject;
-using Kompass.Domain.Common;
-using Kompass.Domain.Interfaces;
 using Kompass.Domain.Interfaces.Folders;
-using Kompass.Domain.Interfaces.Projects;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,10 +21,10 @@ public class CreateFolderCommandHandler : IRequestHandler<CreateFolderCommand, R
     {
         try
         {
-            Guid.TryParse(request.ParentFolderId, out var parentFolderId);
-            Guid.TryParse(request.ProjectId, out var projectId);
+            Guid.TryParse(request.ParentFolderId, out Guid parentFolderId);
+            Guid.TryParse(request.ProjectId, out Guid projectId);
             
-            var newFolder = new Domain.Entities.Folders.Folder
+            Domain.Entities.Folders.Folder newFolder = new()
             {
                 Name = request.Name!, ProjectId = projectId, ParentFolderId = parentFolderId
             };

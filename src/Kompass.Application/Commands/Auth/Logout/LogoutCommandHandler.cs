@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.Result;
+using AutoMapper;
 using Kompass.Application.Commands.Auth.Logout;
 using Kompass.Application.Common.Exceptions;
 using Kompass.Application.Common.Interfaces;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Kompass.Application.Commands.Auth.Logout;
 
-public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Unit>
+public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Result<Unit>>
 {
     private readonly IIdentityService _identityService;
 
@@ -18,10 +19,10 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, Unit>
     {
         _identityService = identityService;
     }
-    
-    public async Task<Unit> Handle(LogoutCommand request, CancellationToken cancellationToken)
+
+    public async Task<Result<Unit>> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
         await _identityService.LogoutUserAsync();
-        return Unit.Value;
+        return Result<Unit>.Success(Unit.Value);
     }
 }

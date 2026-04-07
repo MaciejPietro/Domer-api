@@ -1,4 +1,5 @@
-﻿using Kompass.Application.Commands.User.ResendEmailConfirmation;
+﻿using Ardalis.Result;
+using Kompass.Application.Commands.User.ResendEmailConfirmation;
 using Kompass.Application.Common.Exceptions;
 using Kompass.Application.Common.Interfaces;
 using Kompass.Domain.Interfaces;
@@ -10,35 +11,34 @@ using System.Threading.Tasks;
 
 namespace Kompass.Application.Commands.User.DeleteUser;
 
-public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
+public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Result<Unit>>
 {
     private readonly IIdentityService _identityService;
 
-    
+
     public DeleteUserCommandHandler(IIdentityService identityService)
     {
         _identityService = identityService;
     }
-    
-    public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+
+    public async Task<Result<Unit>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(request.Password))
         {
-            throw new BadRequestException("Password is required to delete account.");
+            return Result<Unit>.Error("Password is required to delete account.");
         }
-        
+
         IApplicationUser? user = await _identityService.GetUserDetailsAsync(request.Id);
-        
-        
+
         bool isCurrentPasswordCorrect = await _identityService.CheckPasswordAsync(user, request.Password);
-    
+
         if (!isCurrentPasswordCorrect)
         {
-            throw new BadRequestException("Błędne hasło.");
+            return Result<Unit>.Error("Błędne hasło.");
         }
-        
+
         await _identityService.DeleteUserAsync(user);
 
-        return Unit.Value;
+        return Result<Unit>.Success(Unit.Value);
     }
 }

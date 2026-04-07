@@ -19,16 +19,13 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IS3StorageService _s3StorageService;
-    private readonly IValidator<CreateProjectCommand> _validator;
     
     public CreateProjectCommandHandler(
         IProjectRepository projectRepository, 
-        IS3StorageService s3StorageService,
-        IValidator<CreateProjectCommand> validator)
+        IS3StorageService s3StorageService)
     {
         _projectRepository = projectRepository;
         _s3StorageService = s3StorageService;
-        _validator = validator;
     }
     
     public async Task<Result<Unit>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
@@ -44,7 +41,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
             var projectId = Guid.CreateVersion7();
 
             var projectDetails = ProjectDetails.Create(projectId, urls);
-            var projectCreator = ProjectCreator.Create(projectId, "\"{}\"");
+            var projectCreator = ProjectCreator.Create(projectId, "{}");
             var projectImages = new List<ProjectImage>();
 
             var project = Domain.Entities.Projects.Project.Create(
@@ -71,21 +68,3 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
     }
 
 }
-
-            // Upload images and create ProjectImage entities
-            // if (request.Images != null && request.Images.Any())
-            // {
-            //     foreach (var image in request.Images)
-            //     {
-            //         var uploadResult = await _s3StorageService.UploadObjectAsync(image);
-            //         
-            //         if (uploadResult.Success)
-            //         {
-            //             project.Images.Add(new ProjectImage
-            //             {
-            //                 FileName = uploadResult.FileName,
-            //                 ImageUrl = $"https://your-bucket-url/{uploadResult.FileName}"
-            //             });
-            //         }
-            //     }
-            // }

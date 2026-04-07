@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.Result;
+using AutoMapper;
 using Kompass.Application.Common.Exceptions;
 using Kompass.Application.Common.Interfaces;
 using Kompass.Application.DTOs;
@@ -16,23 +17,23 @@ using System.Threading.Tasks;
 
 namespace Kompass.Application.Commands.Auth.Register;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Unit>>
 {
     private readonly IIdentityService _identityService;
 
-    
+
     public RegisterCommandHandler(IIdentityService identityService)
     {
         _identityService = identityService;
     }
-    
-    public async Task<Unit> Handle(RegisterCommand request, CancellationToken cancellationToken)
+
+    public async Task<Result<Unit>> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         if (await _identityService.IsUserExists(request.Email))
         {
-            throw new BadRequestException("Użytkownik o takim adresie e-mail już istnieje");
+            return Result<Unit>.Error("Użytkownik o takim adresie e-mail już istnieje");
         }
-        
+
         IApplicationUser user = await _identityService.CreateUserAsync(request.Email, request.Password);
 
         await _identityService.AssignUserToRoleAsync(user.Id.ToString(), nameof(UserRole.Viewer));
@@ -41,6 +42,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Unit>
         // string token = await _identityService.GenerateEmailConfirmationTokenAsync(user);
         // await _identityService.SendConfirmationEmail(request.ClientUri, user.Email, token);
 
-        return Unit.Value;
+        return Result<Unit>.Success(Unit.Value);
     }
 }
