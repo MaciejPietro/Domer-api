@@ -1,4 +1,5 @@
 ﻿using Kompass.Domain.Entities.Devices;
+using Kompass.Domain.Entities.Devices.Camera;
 using Kompass.Domain.Entities.Documents;
 using Kompass.Domain.Entities.Folders;
 using Kompass.Domain.Entities.Projects;
@@ -16,6 +17,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Folder> Folders { get; init; } = null!;
     public DbSet<Document> Documents { get; init; } = null!;
     public DbSet<Device> Devices { get; init; } = null!;
+    public DbSet<Camera> Cameras { get; init; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
