@@ -7,7 +7,7 @@ namespace Kompass.Infrastructure.Repository;
 
 public class CameraRepository(ApplicationDbContext dbContext): ICameraRepository
 {
-    public async Task<ICamera>  AddAsync(Camera device, CancellationToken cancellationToken)
+    public async Task<ICamera> AddAsync(Camera device, CancellationToken cancellationToken)
     {
         await dbContext.Cameras.AddAsync(device, cancellationToken);
 

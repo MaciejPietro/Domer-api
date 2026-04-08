@@ -8,7 +8,7 @@ namespace Kompass.Infrastructure.Repository;
 
 public class DeviceRepository(ApplicationDbContext dbContext) : IDeviceRepository
 {
-    public async Task<IDevice>  AddAsync(Device device, CancellationToken cancellationToken)
+    public async Task<IDevice> AddAsync(Device device, CancellationToken cancellationToken)
     {
         await dbContext.Devices.AddAsync(device, cancellationToken);
 
