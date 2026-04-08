@@ -1,5 +1,6 @@
 using Kompass.Domain.Common;
 using Kompass.Domain.Common.Entities;
+using Kompass.Domain.Entities.Documents;
 using Kompass.Domain.Entities.Projects;
 using Kompass.Domain.Interfaces.Folders;
 using MailKit;

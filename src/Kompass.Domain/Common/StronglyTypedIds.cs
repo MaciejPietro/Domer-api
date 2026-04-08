@@ -9,6 +9,16 @@ namespace Kompass.Domain.Common;
 public interface IGuid {}
 
 [StronglyTypedId]
+public partial struct DeviceId : IGuid
+{
+    public static implicit operator DeviceId(Guid guid)
+    {
+        return new DeviceId(guid);
+    }
+}
+
+
+[StronglyTypedId]
 public partial struct FolderId : IGuid
 {
     public static implicit operator FolderId(Guid guid)
