@@ -19,14 +19,15 @@ public class DeviceService : IDeviceService
     }
 
 
-    public async Task<(Device device, IDeviceRelatedEntity RelatedEntity)> CreateDeviceAsync(
+    public async Task<(Device device, IDeviceRelatedEntity RelatedEntity)> CreateDeviceAsync<TConfig>(
         DeviceType deviceType,
         string name,
         string? description,
+        TConfig? config,
         CancellationToken cancellationToken)
     {
-        IDeviceFactory factory = _registry.GetFactory(deviceType);
-        (Device device, IDeviceRelatedEntity relatedEntity) = factory.Create(name, description);
+        IDeviceFactory<TConfig> factory = _registry.GetFactory<TConfig>(deviceType);  
+        (Device device, IDeviceRelatedEntity relatedEntity) = factory.Create(name, description, config);
 
         await _deviceRepository.AddAsync(device, relatedEntity, cancellationToken);
 

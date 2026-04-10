@@ -3,7 +3,7 @@ using Kompass.Domain.Interfaces.Devices;
 
 namespace Kompass.Domain.Interfaces.Devices;
 
-public interface IDeviceFactory
+public interface IDeviceFactory<TConfig>
 {
-    (Device Device, IDeviceRelatedEntity RelatedEntity) Create(string name, string? description);
+    (Device Device, IDeviceRelatedEntity RelatedEntity) Create(string name, string? description, TConfig config);
 }

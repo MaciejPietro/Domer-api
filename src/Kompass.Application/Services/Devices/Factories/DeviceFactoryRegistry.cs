@@ -7,15 +7,18 @@ namespace Kompass.Application.Services.Devices.Factories;
 
 public class DeviceFactoryRegistry
 {
-    private readonly Dictionary<DeviceType, IDeviceFactory> _factories;
+    private readonly Dictionary<DeviceType, object> _factories;
 
     public DeviceFactoryRegistry(CameraDeviceFactory cameraFactory)
     {
-        _factories = new Dictionary<DeviceType, IDeviceFactory> { { DeviceType.Camera, cameraFactory } };
+        _factories = new Dictionary<DeviceType, object> { { DeviceType.Camera, cameraFactory } };
     }
     
-    public IDeviceFactory GetFactory(DeviceType type)
+    public IDeviceFactory<TConfig> GetFactory<TConfig>(DeviceType type)
     {
-        return !_factories.TryGetValue(type, out IDeviceFactory? factory) ? throw new ArgumentException($"No factory for {type}") : factory;
+        if (!_factories.TryGetValue(type, out var factory))
+            throw new ArgumentException($"No factory for {type}");
+
+        return (IDeviceFactory<TConfig>)factory;
     }
 }

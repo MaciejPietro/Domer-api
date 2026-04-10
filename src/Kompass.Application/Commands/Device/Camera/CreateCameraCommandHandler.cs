@@ -1,6 +1,8 @@
 ﻿using Ardalis.Result;
 using Kompass.Application.Services.Devices;
 using Kompass.Domain.Enums.Devices;
+using Kompass.Domain.ValueObjects;
+using Kompass.Domain.ValueObjects.Device;
 using MediatR;
 using System;
 using System.Threading;
@@ -21,7 +23,13 @@ public class CreateCameraCommandHandler : IRequestHandler<CreateCameraCommand, R
     {
         try
         {
-            await _deviceService.CreateDeviceAsync(DeviceType.Camera, request.Name, request.Description, cancellationToken);
+            var angle = request.VerticalAngle is null ? null : new Angle(request.VerticalAngle.Value);
+            var horizontalAngle = request.HorizontalAngle is null ? null : new Angle(request.HorizontalAngle.Value);
+            var maxDistance = request.MaxDistance is null ? null : new Centimeter(request.MaxDistance.Value);
+            
+            var config = new CameraConfiguration(angle, horizontalAngle, maxDistance);
+            
+            await _deviceService.CreateDeviceAsync(DeviceType.Camera, request.Name, request.Description, config, cancellationToken);
 
             return Result<Unit>.Success(Unit.Value);
         }
