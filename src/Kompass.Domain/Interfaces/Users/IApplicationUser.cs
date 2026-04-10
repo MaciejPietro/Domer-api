@@ -5,9 +5,9 @@ namespace Kompass.Domain.Interfaces.Users;
 
 public interface IApplicationUser
 {
-    Guid Id { get; set; }
-    string Email { get; set; }
+    Guid Id { get;  }
+    string Email { get;  }
     string UserName { get; set; }
-    bool EmailConfirmed { get; set; }
-    IList<string> Roles { get; set; }
+    bool EmailConfirmed { get;  }
+    IList<string> Roles { get;  }
 }

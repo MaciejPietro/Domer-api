@@ -25,8 +25,8 @@ public class Camera: Entity<CameraId>, ICamera, IDeviceRelatedEntity
         if (verticalAngle.Value is < 0 or > 360)
             throw new ArgumentException("VerticalAngle must be greater than 0 and less than or equal to 360 degrees", nameof(verticalAngle));
 
-        if (maxDistance.Value <= 0)
-            throw new ArgumentException("MaxDistance must be greater than 0 meters", nameof(maxDistance));
+        if (maxDistance.Value is <= 0 or > 1000)
+            throw new ArgumentException("MaxDistance must be greater than 0 meters and less than 1000m", nameof(maxDistance));
 
         Camera camera = new() { DeviceId = deviceId, HorizontalAngle = horizontalAngle, VerticalAngle = verticalAngle, MaxDistance = maxDistance };
 
