@@ -71,7 +71,7 @@ public class FolderRepository(ApplicationDbContext dbContext) : IFolderRepositor
     public async Task<bool> DeleteAsync(FolderId folderId, CancellationToken cancellationToken)
     {
         var folder = await dbContext.Folders
-            .FirstOrDefaultAsync(p => p.Id == folderId, cancellationToken);
+            .FindAsync([folderId], cancellationToken);
 
         if (folder == null)
         {

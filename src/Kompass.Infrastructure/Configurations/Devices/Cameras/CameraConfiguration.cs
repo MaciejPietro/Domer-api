@@ -1,5 +1,6 @@
 using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Devices.Camera;
+using Kompass.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,12 +20,15 @@ public class CameraConfiguration : IEntityTypeConfiguration<Camera>
             .IsRequired();
 
         builder.Property(x => x.HorizontalAngle)
+            .HasConversion(x => x.Value, v => new Angle(v))
             .IsRequired();
 
         builder.Property(x => x.VerticalAngle)
+            .HasConversion(x => x.Value, v => new Angle(v))
             .IsRequired();
 
         builder.Property(x => x.MaxDistance)
+            .HasConversion(x => x.Value, v => new Centimeter(v))
             .IsRequired();
 
         // 1:1 relationship with Device

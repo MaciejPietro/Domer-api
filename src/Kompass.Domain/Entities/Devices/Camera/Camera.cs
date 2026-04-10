@@ -1,15 +1,15 @@
 using Kompass.Domain.Common;
 using Kompass.Domain.Common.Entities;
+using Kompass.Domain.Interfaces.Devices;
 using Kompass.Domain.Interfaces.Devices.Camera;
 using Kompass.Domain.ValueObjects;
 using System;
 
 namespace Kompass.Domain.Entities.Devices.Camera;
 
-public class Camera: Entity<CameraId>, ICamera
+public class Camera: Entity<CameraId>, ICamera, IDeviceRelatedEntity
 {
     private Camera() {}
-
     public override CameraId Id { get; protected set; } = Guid.CreateVersion7();
     public DeviceId DeviceId { get; init; }
     public Device Device { get; init; }
@@ -32,4 +32,6 @@ public class Camera: Entity<CameraId>, ICamera
 
         return camera;
     }
+
+    
 }

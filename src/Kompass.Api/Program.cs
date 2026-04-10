@@ -3,6 +3,9 @@ using Kompass.Api.Configurations;
 using Kompass.Infrastructure.Configurations;
 using Kompass.Application.Common.Interfaces;
 using Kompass.Application.Queries.User.GetCurrentUser;
+using Kompass.Application.Services.Devices;
+using Kompass.Application.Services.Devices.Factories;
+using Kompass.Domain.Interfaces.Devices;
 using Kompass.Domain.Interfaces.Documents;
 using Kompass.Domain.Interfaces.Folders;
 using Kompass.Domain.Interfaces.Projects;
@@ -40,6 +43,10 @@ builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<CameraDeviceFactory>();
+builder.Services.AddScoped<DeviceFactoryRegistry>();
+builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
+builder.Services.AddScoped<IDeviceService, DeviceService>();
 
 
 // Swagger
