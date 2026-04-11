@@ -4,6 +4,7 @@ using Kompass.Application.DTOs.Queries.Devices.Cameras;
 using Kompass.Application.Queries.Devices.Camera.GetAllCameras;
 using Kompass.Application.Queries.Folders.GetAllFolders;
 using Kompass.Application.Queries.Projects.GetAllProjects;
+using Kompass.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,5 +34,15 @@ public class CameraController(IMediator mediator) : ControllerBase
          List<CameraListDto> result = await mediator.Send(query);
 
          return Ok(result);
+    }
+    
+    [HttpDelete("{cameraId}")]
+    [Authorize]
+    public async Task<IActionResult> DeleteCamera([FromRoute] CameraId cameraId)
+    {
+        // DeleteCameraCommand query = new(cameraId);
+        // var result = await mediator.Send(query);
+
+        return Ok(":)");
     }
 }
