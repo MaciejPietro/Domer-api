@@ -8,7 +8,6 @@ public class CreateCameraCommandValidator : AbstractValidator<CreateCameraComman
 {
     public CreateCameraCommandValidator()
     {
-
         const int minAngle = CameraConfiguration.ValidationRules.MinAngle;
         const int maxAngle = CameraConfiguration.ValidationRules.MaxAngle;
         

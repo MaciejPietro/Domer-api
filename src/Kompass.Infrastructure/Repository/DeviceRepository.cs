@@ -1,7 +1,11 @@
 using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Devices;
 using Kompass.Domain.Entities.Documents;
+using Kompass.Domain.Enums.Devices;
 using Kompass.Domain.Interfaces.Devices;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +21,15 @@ public class DeviceRepository(ApplicationDbContext dbContext) : IDeviceRepositor
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return device;
+    }
+
+    public async Task<(IEnumerable<IDevice>, int count)> GetAllAsync(DeviceType type, CancellationToken cancellationToken)
+    {
+        List<Device> devices = await dbContext.Devices
+            .Where(d => d.Type == type)
+            .ToListAsync(cancellationToken);
+
+        return (devices.AsEnumerable(), devices.Count);
     }
 
     public async Task<bool> DeleteAsync(DeviceId deviceId, CancellationToken cancellationToken)

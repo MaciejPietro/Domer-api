@@ -12,10 +12,15 @@ public interface IFolderRepository
     
     Task<IFolder> UpdateAsync(IFolder folder, CancellationToken cancellationToken);
 
+    // TODO make it consistent and return IFolder
     Task<Folder?> GetByIdAsync(FolderId folderId, CancellationToken cancellationToken);
 
+    // TODO make it consistent and return IFolder
+    
     Task<Folder?> GetByNameAsync(string folderName, FolderId? folderId, CancellationToken cancellationToken);
 
+    // TODO make it consistent and return IFolder
+    
     Task<(List<Folder> Folders, int TotalCount)> GetAllAsync(ProjectId projectId, CancellationToken cancellationToken);
 
 

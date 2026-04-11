@@ -7,5 +7,5 @@ namespace Kompass.Application.Queries.Folders.GetAllFolders;
 
 public class GetAllFoldersQuery : IRequest<List<FolderListDto>>
 {
-    public ProjectId ProjectId { get; set; }
+    public ProjectId ProjectId { get; init; }
 }
