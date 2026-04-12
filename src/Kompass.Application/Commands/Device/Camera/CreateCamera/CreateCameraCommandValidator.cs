@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
-using JetBrains.Annotations;
 using Kompass.Domain.ValueObjects.Device;
 
-namespace Kompass.Application.Commands.Device.Camera;
+namespace Kompass.Application.Commands.Device.Camera.CreateCamera;
 
 public class CreateCameraCommandValidator : AbstractValidator<CreateCameraCommand>
 {

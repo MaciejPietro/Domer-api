@@ -86,7 +86,6 @@ public class ProjectController(IMediator mediator)
     [Authorize]
     public async Task<IActionResult> DeleteProject([FromRoute] ProjectId projectId)
     {
-        
         DeleteProjectCommand query = new (projectId);
         var result = await mediator.Send(query);
     

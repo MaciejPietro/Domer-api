@@ -8,7 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kompass.Application.Commands.Device.Camera;
+namespace Kompass.Application.Commands.Device.Camera.CreateCamera;
 
 public class CreateCameraCommandHandler : IRequestHandler<CreateCameraCommand, Result<Unit>>
 {

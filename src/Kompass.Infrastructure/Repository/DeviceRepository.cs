@@ -4,6 +4,7 @@ using Kompass.Domain.Entities.Documents;
 using Kompass.Domain.Enums.Devices;
 using Kompass.Domain.Interfaces.Devices;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -35,7 +36,10 @@ public class DeviceRepository(ApplicationDbContext dbContext) : IDeviceRepositor
     public async Task<bool> DeleteAsync(DeviceId deviceId, CancellationToken cancellationToken)
     {
         Device? device = await dbContext.Devices.FindAsync([deviceId], cancellationToken);
-
+        
+        Console.WriteLine(device);
+        
+        
         if (device is null)
         {
             return false;

@@ -26,9 +26,9 @@ public class DeleteFolderCommandHandler : IRequestHandler<DeleteFolderCommand, R
         {
             Guid.TryParse(request.Id, out Guid folderId);
             
-            await _folderRepository.DeleteAsync(folderId, cancellationToken);
+            var isSuccess = await _folderRepository.DeleteAsync(folderId, cancellationToken);
         
-            return Result<Unit>.Success(Unit.Value);
+            return isSuccess ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Invalid();
         }
         catch (Exception e)
         {

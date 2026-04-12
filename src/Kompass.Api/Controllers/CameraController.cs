@@ -1,10 +1,8 @@
-using Kompass.Application.Commands.Device.Camera;
-using Kompass.Application.DTOs.Queries;
+using Ardalis.Result;
+using Kompass.Application.Commands.Device.Camera.CreateCamera;
+using Kompass.Application.Commands.Device.Camera.DeleteCamera;
 using Kompass.Application.DTOs.Queries.Devices.Cameras;
 using Kompass.Application.Queries.Devices.Camera.GetAllCameras;
-using Kompass.Application.Queries.Folders.GetAllFolders;
-using Kompass.Application.Queries.Projects.GetAllProjects;
-using Kompass.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +15,7 @@ namespace Kompass.Api.Controllers;
 [ApiController]
 public class CameraController(IMediator mediator) : ControllerBase
 {
-    [HttpPost()]
+    [HttpPost]
     [Authorize]
     public async Task<IActionResult> CreateCamera([FromBody] CreateCameraCommand command)
     {
@@ -27,7 +25,7 @@ public class CameraController(IMediator mediator) : ControllerBase
         return StatusCode(201, result);
     }
 
-    [HttpGet()]
+    [HttpGet]
     [Authorize]
     public async Task<IActionResult> GetAllCameras([FromQuery] GetAllCamerasQuery query)
     {
@@ -36,13 +34,12 @@ public class CameraController(IMediator mediator) : ControllerBase
          return Ok(result);
     }
     
-    [HttpDelete("{cameraId}")]
+    [HttpDelete("{deviceId}")]
     [Authorize]
-    public async Task<IActionResult> DeleteCamera([FromRoute] CameraId cameraId)
+    public async Task<IActionResult> DeleteCamera([FromRoute] string deviceId, [FromQuery] DeleteCameraCommand command)
     {
-        // DeleteCameraCommand query = new(cameraId);
-        // var result = await mediator.Send(query);
-
-        return Ok(":)");
+        command.Id = deviceId;
+        Result<Unit> result = await mediator.Send(command);
+        return Ok(result);
     }
 }

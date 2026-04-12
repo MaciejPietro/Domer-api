@@ -1,7 +1,7 @@
 using Ardalis.Result;
 using MediatR;
 
-namespace Kompass.Application.Commands.Device.Camera;
+namespace Kompass.Application.Commands.Device.Camera.CreateCamera;
 
 public class CreateCameraCommand : IRequest<Result<Unit>>
 {
