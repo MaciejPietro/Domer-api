@@ -1,6 +1,7 @@
 using FluentValidation;
 using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Folders;
+using Kompass.Domain.Interfaces.Devices;
 using Kompass.Domain.Interfaces.Folders;
 using Kompass.Domain.Interfaces.Projects;
 using System;
@@ -43,6 +44,25 @@ public static class FluentValidationExtensions
                 return false;
             })
             .WithMessage("Project does not exist.");
+    }
+    
+    public static IRuleBuilderOptions<T, object?> MustDeviceExists<T>(
+        this IRuleBuilder<T, object?> ruleBuilder, IDeviceRepository deviceRepository)
+    {
+        return ruleBuilder
+            .MustAsync(async (deviceId, cancellation) =>
+            {
+                if (Guid.TryParse(deviceId?.ToString(), out Guid guid))
+                {
+                    
+                    IDevice? folder = await deviceRepository.GetByIdAsync(guid, cancellation);
+                    
+                    return folder != null;
+                }
+                
+                return false;
+            })
+            .WithMessage("Device does not exist.");
     }
     
     public static IRuleBuilderOptions<T, object?> MustFolderExists<T>(

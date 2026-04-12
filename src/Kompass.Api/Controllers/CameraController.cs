@@ -1,8 +1,11 @@
 using Ardalis.Result;
 using Kompass.Application.Commands.Device.Camera.CreateCamera;
 using Kompass.Application.Commands.Device.Camera.DeleteCamera;
+using Kompass.Application.Common.Responses;
 using Kompass.Application.DTOs.Queries.Devices.Cameras;
 using Kompass.Application.Queries.Devices.Camera.GetAllCameras;
+using Kompass.Application.Queries.Devices.Camera.GetCameraById;
+using Kompass.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,11 +30,21 @@ public class CameraController(IMediator mediator) : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetAllCameras([FromQuery] GetAllCamerasQuery query)
+    public async Task<IActionResult> GetAllCameras([FromRoute] GetAllCamerasQuery query)
     {
          List<CameraListDto> result = await mediator.Send(query);
 
          return Ok(result);
+    }
+    
+    [HttpGet("{id}")]
+    [Authorize]
+    public async Task<IActionResult> GetCamera([FromRoute] string id)
+    {
+        GetCameraByIdQuery query = new (id);
+        Result<CameraDto> result = await mediator.Send(query);
+
+        return Ok(result);
     }
     
     [HttpDelete("{deviceId}")]

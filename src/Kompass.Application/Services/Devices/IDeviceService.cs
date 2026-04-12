@@ -1,3 +1,4 @@
+using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Devices;
 using Kompass.Domain.Enums.Devices;
 using Kompass.Domain.Interfaces.Devices;
@@ -13,5 +14,9 @@ public interface IDeviceService
         string name,
         string? description,
         TConfig? config,
+        CancellationToken cancellationToken);
+
+    Task<(Device? device, IDeviceRelatedEntity? relatedEntity)> GetDeviceWithRelatedEntityByIdAsync(
+        DeviceId deviceId,
         CancellationToken cancellationToken);
 }

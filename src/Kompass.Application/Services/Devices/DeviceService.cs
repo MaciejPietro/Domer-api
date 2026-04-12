@@ -1,4 +1,5 @@
 using Kompass.Application.Services.Devices.Factories;
+using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Devices;
 using Kompass.Domain.Enums.Devices;
 using Kompass.Domain.Interfaces.Devices;
@@ -33,5 +34,23 @@ public class DeviceService : IDeviceService
 
         return (device, relatedEntity);
     }
+
+    public async Task<(Device? device, IDeviceRelatedEntity? relatedEntity)> GetDeviceWithRelatedEntityByIdAsync(
+        DeviceId deviceId,
+        CancellationToken cancellationToken)
+    {
+        var device = await _deviceRepository.GetByIdAsync(deviceId, cancellationToken);
+
+        if (device is null)
+        {
+            return (null, null);
+        }
+
+        var relatedEntity = await _deviceRepository.GetRelatedEntityById(device.Type, deviceId, cancellationToken);
+
+        return (device, relatedEntity);
+
+    }
+   
     
 }

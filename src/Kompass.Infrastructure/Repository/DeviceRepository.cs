@@ -3,6 +3,7 @@ using Kompass.Domain.Entities.Devices;
 using Kompass.Domain.Entities.Documents;
 using Kompass.Domain.Enums.Devices;
 using Kompass.Domain.Interfaces.Devices;
+using Kompass.Domain.Interfaces.Devices.Camera;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,24 @@ public class DeviceRepository(ApplicationDbContext dbContext) : IDeviceRepositor
         return device;
     }
 
+    public async Task<Device?> GetByIdAsync(DeviceId id, CancellationToken cancellationToken)
+    {
+        var device = await dbContext.Devices.FindAsync([id],  cancellationToken);
+        
+        return device;
+    }
+    
+    public async Task<IDeviceRelatedEntity?> GetRelatedEntityById(DeviceType type, DeviceId deviceId, CancellationToken cancellationToken)
+    {
+        IDeviceRelatedEntity? relatedEntity = type switch
+        {
+            DeviceType.Camera => await dbContext.Cameras.FirstOrDefaultAsync(c => c.DeviceId == deviceId, cancellationToken),
+            _ => null
+        };
+        
+        return relatedEntity;
+    }
+
     public async Task<(IEnumerable<IDevice>, int count)> GetAllAsync(DeviceType type, CancellationToken cancellationToken)
     {
         List<Device> devices = await dbContext.Devices
@@ -33,9 +52,9 @@ public class DeviceRepository(ApplicationDbContext dbContext) : IDeviceRepositor
         return (devices.AsEnumerable(), devices.Count);
     }
 
-    public async Task<bool> DeleteAsync(DeviceId deviceId, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(DeviceId id, CancellationToken cancellationToken)
     {
-        Device? device = await dbContext.Devices.FindAsync([deviceId], cancellationToken);
+        Device? device = await dbContext.Devices.FindAsync([id], cancellationToken);
         
         Console.WriteLine(device);
         
