@@ -12,7 +12,7 @@ public interface IProjectCreator
     
     ProjectId ProjectId { get; }
     
-    string Config { get; }
+    string? Config { get; }
 
     DateTime CreatedAt { get; }
 

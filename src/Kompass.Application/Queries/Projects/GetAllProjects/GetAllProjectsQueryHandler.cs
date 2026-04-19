@@ -1,5 +1,6 @@
 ﻿using Kompass.Application.Common.Responses;
 using Kompass.Application.DTOs.Queries;
+using Kompass.Application.DTOs.Queries.Projects;
 using Kompass.Domain.Interfaces.Projects;
 using MediatR;
 using System;

@@ -1,6 +1,9 @@
-﻿using AutoMapper;
+﻿using Ardalis.Result;
+using AutoMapper;
 using Kompass.Application.Common.Responses;
 using Kompass.Application.DTOs.Queries;
+using Kompass.Application.DTOs.Queries.Projects;
+using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Projects;
 using Kompass.Domain.Interfaces.Projects;
 using MediatR;
@@ -11,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Kompass.Application.Queries.Projects.GetProjectById;
 
-public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, ResultResponse<ProjectDto>>
+public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, Result<ProjectDto>>
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IMapper _mapper;
@@ -22,14 +25,22 @@ public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, R
         _mapper = mapper;
     }
 
-    public async Task<ResultResponse<ProjectDto>> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<ProjectDto>> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            IProject project = await _projectRepository.GetByIdAsync(request.Id, cancellationToken);
+            var projectId = new ProjectId(Guid.Parse(request.Id!));
+        
+            IProject? project = await _projectRepository.GetByIdAsync(projectId, cancellationToken);
+
+            if (project == null)
+            {
+                return Result.NotFound();
+            }
+            
             
             ProjectDto? projectDto = _mapper.Map<ProjectDto>(project);
-            return new ResultResponse<ProjectDto> { Result = projectDto };
+            return Result.Success(projectDto);
         }
         catch (Exception e)
         {

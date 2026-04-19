@@ -81,6 +81,7 @@ public class ProjectRepository(ApplicationDbContext dbContext) : IProjectReposit
     public async Task<Project?> GetByIdAsync(ProjectId projectId, CancellationToken cancellationToken)
     {
         var project = await dbContext.Projects
+            .Include(p => p.ProjectCreator)
             .Include(p => p.ProjectDetails)
             .FirstOrDefaultAsync(p => p.Id == projectId, cancellationToken);
         

@@ -13,6 +13,8 @@ public interface  IProject
     
     ProjectDetails ProjectDetails { get; }
 
+    ProjectCreator ProjectCreator { get; }
+    
     string? Description { get;  }
 
     DateTime CreatedAt { get;  }

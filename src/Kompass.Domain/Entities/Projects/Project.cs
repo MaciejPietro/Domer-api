@@ -27,7 +27,7 @@ public class Project : Entity<ProjectId>, IProject
     
     public ProjectDetails ProjectDetails { get; private init; }
     
-    public ProjectCreator ProjectCreator { get; private set; }
+    public ProjectCreator ProjectCreator { get; private init; }
     
     public IReadOnlyCollection<Folder> Folders { get; private init; } = [];
     

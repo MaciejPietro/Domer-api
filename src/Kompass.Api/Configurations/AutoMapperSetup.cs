@@ -12,6 +12,7 @@ public static class AutoMapperSetup
     {
         services.AddAutoMapper(typeof(UserMappingProfile));
         services.AddAutoMapper(typeof(ProjectsMappingProfile));
+        services.AddAutoMapper(typeof(ProjectMappingProfile));
         services.AddAutoMapper(typeof(CameraMappingProfile));
 
         return services;

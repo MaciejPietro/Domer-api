@@ -6,6 +6,7 @@ using Kompass.Application.Commands.Project.UpdateProject;
 using Kompass.Application.Commands.User.ResendEmailConfirmation;
 using Kompass.Application.Common.Responses;
 using Kompass.Application.DTOs.Queries;
+using Kompass.Application.DTOs.Queries.Projects;
 using Kompass.Application.Queries.Projects;
 using Kompass.Application.Queries.Projects.GetAllProjects;
 using Kompass.Application.Queries.Projects.GetProjectById;
@@ -34,12 +35,12 @@ public class ProjectController(IMediator mediator)
         return Ok(result);
     }
     
-    [HttpGet("{projectId}")]
+    [HttpGet("{id}")]
     [Authorize]
-    public async Task<IActionResult> GetProjectById([FromRoute] ProjectId projectId)
+    public async Task<IActionResult> GetProject([FromRoute] string id)
     {
-        GetProjectByIdQuery query = new (projectId);
-        ResultResponse<ProjectDto> result = await mediator.Send(query);
+        GetProjectByIdQuery query = new (id);
+        Result<ProjectDto> result = await mediator.Send(query);
     
         return Ok(result);
     }
@@ -50,25 +51,6 @@ public class ProjectController(IMediator mediator)
     {
         var result = await mediator.Send(command);
     
-        if (result.Status == ResultStatus.Invalid)
-        {
-            // Return 400 Bad Request with validation errors
-            return BadRequest(new 
-            { 
-                Errors = result.ValidationErrors
-            });
-        }
-    
-        if (result.Status == ResultStatus.Error)
-        {
-            // Return 500 Internal Server Error
-            return StatusCode(500, new 
-            { 
-                Error = result.Errors.FirstOrDefault()
-            });
-        }
-
-        // Success case
         return StatusCode(201, result);
     }
     

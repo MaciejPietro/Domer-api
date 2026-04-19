@@ -2,7 +2,7 @@
 using Kompass.Domain.Enums.Projects;
 using System;
 
-namespace Kompass.Application.DTOs.Queries;
+namespace Kompass.Application.DTOs.Queries.Projects;
 
 public class ProjectListDto
 {

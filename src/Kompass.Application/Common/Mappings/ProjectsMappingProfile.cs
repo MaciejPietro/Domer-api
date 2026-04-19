@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Kompass.Application.DTOs.Queries;
-
+using Kompass.Application.DTOs.Queries.Projects;
 using Kompass.Domain.Interfaces.Projects;
 
 namespace Kompass.Application.Common.Mappings;

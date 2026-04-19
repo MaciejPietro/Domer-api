@@ -24,7 +24,6 @@ public class CameraController(IMediator mediator) : ControllerBase
     {
         var result = await mediator.Send(command);
     
-        // Success case
         return StatusCode(201, result);
     }
 

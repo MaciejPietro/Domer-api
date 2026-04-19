@@ -16,7 +16,7 @@ public class ProjectCreator : Entity<ProjectCreatorId>, IProjectCreator
     public ProjectId ProjectId { get; private init; }
     
     [MaxLength(1000)]
-    public string Config { get; private init; } = "\"{\\\"floors\\\":[]}\"";
+    public string? Config { get; private init; } = "\"{\\\"floors\\\":[]}\"";
 
     public DateTime CreatedAt { get; private init; } = DateTime.UtcNow;
 
@@ -24,12 +24,12 @@ public class ProjectCreator : Entity<ProjectCreatorId>, IProjectCreator
     
     public static ProjectCreator Create(ProjectId projectId, string config)
     {
-        ProjectCreator project = new ()
+        ProjectCreator creator = new ()
         {
             ProjectId = projectId,
             Config = config,
         };
 
-        return project;
+        return creator;
     }
 }

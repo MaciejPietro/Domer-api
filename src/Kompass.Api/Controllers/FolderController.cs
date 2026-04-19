@@ -50,26 +50,7 @@ public class FolderController(IMediator mediator)
     public async Task<IActionResult> CreateFolder([FromBody] CreateFolderCommand command)
     {
         var result = await mediator.Send(command);
-    
-        if (result.Status == ResultStatus.Invalid)
-        {
-            // Return 400 Bad Request with validation errors
-            return BadRequest(new 
-            { 
-                Errors = result.ValidationErrors
-            });
-        }
-    
-        if (result.Status == ResultStatus.Error)
-        {
-            // Return 500 Internal Server Error
-            return StatusCode(500, new 
-            { 
-                Error = result.Errors.FirstOrDefault()
-            });
-        }
-
-        // Success case
+   
         return StatusCode(201, result);
     }
     
