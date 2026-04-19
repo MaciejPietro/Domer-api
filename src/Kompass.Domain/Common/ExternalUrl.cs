@@ -1,7 +1,3 @@
 ﻿namespace Kompass.Domain.Common;
 
-public class ExternalUrl
-{
-    public string Name { get; set; }
-    public string Url { get; set; }
-}
+public readonly record struct ExternalUrl(string Name, string Url);

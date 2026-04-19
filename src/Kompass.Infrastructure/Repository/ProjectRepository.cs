@@ -1,4 +1,5 @@
-﻿using Kompass.Domain.Common;
+﻿using Kompass.Application.Common.Exceptions;
+using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Projects;
 using Kompass.Domain.Enums.Projects;
 using Kompass.Domain.Interfaces.Projects;
@@ -28,28 +29,8 @@ public class ProjectRepository(ApplicationDbContext dbContext) : IProjectReposit
 
     public async Task UpdateAsync(Project project, ProjectDetails projectDetails, CancellationToken cancellationToken)
     {
-    
-        Project? existingProject = await GetByIdAsync(project.Id, cancellationToken);
-
-
-        // Detach existing entities to avoid tracking conflicts
-        dbContext.Entry(existingProject).State = EntityState.Detached;
-        dbContext.Entry(existingProject!.ProjectDetails).State = EntityState.Detached;
-
-        // Update Project entity
-        dbContext.Entry(project).State = EntityState.Modified;
-
-        // Update ProjectDetails entity
-        dbContext.Entry(projectDetails).State = EntityState.Modified;
-
-        try
-        {
-            await dbContext.SaveChangesAsync(cancellationToken);
-        }
-        catch (DbUpdateException ex)
-        {
-            throw new Exception("An error occurred while updating the project", ex);
-        }
+        dbContext.Projects.Update(project);
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<(List<Project> Projects, int TotalCount)> GetAllAsync(

@@ -46,11 +46,14 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
 
         if (request.Urls is not null)
         {
-            var urls = request.Urls.Select(u => new ExternalUrl
+            var urls = request.Urls.Select(u =>
             {
-                Name = u.Name,
-                Url = u.Url
+                Console.WriteLine(u.Name);
+                Console.WriteLine(u.Url);
+
+                return new ExternalUrl { Name = u.Name, Url = u.Url };
             }).ToList();
+            
             project.ProjectDetails.UpdateUrls(urls);
         }
 

@@ -12,7 +12,7 @@ public class ProjectsMappingProfile : Profile
         CreateMap<IProject, ProjectDto>()
             .ForMember(dest => dest.Details, opt =>
                 opt.MapFrom(src => src.ProjectDetails));
-            // .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+         
         
         CreateMap<IProjectDetails, ProjectDetailsDto>();
     }
