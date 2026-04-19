@@ -16,5 +16,5 @@ public class UpdateProjectCommand : IRequest<Result<Unit>>
     
     public string? Description { get; set; }
     
-    public List<ExternalUrl>? Urls { get; set; } = new();
+    public List<ExternalUrl>? Urls { get; set; }
 }

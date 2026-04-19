@@ -1,20 +1,18 @@
 ﻿using FluentValidation;
+using Kompass.Application.Commands.Project.CreateProject;
 using Kompass.Domain.ValueObjects.Common;
 using Kompass.Domain.ValueObjects.Project;
-using System.IO;
-using System.Linq;
 
-namespace Kompass.Application.Commands.Project.CreateProject;
+namespace Kompass.Application.Commands.Project.UpdateProject;
 
-public class CreateProjectCommandValidator : AbstractValidator<CreateProjectCommand>
+public class UpdateProjectCommandValidator : AbstractValidator<UpdateProjectCommand>
 {
-    public CreateProjectCommandValidator()
+    public UpdateProjectCommandValidator()
     {
         RuleLevelCascadeMode = ClassLevelCascadeMode;
 
         // NAME
         RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name is required.")
             .MaximumLength(ProjectConfiguration.ValidationRules.NameMaxLength).WithMessage("Name must not exceed 100 characters.");
         
         // NAME
@@ -33,17 +31,5 @@ public class CreateProjectCommandValidator : AbstractValidator<CreateProjectComm
                     url.RuleFor(x => x.Name).NotEmpty().MaximumLength(UrlConfiguration.ValidationRules.NameMaxLength);
                 });
         });
-        
-        // IMAGES
-        // RuleForEach(x => x.Images)
-        //     .Must(file => file.Length <= 2 * 1024 * 1024) // 2MB limit
-        //     .WithMessage("Image size must be less than 2MB")
-        //     .Must(file => new[] { ".jpg", ".jpeg", ".png" }
-        //         .Contains(Path.GetExtension(file.FileName).ToLower()))
-        //     .WithMessage("Only .jpg and .png files are allowed");
-        // RuleFor(x => x.Images)
-        //     .Must(x => x == null || x.Count <= 10)
-        //     .WithMessage("Maximum 10 images allowed");
-
     }
 }
