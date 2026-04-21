@@ -18,6 +18,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Document> Documents { get; init; } = null!;
     public DbSet<Device> Devices { get; init; } = null!;
     public DbSet<Camera> Cameras { get; init; } = null!;
+    
+    public DbSet<ProjectDevice> ProjectDevice { get; init; } = null!;
+    
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

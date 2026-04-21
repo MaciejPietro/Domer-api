@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using Kompass.Application.Commands.Project;
+using Kompass.Application.Commands.Project.AttachDevice;
 using Kompass.Application.Commands.Project.CreateProject;
 using Kompass.Application.Commands.Project.DeleteProject;
 using Kompass.Application.Commands.Project.UpdateProject;
@@ -72,5 +73,14 @@ public class ProjectController(IMediator mediator)
         var result = await mediator.Send(query);
     
         return Ok(result);
+    }
+    
+    [HttpPost("{projectId}/devices")]
+    [Authorize]
+    public async Task<IActionResult> AttachDevice([FromRoute] ProjectId projectId, [FromBody] AttachDeviceCommand command)
+    {
+        command.ProjectId = projectId;
+        
+        return StatusCode(200, await mediator.Send(command));
     }
 }

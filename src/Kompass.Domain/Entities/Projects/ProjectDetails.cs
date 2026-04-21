@@ -13,7 +13,7 @@ public class ProjectDetails  : Entity<ProjectDetailsId>, IProjectDetails
     public override ProjectDetailsId Id { get; protected set; } = Guid.CreateVersion7();
     public ProjectId ProjectId { get; private init; }
 
-    public List<ExternalUrl>? Urls { get; private set; } = new();
+    public List<ExternalUrl>? Urls { get; private set; } = [];
 
     public DateTime CreatedAt { get; private init; } = DateTime.UtcNow;
 
@@ -30,5 +30,4 @@ public class ProjectDetails  : Entity<ProjectDetailsId>, IProjectDetails
 
         return details;
     }
-
 }

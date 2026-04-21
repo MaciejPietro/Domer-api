@@ -25,5 +25,8 @@ public interface IProjectRepository
 
         
         Task<bool> DeleteAsync( ProjectId projectId,  CancellationToken cancellationToken);
+        
+        Task<bool> AttachDevice(ProjectId projectId, DeviceId deviceId, CancellationToken cancellationToken);
+        
 
 }

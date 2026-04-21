@@ -1,5 +1,4 @@
 ﻿using Kompass.Domain.Common;
-using Kompass.Domain.Enums.Projects;
 using System;
 using System.Collections.Generic;
 

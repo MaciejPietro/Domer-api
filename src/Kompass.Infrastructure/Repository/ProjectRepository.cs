@@ -86,4 +86,15 @@ public class ProjectRepository(ApplicationDbContext dbContext) : IProjectReposit
     
         return true;
     }
+
+    public async Task<bool> AttachDevice(ProjectId projectId, DeviceId deviceId, CancellationToken cancellationToken)
+    {
+        var projectDevice = ProjectDevice.Create(projectId, deviceId);
+        
+        await dbContext.ProjectDevice.AddAsync(projectDevice, cancellationToken);
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
 }
