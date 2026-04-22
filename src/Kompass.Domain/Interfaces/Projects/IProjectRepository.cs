@@ -1,6 +1,7 @@
 ﻿using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Projects;
 using Kompass.Domain.Enums.Projects;
+using Kompass.Domain.Interfaces.Devices;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -21,12 +22,12 @@ public interface IProjectRepository
             CancellationToken cancellationToken);
         
         Task<Project?> GetByIdAsync( ProjectId projectId,  CancellationToken cancellationToken);
-
-
         
         Task<bool> DeleteAsync( ProjectId projectId,  CancellationToken cancellationToken);
         
         Task<bool> AttachDevice(ProjectId projectId, DeviceId deviceId, CancellationToken cancellationToken);
+
+        Task<List<ProjectDevice>> GetDevicesAsync(ProjectId projectId, CancellationToken cancellationToken);
         
 
 }

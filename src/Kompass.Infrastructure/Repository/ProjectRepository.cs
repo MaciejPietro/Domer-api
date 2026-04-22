@@ -2,6 +2,7 @@
 using Kompass.Domain.Common;
 using Kompass.Domain.Entities.Projects;
 using Kompass.Domain.Enums.Projects;
+using Kompass.Domain.Interfaces.Devices;
 using Kompass.Domain.Interfaces.Projects;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -96,5 +97,15 @@ public class ProjectRepository(ApplicationDbContext dbContext) : IProjectReposit
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return true;
+    }
+
+    public async Task<List<ProjectDevice>> GetDevicesAsync(ProjectId projectId, CancellationToken cancellationToken)
+    {
+        var projectDevices = await dbContext.ProjectDevice
+            .Where(f => f.ProjectId == projectId)
+            .Include(pd => pd.Device)
+            .ToListAsync(cancellationToken);
+
+        return projectDevices;
     }
 }

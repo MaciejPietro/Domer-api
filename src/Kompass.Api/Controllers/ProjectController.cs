@@ -11,6 +11,7 @@ using Kompass.Application.DTOs.Queries.Projects;
 using Kompass.Application.Queries.Projects;
 using Kompass.Application.Queries.Projects.GetAllProjects;
 using Kompass.Application.Queries.Projects.GetProjectById;
+using Kompass.Application.Queries.Projects.GetProjectDevices;
 using Kompass.Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -82,5 +83,15 @@ public class ProjectController(IMediator mediator)
         command.ProjectId = projectId;
         
         return StatusCode(200, await mediator.Send(command));
+    }
+    
+    [HttpGet("{projectId}/devices")]
+    [Authorize]
+    public async Task<IActionResult> GetDevices([FromRoute] string projectId, [FromRoute] GetProjectDevicesQuery query)
+    {
+        query.Id = projectId;
+        var result = await mediator.Send(query);
+        
+        return Ok(result);
     }
 }

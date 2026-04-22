@@ -3,6 +3,7 @@ using System;
 using Kompass.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kompass.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260422144222_AddDeviceToProjectDevice2")]
+    partial class AddDeviceToProjectDevice2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,6 +234,9 @@ namespace Kompass.Infrastructure.Migrations
                     b.Property<Guid>("DeviceId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("DeviceId1")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uuid");
 
@@ -240,6 +246,8 @@ namespace Kompass.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DeviceId");
+
+                    b.HasIndex("DeviceId1");
 
                     b.ToTable("ProjectDevice");
                 });
@@ -522,11 +530,15 @@ namespace Kompass.Infrastructure.Migrations
 
             modelBuilder.Entity("Kompass.Domain.Entities.Projects.ProjectDevice", b =>
                 {
-                    b.HasOne("Kompass.Domain.Entities.Devices.Device", "Device")
+                    b.HasOne("Kompass.Domain.Entities.Devices.Device", null)
                         .WithMany()
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Kompass.Domain.Entities.Devices.Device", "Device")
+                        .WithMany()
+                        .HasForeignKey("DeviceId1");
 
                     b.Navigation("Device");
                 });

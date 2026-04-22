@@ -1,5 +1,6 @@
 using Kompass.Domain.Common;
 using Kompass.Domain.Common.Entities;
+using Kompass.Domain.Entities.Devices;
 using Kompass.Domain.Interfaces.Projects;
 using System;
 
@@ -13,6 +14,8 @@ public class ProjectDevice : Entity<ProjectDeviceId>, IProjectDevice
     public ProjectId ProjectId { get; private init; }
     public DeviceId DeviceId { get; private init; }
 
+    public Device? Device { get; private set; }
+    
     public DateTime CreatedAt { get; private init; } = DateTime.UtcNow;
 
     public DateTime UpdatedAt { get; private init; } = DateTime.UtcNow;

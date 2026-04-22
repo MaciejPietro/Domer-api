@@ -21,7 +21,7 @@ public class ProjectDeviceConfiguration : IEntityTypeConfiguration<ProjectDevice
         builder.Property(x => x.DeviceId)
             .HasConversion<DeviceId.EfCoreValueConverter>();
         
-        builder.HasOne<Device>()
+        builder.HasOne(x => x.Device)
             .WithMany()
             .HasForeignKey(x => x.DeviceId)
             .IsRequired();
