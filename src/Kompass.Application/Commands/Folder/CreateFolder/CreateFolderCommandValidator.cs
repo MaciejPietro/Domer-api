@@ -2,8 +2,6 @@
 using Kompass.Application.Common.Validation;
 using Kompass.Domain.Interfaces.Folders;
 using Kompass.Domain.Interfaces.Projects;
-using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kompass.Application.Commands.Folder.CreateFolder;

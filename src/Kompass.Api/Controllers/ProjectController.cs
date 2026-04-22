@@ -77,7 +77,7 @@ public class ProjectController(IMediator mediator)
     
     [HttpPost("{projectId}/devices")]
     [Authorize]
-    public async Task<IActionResult> AttachDevice([FromRoute] ProjectId projectId, [FromBody] AttachDeviceCommand command)
+    public async Task<IActionResult> AttachDevice([FromRoute] string projectId, [FromBody] AttachDeviceCommand command)
     {
         command.ProjectId = projectId;
         

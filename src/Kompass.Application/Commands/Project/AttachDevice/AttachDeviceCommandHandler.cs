@@ -22,7 +22,10 @@ public class AttachDeviceCommandHandler: IRequestHandler<AttachDeviceCommand, Re
     {
         try
         {
-            await _projectRepository.AttachDevice(request.ProjectId, request.DeviceId, cancellationToken);
+            Guid.TryParse(request.DeviceId, out Guid deviceId);
+            Guid.TryParse(request.ProjectId, out Guid projectId);
+            
+            await _projectRepository.AttachDevice(projectId, deviceId, cancellationToken);
         
             return Result<Unit>.Success(Unit.Value);
         } catch (Exception e)

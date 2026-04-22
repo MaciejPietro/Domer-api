@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using Kompass.Domain.ValueObjects.Common;
 using Kompass.Domain.ValueObjects.Project;
-using System.IO;
-using System.Linq;
 
 namespace Kompass.Application.Commands.Project.CreateProject;
 
