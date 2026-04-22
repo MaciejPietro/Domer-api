@@ -15,8 +15,7 @@ namespace Kompass.Application.Queries.Projects.GetProjectById;
 
 public class GetProjectByIdQueryValidator : AbstractValidator<GetProjectByIdQuery>
 {
-    public GetProjectByIdQueryValidator(IProjectRepository projectRepository)
+    public GetProjectByIdQueryValidator()
     {
-        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustProjectExists(projectRepository);
     }
 }
