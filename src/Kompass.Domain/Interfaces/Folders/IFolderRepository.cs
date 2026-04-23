@@ -24,5 +24,5 @@ public interface IFolderRepository
     Task<(List<Folder> Folders, int TotalCount)> GetAllAsync(ProjectId projectId, CancellationToken cancellationToken);
 
 
-    Task<bool> DeleteAsync( FolderId folderId,  CancellationToken cancellationToken);
+    Task<Folder?> DeleteAsync( FolderId folderId,  CancellationToken cancellationToken);
 }

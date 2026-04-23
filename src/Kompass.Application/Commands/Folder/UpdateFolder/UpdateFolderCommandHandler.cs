@@ -31,7 +31,7 @@ public class UpdateFolderCommandHandler : IRequestHandler<UpdateFolderCommand, R
 
             if (existingFolder is null)
             {
-                return Result<Unit>.Error("Folder not found");
+                return Result.NotFound($"Folder with id {folderId} not found");
             }
 
             existingFolder.Name = request.Name!;

@@ -28,8 +28,7 @@ public class UpdateFolderCommandValidator : AbstractValidator<UpdateFolderComman
         // ID
         RuleFor(x => x.Id)
             .Cascade(CascadeMode.Stop)
-            .MustBeGuidObject().When(x => !string.IsNullOrEmpty(x.Id))
-            .MustFolderExists(_folderRepository).When(x => !string.IsNullOrEmpty(x.Id));
+            .MustBeGuidObject().When(x => !string.IsNullOrEmpty(x.Id));
         
         // DUPLICATED NAME
         RuleFor(x => x)

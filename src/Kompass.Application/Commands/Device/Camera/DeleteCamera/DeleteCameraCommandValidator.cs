@@ -8,6 +8,6 @@ public class DeleteCameraCommandValidator: AbstractValidator<DeleteCameraCommand
 {
     public DeleteCameraCommandValidator(IDeviceRepository deviceRepository)
     {
-        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustBeGuidObject().MustDeviceExists(deviceRepository);
+        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustBeGuidObject();
     }
 }

@@ -1,4 +1,5 @@
 using Ardalis.Result;
+using Kompass.Api.Common;
 using Kompass.Application.Commands.Device.Camera.CreateCamera;
 using Kompass.Application.Commands.Device.Camera.DeleteCamera;
 using Kompass.Application.Common.Responses;
@@ -43,7 +44,7 @@ public class CameraController(IMediator mediator) : ControllerBase
         GetCameraByIdQuery query = new (id);
         Result<CameraDto> result = await mediator.Send(query);
 
-        return Ok(result);
+        return result.ToActionResult();
     }
     
     [HttpDelete("{deviceId}")]
@@ -52,6 +53,6 @@ public class CameraController(IMediator mediator) : ControllerBase
     {
         command.Id = deviceId;
         Result<Unit> result = await mediator.Send(command);
-        return Ok(result);
+        return result.ToActionResult();
     }
 }

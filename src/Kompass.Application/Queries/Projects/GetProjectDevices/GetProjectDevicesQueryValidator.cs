@@ -9,6 +9,6 @@ public class GetProjectDevicesQueryValidator : AbstractValidator<GetProjectDevic
 {
     public GetProjectDevicesQueryValidator(IProjectRepository projectRepository)
     {
-        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustProjectExists(projectRepository);
+        RuleFor(x => x.Id).MustBeGuidObject();
     }
 }

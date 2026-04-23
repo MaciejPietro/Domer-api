@@ -8,6 +8,6 @@ public class GetCameraByIdQueryValidator: AbstractValidator<GetCameraByIdQuery>
 {
     public GetCameraByIdQueryValidator(IDeviceRepository deviceRepository)
     {
-        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustBeGuidObject().MustDeviceExists(deviceRepository);
+        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustBeGuidObject();
     }
 }

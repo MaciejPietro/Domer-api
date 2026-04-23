@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result;
+using Kompass.Api.Common;
 using Kompass.Application.Commands.Project;
 using Kompass.Application.Commands.Project.AttachDevice;
 using Kompass.Application.Commands.Project.CreateProject;
@@ -23,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Kompass.Api.Controllers;
 
-[Route("api/project")]
+[Route("api/projects")]
 [ApiController]
 public class ProjectController(IMediator mediator)
     : ControllerBase
@@ -43,8 +44,8 @@ public class ProjectController(IMediator mediator)
     {
         GetProjectByIdQuery query = new (id);
         Result<ProjectDto> result = await mediator.Send(query);
-    
-        return Ok(result);
+
+        return result.ToActionResult();
     }
     
     [HttpPost()]
@@ -92,6 +93,6 @@ public class ProjectController(IMediator mediator)
         query.Id = projectId;
         var result = await mediator.Send(query);
         
-        return Ok(result);
+        return result.ToActionResult();
     }
 }

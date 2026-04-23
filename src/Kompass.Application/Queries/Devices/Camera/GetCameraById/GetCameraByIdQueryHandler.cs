@@ -28,10 +28,11 @@ public class GetCameraByIdQueryHandler : IRequestHandler<GetCameraByIdQuery, Res
         var deviceId = new DeviceId(Guid.Parse(request.Id));
         var (device, relatedEntity) = await _deviceService.GetDeviceWithRelatedEntityByIdAsync(deviceId, cancellationToken);
 
-        if (device == null || relatedEntity == null)
+        if (device is null || relatedEntity is null)
         {
-            return Result.NotFound();
+            return Result.NotFound($"Device with ID '{request.Id}' was not found.");
         }
+
         CameraDto? cameraDto = _mapper.Map<CameraDto>((device, (Domain.Entities.Devices.Camera.Camera) relatedEntity));
 
         return Result.Success(cameraDto);

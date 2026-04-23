@@ -19,6 +19,6 @@ public interface IDeviceRepository
     
     Task<(IEnumerable<IDevice>, int count)> GetAllAsync(DeviceType type, CancellationToken cancellationToken);
     
-    Task<bool> DeleteAsync(DeviceId deviceId, CancellationToken cancellationToken);
+    Task<Device?> DeleteAsync(DeviceId deviceId, CancellationToken cancellationToken);
     
 }

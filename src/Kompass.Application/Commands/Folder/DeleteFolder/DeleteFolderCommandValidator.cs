@@ -8,6 +8,6 @@ public class DeleteFolderCommandValidator : AbstractValidator<DeleteFolderComman
 {
     public DeleteFolderCommandValidator(IFolderRepository folderRepository)
     {
-        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustBeGuidObject().MustFolderExists(folderRepository);
+        RuleFor(x => x.Id).Cascade(CascadeMode.Stop).MustBeGuidObject();
     }
 }

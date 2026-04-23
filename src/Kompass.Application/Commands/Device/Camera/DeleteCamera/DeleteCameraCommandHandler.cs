@@ -20,8 +20,13 @@ public class DeleteCameraCommandHandler :  IRequestHandler<DeleteCameraCommand, 
     {
         Guid.TryParse(request.Id, out Guid deviceId);
         
-        var isSuccess = await _deviceRepository.DeleteAsync(deviceId, cancellationToken);
+        var device = await _deviceRepository.DeleteAsync(deviceId, cancellationToken);
 
-        return isSuccess ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Invalid();
+        if (device is null)
+        {
+            return Result.NotFound($"Device with ID {request.Id} not found");
+        }
+
+        return Result<Unit>.Success(Unit.Value);
     }
 }

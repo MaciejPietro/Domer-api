@@ -17,5 +17,7 @@ public class GetProjectByIdQueryValidator : AbstractValidator<GetProjectByIdQuer
 {
     public GetProjectByIdQueryValidator()
     {
+        RuleFor(x => x.Id).MustBeGuidObject();
+        
     }
 }

@@ -33,7 +33,7 @@ public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, R
 
         if (project == null)
         {
-            return Result.NotFound();
+            return Result.NotFound($"Project with ID '{request.Id}' was not found.");
         }
 
         ProjectDto? projectDto = _mapper.Map<ProjectDto>(project);

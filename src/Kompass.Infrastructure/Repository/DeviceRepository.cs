@@ -52,7 +52,7 @@ public class DeviceRepository(ApplicationDbContext dbContext) : IDeviceRepositor
         return (devices.AsEnumerable(), devices.Count);
     }
 
-    public async Task<bool> DeleteAsync(DeviceId id, CancellationToken cancellationToken)
+    public async Task<Device?> DeleteAsync(DeviceId id, CancellationToken cancellationToken)
     {
         Device? device = await dbContext.Devices.FindAsync([id], cancellationToken);
         
@@ -61,12 +61,12 @@ public class DeviceRepository(ApplicationDbContext dbContext) : IDeviceRepositor
         
         if (device is null)
         {
-            return false;
+            return null;
         }
         
         dbContext.Devices.Remove(device);
         await dbContext.SaveChangesAsync(cancellationToken);
         
-        return true;
+        return device;
     }
 }

@@ -30,18 +30,16 @@ public class GetProjectDevicesQueryHandler : IRequestHandler<GetProjectDevicesQu
         {
             Guid.TryParse(request.Id, out Guid projectId);
             
-            var device =  await _projectRepository.GetDevicesAsync(projectId, cancellationToken);
-        
-            // IProject? project = await _projectRepository.GetProjectDevicesAsync(projectId, cancellationToken);
-            //
-            // if (project == null)
-            // {
-            //     return Result.NotFound();
-            // }
-            //
-            //
-            // ProjectDto? projectDto = _mapper.Map<ProjectDto>(project);
-            return Result.Success(device);
+            var devices =  await _projectRepository.GetDevicesAsync(projectId, cancellationToken);
+
+            if (devices.Count is not 0)
+            {
+                return Result.Success(devices);
+            }
+
+            var project = await _projectRepository.GetByIdAsync(projectId, cancellationToken);
+
+            return project is null ? Result.NotFound($"Project with ID '{projectId}' was not found.") : Result.Success(devices);
         }
         catch (Exception e)
         {
